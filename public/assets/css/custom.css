@@ -1,0 +1,23 @@
+.logo-wrapper .img {
+	width:40%;
+}
+
+.sidebar-body-menu a.active, .sidebar-body-menu a:hover {
+  opacity: 1;
+  border: 3px solid !important;
+  border-radius: 20px !important;
+}
+
+.sidebar-body-menu a {
+  opacity: 1 !important;
+}
+
+span.material-icons-outlined {
+    margin: 0 5px;
+}
+
+iconify-icon {
+    font-size: 2em;
+}
+
+
