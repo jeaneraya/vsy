@@ -19,3 +19,7 @@ Route::view('/login', 'login');
 Route::view('/register', 'register');
 
 
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
