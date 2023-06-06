@@ -15,8 +15,8 @@ use App\Http\Controllers\userController;
 */
 
 Route::view('/', 'dashboard');
-Route::view('/login', 'login');
-Route::view('/register', 'register');
+Route::view('/login1', 'login');
+Route::view('/register1', 'register');
 
 
 
