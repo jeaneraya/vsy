@@ -16,7 +16,7 @@
   <div class="layer"></div>
 @yield("contents")
 <!-- Custom scripts -->
-<script src="{{ asset('assets/plugins/script.js') }"></script>
+<script src="{{ asset('assets/plugins/script.js') }}"></script>
 </body>
 
 </html>

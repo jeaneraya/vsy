@@ -168,7 +168,7 @@
     </script>
 
     <!-- Custom scripts -->
-    <script src="{{ asset('assets/plugins/script.js') }"></script>
+    <script src="{{ asset('assets/plugins/script.js') }}"></script>
 
     <!-- choose one -->
     <script src="https://unpkg.com/feather-icons"></script>
