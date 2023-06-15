@@ -62,9 +62,10 @@
               <h1 class="modal-title fs-5" id="exampleModalLabel">Add Collector</h1>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <form action="{{ route('form-submit') }}" method="POST">
+                @csrf
             <div class="modal-body">
-                <form action="{{ route('form-submit') }}" method="POST">
-                  @csrf
+
                   <div class="row">
                     <div class="col-3 mb-3">
                       <label for="code" class="form-label">Code:</label>
@@ -91,12 +92,13 @@
                       <textarea class="form-control" name="address" id="address" cols="30" rows="3"></textarea>
                     </div>
                   </div>
-                </form>
+
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
               <input type="submit" value="Add Collector" class="btn btn-primary">
             </div>
+        </form>
           </div>
         </div>
       </div>

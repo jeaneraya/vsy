@@ -21,7 +21,7 @@ class CreateCollectorsTable extends Migration
             $table->string('address');
             $table->double('cashbond',8,2);
             $table->string('ctc_no');
-            $table->string('status');
+            $table->string('status')->default('active');
             $table->timestamps();
         });
     }
