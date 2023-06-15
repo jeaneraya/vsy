@@ -1,14 +1,16 @@
-@extends('layout.account')
-
-@section('title', 'Register')
+@extends('layout.design')
 
 @section('contents')
-    <main class="page-center">
-        <article class="sign-up">
-            <img src="{{ asset('assets/images/logo/logo.png') }}" class="img" style="width:20%">
-            <p class="sign-up__subtitle">VSY Collection | Create New Administrator's Account</p>
-
-            <form class="sign-up-form form" method="POST" action="{{ route('register') }}">
+    <div class="container">
+        <h2 class="main-title">Users</h2>
+        @if (Session::has('success'))
+            {{ Session::get('success') }}
+        @elseif(Session::has('warning'))
+            {{ Session::get('warning') }}
+            <!-- here to 'withWarning()' -->
+        @endif
+        <div class="row stat-cards">
+            <form class="sign-up-form form" method="POST" action="{{ route('post_user_create') }}">
                 @csrf
                 <label class="form-label-wrapper">
                     <p class="form-label">Role</p>
@@ -18,10 +20,6 @@
 
                     <select name="role" id="role" type="text"
                         class="form-control @error('role') is-invalid @enderror form-input autofocus">
-                        @php
-                            $roles = App\Models\Role::all();
-                        @endphp
-                        @endphp
                         @foreach ($roles as $role)
                             <option value="{{ $role->id }}" {{ $role->id == old('role') ? 'selected' : '' }}>
                                 {{ $role->name }}</option>
@@ -38,12 +36,12 @@
                     <p class="form-label">Name</p>
                     <input id="name" type="text" class="form-control @error('name') is-invalid @enderror form-input"
                         name="name" value="{{ old('name') }}" placeholder="Enter your name" required
-                        autocomplete="name" autofocus>
+                        autocomplete="name">
                 </label>
                 @error('name')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
+                    {{-- <span class="invalid-feedback" role="alert"> --}}
+                    <strong>{{ $message }}</strong>
+                    {{-- </span> --}}
                 @enderror
 
                 <label class="form-label-wrapper">
@@ -53,9 +51,9 @@
                         value="{{ old('birthday') }}" required autocomplete="birthday">
                 </label>
                 @error('birthday')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
+                    {{-- <span class="invalid-feedback" role="alert"> --}}
+                    <strong>{{ $message }}</strong>
+                    {{-- </span> --}}
                 @enderror
 
                 <label class="form-label-wrapper">
@@ -65,9 +63,9 @@
                         value="{{ old('address') }}" required autocomplete="address">
                 </label>
                 @error('address')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
+                    {{-- <span class="invalid-feedback" role="alert"> --}}
+                    <strong>{{ $message }}</strong>
+                    {{-- </span> --}}
                 @enderror
 
                 <label class="form-label-wrapper">
@@ -77,9 +75,9 @@
                         value="{{ old('contact') }}" required autocomplete="contact">
                 </label>
                 @error('contact')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
+                    {{-- <span class="invalid-feedback" role="alert"> --}}
+                    <strong>{{ $message }}</strong>
+                    {{-- </span> --}}
                 @enderror
 
 
@@ -91,9 +89,9 @@
                         value="{{ old('email') }}" required autocomplete="email">
                 </label>
                 @error('email')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
+                    {{-- <span class="invalid-feedback" role="alert"> --}}
+                    <strong>{{ $message }}</strong>
+                    {{-- </span> --}}
                 @enderror
 
                 <label class="form-label-wrapper">
@@ -103,9 +101,9 @@
                         placeholder="Enter your password" name="password" required autocomplete="new-password">
                 </label>
                 @error('password')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
+                    {{-- <span class="invalid-feedback" role="alert"> --}}
+                    <strong>{{ $message }}</strong>
+                    {{-- </span> --}}
                 @enderror
 
                 <label class="form-label-wrapper">
@@ -120,8 +118,6 @@
                 </button>
 
             </form>
-
-        </article>
-    </main>
-
+        </div>
+    </div>
 @endsection

@@ -48,8 +48,7 @@
                     <span class="form-checkbox-label">Remember me next time</span>
                 </label>
 
-                <button class="form-btn primary-default-btn transparent-btn">Sign in</button>
-                <button type="submit" class="class="form-btn primary-default-btn transparent-btn">
+                <button type="submit" class="form-btn primary-default-btn transparent-btn">
                     Sign in
                 </button>
 
