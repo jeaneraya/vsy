@@ -22,6 +22,7 @@ class CreateCollectorsTable extends Migration
             $table->double('cashbond',8,2);
             $table->string('ctc_no');
             $table->string('status')->default('active');
+            $table->string('row_status')->default('pending')->comment('approved, pending');
             $table->timestamps();
         });
     }

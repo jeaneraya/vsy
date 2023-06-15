@@ -9,7 +9,9 @@ class CollectorsController extends Controller
 {
     public function index() {
 
-        $collectors = Collector::all();
+        $collectors = Collector::where([
+            ['row_status', '=', 'approved']
+        ])->get();
         return view('collectors.index', compact('collectors'));
     }
 
