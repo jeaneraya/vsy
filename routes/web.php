@@ -23,3 +23,17 @@ Route::view('/register1', 'register');
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/employees',[App\Http\Controllers\EmployeesController::class, 'index'])->name('employees');
+
+Route::get('/collectors',[App\Http\Controllers\CollectorsController::class, 'index'])->name('collectors');
+Route::post('form-submit', [App\Http\Controllers\CollectorsController::class, 'addCollector'])->name('form-submit');
+
+
+Route::get('/ap_list',[App\Http\Controllers\APListController::class, 'index'])->name('ap_list');
+
+Route::get('/suppliers',[App\Http\Controllers\SupplierController::class, 'index'])->name('suppliers');
+
+Route::get('/stocks',[App\Http\Controllers\StockController::class, 'index'])->name('stocks');
+
+Route::get('/expenses',[App\Http\Controllers\ExpensesController::class, 'index'])->name('expenses');

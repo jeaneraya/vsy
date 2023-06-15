@@ -7,6 +7,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VSY Collection</title>
 
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+
   <!-- Favicon -->
   <link rel="shortcut icon" href="{{ asset('assets/images/favicon/favicon.png') }}" type="image/x-icon">
 
@@ -47,12 +49,15 @@
         <div class="sidebar-body">
             <ul class="sidebar-body-menu">
                 <li>
-                    <a class="active" href="/"><span class="material-icons-outlined">dashboard</span>Dashboard</a>
+                  <a class="{{ request()->is('/') ? 'active' : '' }}" href="{{ url('/') }}">
+                    <span class="material-icons-outlined">dashboard</span>
+                    Dashboard
+                </a>
                 </li>
                 <span class="system-menu__title">vsy enterprise</span>
                 <ul class="sidebar-body-menu">
                     <li>
-                        <a href="appearance.html"><span class="material-icons-outlined">diversity_3</span>Employees</a>
+                        <a class="{{ request()->routeIs('employees') ? 'active' : '' }}" href="{{ route('employees') }}"><span class="material-icons-outlined">diversity_3</span>Employees</a>
                     </li>
                     <li>
                         <a href="##"><span class="material-icons-outlined">receipt_long</span>Records</a>
@@ -64,13 +69,19 @@
                 <span class="system-menu__title">vsy collections</span>
                 <ul class="sidebar-body-menu">
                     <li>
-                        <a href="appearance.html"><span class="material-icons-outlined">groups</span>Collectors</a>
+                        <a class="{{ request()->routeIs('collectors') ? 'active' : '' }}" href="{{ route('collectors') }}"><span class="material-icons-outlined">groups</span>Collectors</a>
                     </li>
                     <li>
-                        <a href="##"><span class="material-icons-outlined">group</span>Suppliers</a>
+                        <a class="{{ request()->routeIs('suppliers') ? 'active' : '' }}" href="{{ route('suppliers') }}"><span class="material-icons-outlined">group</span>Suppliers</a>
                     </li>
                     <li>
-                        <a href="appearance.html"><span class="material-icons-outlined">inventory_2</span>Stocks</a>
+                        <a class="{{ request()->routeIs('stocks') ? 'active' : '' }}" href="{{ route('stocks') }}"><span class="material-icons-outlined">inventory_2</span>Stocks</a>
+                    </li>
+                    <li>
+                        <a class="{{ request()->routeIs('ap_list') ? 'active' : '' }}" href="{{ route('ap_list') }}"><span class="material-icons-outlined">list_alt</span>AP List</a>
+                    </li>
+                    <li>
+                        <a class="{{ request()->routeIs('expenses') ? 'active' : '' }}" href="{{ route('expenses') }}"><span class="material-icons-outlined">playlist_add_check</span>Expenses</a>
                     </li>
                 </ul>
             </ul>
@@ -137,11 +148,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 
 <!-- Custom scripts -->
-<script src="{{ asset('assets/plugins/script.js') }"></script>
-
-<!-- choose one -->
-<script src="https://unpkg.com/feather-icons"></script>
-<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+<script src="{{ asset('assets/plugins/script.js') }}"></script>
 </body>
 
 </html>
