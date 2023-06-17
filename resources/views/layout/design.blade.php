@@ -173,12 +173,19 @@
         integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous">
     </script>
 
+        <!-- Jquery -->
+        <script src="{{ asset('assets/js/jquery-3.7.0.min.js') }}"></script>
+
+
     <!-- Custom scripts -->
-    <script src="{{ asset('assets/plugins/script.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/script.js') }}"></script> --}}
+
 
     <!-- choose one -->
     <script src="https://unpkg.com/feather-icons"></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+
+    @yield('scripts')
 </body>
 
 </html>

@@ -28,7 +28,17 @@
                     {{ session('warning') }}
                 </div>
             @endif
-        </div>
+
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            </div>
 
         <article class="sign-up">
             <img src="{{ asset('assets/images/logo/logo.png') }}" class="img" style="width:35%">
@@ -42,24 +52,13 @@
                         class="form-control @error('email') is-invalid @enderror form-input" placeholder="Enter your email"
                         name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
                 </label>
-                @error('email')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-
 
                 <label class="form-label-wrapper">
                     <p class="form-label">Password</p>
                     <input id="password" type="password"
                         class="form-control @error('password') is-invalid @enderror form-input"
                         placeholder="Enter your password" name="password" required autocomplete="current-password">
-                </label> @error('password')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-
+                </label>
 
                 @if (Route::has('password.request'))
                     <a class="link-info forget-link" href="{{ route('password.request') }}">
