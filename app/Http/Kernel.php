@@ -2,6 +2,9 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\IsRoleAdmin;
+use App\Http\Middleware\IsRoleCollector;
+use App\Http\Middleware\IsRoleSuperAdmin;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -62,5 +65,8 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'isRoleSuperAdmin' => IsRoleSuperAdmin::class,
+        'isRoleAdmin' => IsRoleAdmin::class,
+        'isRoleCollector' => IsRoleCollector::class,
     ];
 }

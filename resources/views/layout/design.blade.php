@@ -57,9 +57,11 @@
                         </li>
                         <span class="system-menu__title">vsy enterprise</span>
                         <ul class="sidebar-body-menu">
-                            <li>
-                                <a class="{{ request()->routeIs('get_user_index') ? 'active' : '' }}" href="{{ route('get_user_index') }}"><span class="material-icons-outlined">groups</span>Users</a>
-                            </li>
+                            @if (Auth::user()->role == 1)
+                                <li>
+                                    <a class="{{ request()->routeIs('get_user_index') ? 'active' : '' }}" href="{{ route('get_user_index') }}"><span class="material-icons-outlined">groups</span>Users</a>
+                                </li>
+                            @endif
                             <li>
                                 <a class="{{ request()->routeIs('employees') ? 'active' : '' }}" href="{{ route('employees') }}"><span class="material-icons-outlined">diversity_3</span>Employees</a>
                             </li>

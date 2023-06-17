@@ -78,6 +78,7 @@ input:enabled:read-write:-webkit-any(:focus, :hover)::-webkit-calendar-picker-in
                         <input id="name" type="text"
                             class="form-control input_name @error('name') is-invalid @enderror form-input" name="name"
                             value="{{ old('name') }}" placeholder="Enter your name" required autocomplete="name"
+                            maxlength="50"
                             autofocus>
                     </label>
 
@@ -92,14 +93,14 @@ input:enabled:read-write:-webkit-any(:focus, :hover)::-webkit-calendar-picker-in
                     <label class="form-label-wrapper col-6">
                         <p class="form-label">Address</p>
                         <input id="address" type="address"
-                            class="form-control @error('address') is-invalid @enderror  form-input" name="address"
+                            class="form-control @error('address') is-invalid @enderror  form-input" name="address"  maxlength="100"
                             value="{{ old('address') }}" required autocomplete="address">
                     </label>
 
                     <label class="form-label-wrapper col-6">
                         <p class="form-label">Contact Number</p>
                         <input id="contact" type="contact"
-                            class="form-control input-numbers @error('contact') is-invalid @enderror  form-input" name="contact" maxlength="11"
+                            class="form-control input-numbers @error('contact') is-invalid @enderror  form-input" name="contact" maxlength="11" minlength="11"
                             value="{{ old('contact') }}" required autocomplete="contact">
                     </label>
 
@@ -107,12 +108,14 @@ input:enabled:read-write:-webkit-any(:focus, :hover)::-webkit-calendar-picker-in
                         <p class="form-label">Email</p>
                         <input id="email" type="email"
                             class="form-control @error('email') is-invalid @enderror  form-input" name="email"
+                            maxlength="50"
                             value="{{ old('email') }}" required autocomplete="email">
                     </label>
                     <label class="form-label-wrapper col-6">
                         <p class="form-label">Password</p>
                         <input id="password" type="password"
                             class="form-control @error('password') is-invalid @enderror form-input"
+                            maxlength="50"
                             placeholder="Enter your password" name="password" required autocomplete="new-password">
                     </label>
 
@@ -120,7 +123,8 @@ input:enabled:read-write:-webkit-any(:focus, :hover)::-webkit-calendar-picker-in
                     <label class="form-label-wrapper col-6">
                         <p class="form-label">Confirm Password</p>
                         <input id="password-confirm" type="password" class="form-control form-input"
-                            name="password_confirmation" required autocomplete="new-password">
+                            name="password_confirmation" required autocomplete="new-password" maxlength="50">
+
                     </label>
 
 

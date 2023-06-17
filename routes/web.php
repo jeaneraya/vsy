@@ -17,16 +17,18 @@ use App\Http\Controllers\userController;
 
 
 Route::middleware(['auth'])->group(function () {
+
     Route::view('/dashboard', 'dashboard')->name('dashboard');
 
-    Route::get('/users', [AccountController::class, 'index'])->name('get_user_index');
-    Route::post('/user', [AccountController::class, 'store']);
-    Route::put('/user/{id}', [AccountController::class, 'put'])->name('put_user');
+    Route::middleware(['isRoleSuperAdmin'])->group(function () {
+        Route::get('/users', [AccountController::class, 'index'])->name('get_user_index');
+        Route::post('/user', [AccountController::class, 'store']);
+        Route::put('/user/{id}', [AccountController::class, 'put'])->name('put_user');
 
-    Route::get('/user/create', [AccountController::class, 'createView'])->name('get_user_create');
-    Route::post('/user/create', [AccountController::class, 'create'])->name('post_user_create');
+        Route::get('/user/create', [AccountController::class, 'createView'])->name('get_user_create');
+        Route::post('/user/create', [AccountController::class, 'create'])->name('post_user_create');
 
-
+    });
 
 
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

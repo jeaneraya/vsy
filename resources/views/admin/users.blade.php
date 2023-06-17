@@ -106,6 +106,14 @@
 
                             </tr>
                         </thead>
+
+                        @php
+                        $statusBadgeLib = [
+                            0 => '<span class="badge-pending">Pending</span>',
+                            1 => '<span class="badge-success">Approved</span>',
+                            2 => '<span class="badge-trashed">Rejected</span>',
+                        ];
+                        @endphp
                         <tbody>
                             @foreach ($users as $user)
                                 <tr>
@@ -121,8 +129,7 @@
                                             data-cashbond='{{ $user->cashbond }}'
                                             data-code='{{ $user->code }}'
                                             data-ctc-no='{{ $user->ctc_no }}'
-                                            class='approval-btn'>edit</button><span
-                                            class="badge-pending">{{ App\Models\Constants::getAccountStatusValue()[$user->approval_status] }}</span>
+                                            class='approval-btn'><span class="material-icons-outlined">mode_edit_outline</span></button>{!!$statusBadgeLib[$user->approval_status]!!}
                                     </td>
                                     <td class="text-center">
                                         <span class="p-relative">
@@ -150,7 +157,7 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                        <h5 class="modal-title" id="exampleModalLongTitle">Approval</h5>
                         <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -256,7 +263,7 @@
                 //     'excel',
                 //     'print',
                 // ],
-                select: true,
+                // select: true,
                 // "ordering": false,
                 // paging: true,
                 // lengthMenu: [
@@ -282,6 +289,10 @@
                 $("#code").prop('required', false);
                 $("#cashbond").prop('required', false);
                 $("#ctcnum").prop('required', false);
+
+                $("#code").prop('disabled', true);
+                $("#cashbond").prop('disabled', true);
+                $("#ctcnum").prop('disabled', true);
                 // end reset modal
 
                 $("#user_id").val($(this).attr('data-id'));
@@ -298,6 +309,12 @@
                     $("#code").prop('required', true);
                     $("#ctcnum").prop('required', true);
                     $("#code").prop('required', true);
+
+
+                    $("#code").prop('disabled', false);
+                    $("#cashbond").prop('disabled', false);
+                    $("#ctcnum").prop('disabled', false);
+
                     $(".span-required").show();
                 }
             });
