@@ -35,6 +35,7 @@ class AccountController extends Controller
     protected function create(Request $request)
     {
 
+
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -58,6 +59,7 @@ class AccountController extends Controller
             'contact' => $request->input('contact'),
             'password' => Hash::make($request->input('password')),
             'role' => $request->input('role'),
+            'approval_status' => 1 // approved
         ]);
 
         return redirect(route("get_user_create"))->withSuccess('Account Created');

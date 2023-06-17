@@ -4,6 +4,32 @@
 
 @section('contents')
     <main class="page-center">
+
+        <div>
+            @if (Session::has('info'))
+                <div class="alert alert-primary" role="alert">
+                    {{ session('info') }}
+                </div>
+            @endif
+
+            @if (Session::has('success'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @if (Session::has('danger'))
+                <div class="alert alert-danger" role="alert">
+                    {{ session('danger') }}
+                </div>
+            @endif
+            @if (Session::has('warning'))
+                <div class="alert alert-warning" role="alert">
+                    {{ session('warning') }}
+                </div>
+            @endif
+        </div>
+
         <article class="sign-up">
             <img src="{{ asset('assets/images/logo/logo.png') }}" class="img" style="width:35%">
             <p class="sign-up__subtitle">VSY Collection | Signin To Your Account</p>
