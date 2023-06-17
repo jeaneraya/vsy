@@ -10,12 +10,14 @@ class Collector extends Model
     use HasFactory;
     protected $table = 'collectors';
     protected $fillable = [
+        'user_id',
         'code',
         'fullname',
         'mobile',
         'address',
         'cashbond',
         'ctc_no',
-        'status'
+        'status',
+        'row_status'
     ];
 }

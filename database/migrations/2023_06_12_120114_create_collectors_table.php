@@ -15,6 +15,7 @@ class CreateCollectorsTable extends Migration
     {
         Schema::create('collectors', function (Blueprint $table) {
             $table->id();
+            $table->integer('user_id');
             $table->string('code')->nullable();
             $table->string('fullname');
             $table->string('mobile');

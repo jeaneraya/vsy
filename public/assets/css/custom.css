@@ -24,3 +24,7 @@ iconify-icon {
 .registration-form form{
     width: 1000px;
 }
+
+.span-required {
+    color: red;
+}

@@ -9,6 +9,7 @@
               <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addcollector">
                 Add Collector
               </button>
+
             </div>
         </div>
         <div class="row">
