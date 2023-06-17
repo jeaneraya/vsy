@@ -14,6 +14,8 @@ return [
     */
 
     'failed' => 'These credentials do not match our records.',
+    'approval_pending' => 'The account is Pending for approval.',
+    'approval_rejected' => 'The account is Rejected.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
 
 ];

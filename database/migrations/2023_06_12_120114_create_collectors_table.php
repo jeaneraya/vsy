@@ -15,12 +15,12 @@ class CreateCollectorsTable extends Migration
     {
         Schema::create('collectors', function (Blueprint $table) {
             $table->id();
-            $table->string('code');
+            $table->string('code')->nullable();
             $table->string('fullname');
             $table->string('mobile');
             $table->string('address');
-            $table->double('cashbond',8,2);
-            $table->string('ctc_no');
+            $table->double('cashbond',8,2)->nullable();
+            $table->string('ctc_no')->nullable();
             $table->string('status')->default('active');
             $table->string('row_status')->default('pending')->comment('approved, pending');
             $table->timestamps();
