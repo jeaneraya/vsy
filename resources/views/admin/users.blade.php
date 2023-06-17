@@ -94,7 +94,7 @@
                     </div>
                 </div>
                 <div class="users-table table-wrapper">
-                    <table class="posts-table">
+                    <table class="posts-table" id="example">
                         <thead style="padding-left:1em">
                             <tr class="users-table-info">
                                 <th>ID</th>
@@ -224,8 +224,49 @@
 @endsection
 
 @section('scripts')
+<script src="{{ asset('assets/tools/DataTables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('assets/tools/DataTables/datatables.min.js') }}"></script>
     <script>
         $(document).ready(function() {
+
+            // DataTable
+            var table = $('#example').DataTable({
+                // dom: 'lfrtip',
+                initComplete: function() {
+                    // Apply the search
+                    this.api()
+                        .columns()
+                        .every(function() {
+                            var that = this;
+
+                            $('input', this.footer()).on('keyup change clear', function() {
+                                if (that.search() !== this.value) {
+                                    that.search(this.value).draw();
+                                }
+                            });
+                        });
+                },
+                dom: 'lBfrtip',
+                responsive: true,
+                scrollX: true,
+                // dom: 'B',
+                // dom: 'Pfrtip',
+                // colReorder: true,
+                // buttons: [
+                //     'excel',
+                //     'print',
+                // ],
+                select: true,
+                // "ordering": false,
+                // paging: true,
+                // lengthMenu: [
+                //     [10, 25, 50, -1],
+                //     [10, 25, 50, 'All'],
+                // ],
+                lengthChange: false,
+
+            });
+
             $(".approval-btn").click(function() {
 
                 // reset modal

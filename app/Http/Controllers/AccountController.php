@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Collector;
 use App\Models\Role;
 use App\Models\User;
+use Collator;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -95,30 +96,48 @@ class AccountController extends Controller
             return redirect(route("get_user_index"))
                 ->withErrors($validator)
                 ->withInput();
-
-            dd($validator);
         }
 
         $user = User::find($request->input('id'));
         $user->approval_status = $request->input('approval_status');
         $user->save();
 
-
         $approvedLib = [
             1 => 'approved',
-            2 => 'pending'
+            2 => 'reject'
         ];
-        $collector = Collector::create([
-            'user_id' => $request->input('id'),
-            'code' => $request->input('code'),
-            'fullname' => $user->name,
-            'mobile' => $user->name,
-            'address' => '',
-            'cashbond' => $request->input('cashbond'),
-            'ctc_no' => $request->input('ctcnum'),
-            'status' => 'active',
-            'row_status' => $approvedLib[$request->input('approval_status')]
-        ]);
+
+        if ($request->input('role') == 3) { // collector and approved
+
+            $collector = Collector::where([
+                ['user_id','=', $request->input('id')]
+            ])->first();
+
+            if ($collector) {
+                $collector->user_id = $request->input('id');
+                $collector->code = $request->input('code');
+                $collector->fullname = $user->name;
+                $collector->mobile = $user->name;
+                $collector->address = $user->address;
+                $collector->cashbond = $request->input('cashbond');
+                $collector->ctc_no = $request->input('ctcnum');
+                $collector->status = 'active';
+                $collector->row_status = $approvedLib[$request->input('approval_status')];
+                $collector->save();
+            } else {
+                Collector::create([
+                    'user_id' => $request->input('id'),
+                    'code' => $request->input('code'),
+                    'fullname' => $user->name,
+                    'mobile' => $user->name,
+                    'address' => $user->address,
+                    'cashbond' => $request->input('cashbond'),
+                    'ctc_no' => $request->input('ctcnum'),
+                    'status' => 'active',
+                    'row_status' => $approvedLib[$request->input('approval_status')]
+                ]);
+            }
+        }
 
         return redirect(route("get_user_index"))
             ->with(['success' => 'Update Successful'])

@@ -20,7 +20,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
 
     <!-- Custom styles -->
-    <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
+  <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 
     <!-- Iconify -->
