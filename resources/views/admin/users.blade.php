@@ -43,7 +43,7 @@
         <div class="row stat-cards">
 
             <div class="col-md-6 col-xl-3">
-                <a href={{ route('get_user_index', ['approval_status' => '0']) }}>
+                <a href={{ route('get_user_index', ['status' => '0']) }}>
                     <article class="stat-cards-item">
                         <div class="stat-cards-icon purple">
                             <iconify-icon icon="fa:group"></iconify-icon>
@@ -56,7 +56,7 @@
                 </a>
             </div>
             <div class="col-md-6 col-xl-3">
-                <a href={{ route('get_user_index', ['approval_status' => '1']) }}>
+                <a href={{ route('get_user_index', ['status' => '1']) }}>
                     <article class="stat-cards-item">
                         <div class="stat-cards-icon purple">
                             <iconify-icon icon="fa:group"></iconify-icon>
@@ -69,7 +69,7 @@
                 </a>
             </div>
             <div class="col-md-6 col-xl-3">
-                <a href={{ route('get_user_index', ['approval_status' => '2']) }}>
+                <a href={{ route('get_user_index', ['status' => '2']) }}>
                     <article class="stat-cards-item">
                         <div class="stat-cards-icon purple">
                             <iconify-icon icon="fa:group"></iconify-icon>
@@ -82,7 +82,7 @@
                 </a>
             </div>
             <div class="col-md-6 col-xl-3">
-                <a href={{ route('get_user_index', ['approval_status' => '3']) }}>
+                <a href={{ route('get_user_index', ['status' => '3']) }}>
                     <article class="stat-cards-item">
                         <div class="stat-cards-icon purple">
                             <iconify-icon icon="fa:group"></iconify-icon>

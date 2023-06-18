@@ -17,9 +17,9 @@ class AccountController extends Controller
     public function index(Request $request)
     {
         $where = [];
-        if ($request->has('approval_status')) {
+        if ($request->has('status')) {
             $where[] = [
-                'approval_status', '=', $request->query('approval_status')
+                'approval_status', '=', $request->query('status')
             ];
         }
         $users = User::leftJoin('collectors', ['users.id' => 'collectors.user_id'])
