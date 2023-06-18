@@ -41,49 +41,72 @@
     <div class="container">
         <h2 class="main-title">Users</h2>
         <div class="row stat-cards">
+
             <div class="col-md-6 col-xl-3">
-                <article class="stat-cards-item">
-                    <div class="stat-cards-icon primary">
-                        <iconify-icon icon="fluent:money-16-filled"></iconify-icon>
-                    </div>
-                    <div class="stat-cards-info">
-                        <p class="stat-cards-info__num">&#8369; 500,000.00</p>
-                        <p class="stat-cards-info__title">Total Collections</p>
-                    </div>
-                </article>
+                <a href={{ route('get_user_index', ['approval_status' => '0']) }}>
+                    <article class="stat-cards-item">
+                        <div class="stat-cards-icon purple">
+                            <iconify-icon icon="fa:group"></iconify-icon>
+                        </div>
+                        <div class="stat-cards-info">
+                            <p class="stat-cards-info__num">{{ $allUsers->where('approval_status', '0')->count() }}</p>
+                            <p class="stat-cards-info__title">Pending For Approval</p>
+                        </div>
+                    </article>
+                </a>
             </div>
             <div class="col-md-6 col-xl-3">
-                <article class="stat-cards-item">
-                    <div class="stat-cards-icon warning">
-                        <iconify-icon icon="fluent-mdl2:product-list"></iconify-icon>
-                    </div>
-                    <div class="stat-cards-info">
-                        <p class="stat-cards-info__num">1200</p>
-                        <p class="stat-cards-info__title">Total Products</p>
-                    </div>
-                </article>
+                <a href={{ route('get_user_index', ['approval_status' => '1']) }}>
+                    <article class="stat-cards-item">
+                        <div class="stat-cards-icon purple">
+                            <iconify-icon icon="fa:group"></iconify-icon>
+                        </div>
+                        <div class="stat-cards-info">
+                            <p class="stat-cards-info__num">{{ $allUsers->where('approval_status', '1')->count() }}</p>
+                            <p class="stat-cards-info__title">Approved</p>
+                        </div>
+                    </article>
+                </a>
             </div>
             <div class="col-md-6 col-xl-3">
-                <article class="stat-cards-item">
-                    <div class="stat-cards-icon purple">
-                        <iconify-icon icon="fa:group"></iconify-icon>
-                    </div>
-                    <div class="stat-cards-info">
-                        <p class="stat-cards-info__num">850</p>
-                        <p class="stat-cards-info__title">Total Collectors</p>
-                    </div>
-                </article>
+                <a href={{ route('get_user_index', ['approval_status' => '2']) }}>
+                    <article class="stat-cards-item">
+                        <div class="stat-cards-icon purple">
+                            <iconify-icon icon="fa:group"></iconify-icon>
+                        </div>
+                        <div class="stat-cards-info">
+                            <p class="stat-cards-info__num">{{ $allUsers->where('approval_status', '2')->count() }}</p>
+                            <p class="stat-cards-info__title">Rejected</p>
+                        </div>
+                    </article>
+                </a>
             </div>
             <div class="col-md-6 col-xl-3">
-                <article class="stat-cards-item">
-                    <div class="stat-cards-icon success">
-                        <iconify-icon icon="mingcute:group-fill"></iconify-icon>
-                    </div>
-                    <div class="stat-cards-info">
-                        <p class="stat-cards-info__num">100</p>
-                        <p class="stat-cards-info__title">Total Employees</p>
-                    </div>
-                </article>
+                <a href={{ route('get_user_index', ['approval_status' => '3']) }}>
+                    <article class="stat-cards-item">
+                        <div class="stat-cards-icon purple">
+                            <iconify-icon icon="fa:group"></iconify-icon>
+                        </div>
+                        <div class="stat-cards-info">
+                            <p class="stat-cards-info__num">{{ $allUsers->where('approval_status', '3')->count() }}</p>
+                            <p class="stat-cards-info__title">Archived</p>
+                        </div>
+                    </article>
+                </a>
+            </div>
+
+            <div class="col-md-6 col-xl-3">
+                <a href={{ route('get_user_index') }}>
+                    <article class="stat-cards-item">
+                        <div class="stat-cards-icon success">
+                            <iconify-icon icon="mingcute:group-fill"></iconify-icon>
+                        </div>
+                        <div class="stat-cards-info">
+                            <p class="stat-cards-info__num">{{$allUsers->count()}}</p>
+                            <p class="stat-cards-info__title">Total Users</p>
+                        </div>
+                    </article>
+                </a>
             </div>
         </div>
         <div class="col-lg-12">
@@ -108,11 +131,12 @@
                         </thead>
 
                         @php
-                        $statusBadgeLib = [
-                            0 => '<span class="badge-pending">Pending</span>',
-                            1 => '<span class="badge-success">Approved</span>',
-                            2 => '<span class="badge-trashed">Rejected</span>',
-                        ];
+                            $statusBadgeLib = [
+                                0 => '<span class="badge-pending">Pending</span>',
+                                1 => '<span class="badge-success">Approved</span>',
+                                2 => '<span class="badge-trashed">Rejected</span>',
+                                3 => '<span class="badge-active">Archived</span>',
+                            ];
                         @endphp
                         <tbody>
                             @foreach ($users as $user)
@@ -122,14 +146,13 @@
                                     <td>{{ $user->name }}</td>
                                     <td>{{ $user->email }}</td>
                                     <td><button data-bs-toggle="modal" data-bs-target="#exampleModalCenter"
-                                            data-id='{{$user->id}}'
-                                            data-role='{{ $user->role }}' data-name='{{ $user->name }}'
-                                            data-mobile='{{ $user->contact }}' data-address='{{ $user->address }}'
+                                            data-id='{{ $user->id }}' data-role='{{ $user->role }}'
+                                            data-name='{{ $user->name }}' data-mobile='{{ $user->contact }}'
+                                            data-address='{{ $user->address }}'
                                             data-approval-status='{{ $user->approval_status }}'
-                                            data-cashbond='{{ $user->cashbond }}'
-                                            data-code='{{ $user->code }}'
-                                            data-ctc-no='{{ $user->ctc_no }}'
-                                            class='approval-btn'><span class="material-icons-outlined">mode_edit_outline</span></button>{!!$statusBadgeLib[$user->approval_status]!!}
+                                            data-cashbond='{{ $user->cashbond }}' data-code='{{ $user->code }}'
+                                            data-ctc-no='{{ $user->ctc_no }}' class='approval-btn'><span
+                                                class="material-icons-outlined">mode_edit_outline</span></button>{!! $statusBadgeLib[$user->approval_status] !!}
                                     </td>
                                     <td class="text-center">
                                         <span class="p-relative">
@@ -137,9 +160,16 @@
                                                 <iconify-icon icon="gg:more-r"></iconify-icon>
                                             </button>
                                             <ul class="dropdown-menu">
-                                                <li><a class="dropdown-item fs-6" href="#">View</a></li>
-                                                <li><a class="dropdown-item fs-6" href="#">Edit</a></li>
-                                                <li><a class="dropdown-item fs-6" href="#">Trash</a></li>
+                                                <li><a class="dropdown-item fs-6"
+                                                        href="{{ route('get_user', ['userId' => $user->id]) }}">Edit</a>
+                                                </li>
+                                                <li>
+                                                    <form method="POST"
+                                                        action="{{ route('put_user_archive', ['userId' => $user->id]) }}">
+                                                        @csrf @method('PUT')
+                                                        <button type="submit" class="dropdown-item fs-6">Trash</button>
+                                                    </form>
+                                                </li>
                                             </ul>
                                         </span>
                                     </td>
@@ -162,62 +192,65 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form method="POST" action="{{route('put_user', ['id' => Auth::id()])}}">
+                    <form method="POST" action="{{ route('put_user', ['id' => Auth::id()]) }}">
                         @csrf
                         @method('PUT')
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-3 mb-3">
-                                <label for="code" class="form-label">Code:<span class='span-required'>*<span></label>
-                                <input type="text" class="form-control border border-secondary-subtle" id="code"
-                                    name="code" required>
-                            </div>
-                            <div class="col-9 mb-3">
-                                <label for="" class="form-label">Fullname:</label>
-                                <input type="text" class="form-control border border-secondary-subtle" id="name"
-                                    name="fullname" required readonly>
-                            </div>
-                            <div class="col-6 mb-3">
-                                <label for="" class="form-label">Mobile #:</label>
-                                <input type="text" class="form-control border border-secondary-subtle" id="mobile"
-                                    name="mobile" readonly>
-                            </div>
-                            <div class="col-6 mb-3">
-                                <label for="" class="form-label">Cashbond:<span
-                                        class='span-required'>*<span></label>
-                                <input type="text" class="form-control border border-secondary-subtle" id="cashbond"
-                                    name="cashbond" required>
-                            </div>
-                            <div class="col-6 mb-3">
-                                <label for="" class="form-label">CTC No<span
-                                        class='span-required'>*<span>:</label>
-                                <input type="text" class="form-control border border-secondary-subtle" id="ctcnum"
-                                    name="ctcnum" required>
-                            </div>
-                            <div class="col-6 mb-3">
-                                <label for="" class="form-label">Address:</label>
-                                <textarea class="form-control" name="address" id="address" cols="30" rows="3" required readonly></textarea>
-                            </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-3 mb-3">
+                                    <label for="code" class="form-label">Code:<span
+                                            class='span-required'>*<span></label>
+                                    <input type="text" class="form-control border border-secondary-subtle" id="code"
+                                        name="code" required>
+                                </div>
+                                <div class="col-9 mb-3">
+                                    <label for="" class="form-label">Fullname:</label>
+                                    <input type="text" class="form-control border border-secondary-subtle" id="name"
+                                        name="fullname" required readonly>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <label for="" class="form-label">Mobile #:</label>
+                                    <input type="text" class="form-control border border-secondary-subtle"
+                                        id="mobile" name="mobile" readonly>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <label for="" class="form-label">Cashbond:<span
+                                            class='span-required'>*<span></label>
+                                    <input type="text" class="form-control border border-secondary-subtle"
+                                        id="cashbond" name="cashbond" required>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <label for="" class="form-label">CTC No<span
+                                            class='span-required'>*<span>:</label>
+                                    <input type="text" class="form-control border border-secondary-subtle"
+                                        id="ctcnum" name="ctcnum" required>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <label for="" class="form-label">Address:</label>
+                                    <textarea class="form-control" name="address" id="address" cols="30" rows="3" required readonly></textarea>
+                                </div>
 
-                            <div class="col-12">
+                                <div class="col-12">
 
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="approval_status" id="approved_radio" value="1" checked>
-                                <label class="form-check-label" for="inlineRadio1">Approved</label>
-                              </div>
-                              <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="approval_status" id="reject_radio" value="2">
-                                <label class="form-check-label" for="inlineRadio2">Reject</label>
-                              </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="approval_status"
+                                            id="approved_radio" value="1" checked>
+                                        <label class="form-check-label" for="inlineRadio1">Approved</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="approval_status"
+                                            id="reject_radio" value="2">
+                                        <label class="form-check-label" for="inlineRadio2">Reject</label>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="user_id" name="id">
+                                <input type="hidden" id="role" name="role">
                             </div>
-                            <input type="hidden" id="user_id" name="id">
-                            <input type="hidden" id="role" name="role">
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
-                    </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -231,8 +264,8 @@
 @endsection
 
 @section('scripts')
-<script src="{{ asset('assets/tools/DataTables/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('assets/tools/DataTables/datatables.min.js') }}"></script>
+    <script src="{{ asset('assets/tools/DataTables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/tools/DataTables/datatables.min.js') }}"></script>
     <script>
         $(document).ready(function() {
 
@@ -309,7 +342,6 @@
                     $("#code").prop('required', true);
                     $("#ctcnum").prop('required', true);
                     $("#code").prop('required', true);
-
 
                     $("#code").prop('disabled', false);
                     $("#cashbond").prop('disabled', false);

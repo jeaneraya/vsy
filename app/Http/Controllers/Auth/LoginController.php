@@ -7,6 +7,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
@@ -55,15 +56,69 @@ class LoginController extends Controller
                 'email' => $credentials['email'],
                 'password' => $credentials['password']
             ])) {
-            if (Auth::user()->approval_status == 0) {
-                Auth::logout();
-                return $this->sendPendingApprovalResponse($request);
-            }
 
-            if (Auth::user()->approval_status == 2) {
+            if (Auth::user()->approval_status != 1) {
+
+
+                if (Auth::user()->approval_status == 0) {
+                    Auth::logout();
+                    return $this->sendPendingApprovalResponse($request);
+                }
+
+                if (Auth::user()->approval_status == 2) {
+                    Auth::logout();
+                    return $this->sendRejectedApprovalResponse($request);
+                }
                 Auth::logout();
-                return $this->sendRejectedApprovalResponse($request);
+                return $this->sendNotApprovedlResponse($request);
             }
         }
+    }
+
+
+    /**
+     * Get the failed login response instance.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected function sendPendingApprovalResponse(Request $request)
+    {
+        throw ValidationException::withMessages([
+            $this->username() => [trans('auth.approval_pending')],
+        ]);
+    }
+
+    /**
+     * Get the failed login response instance.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected function sendRejectedApprovalResponse(Request $request)
+    {
+        throw ValidationException::withMessages([
+            $this->username() => [trans('auth.approval_rejected')],
+        ]);
+    }
+
+
+    /**
+     * Get the failed login response instance.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected function sendNotApprovedlResponse(Request $request)
+    {
+        throw ValidationException::withMessages([
+            $this->username() => [trans('auth.approval_unknown')],
+        ]);
     }
 }

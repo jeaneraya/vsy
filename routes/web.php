@@ -24,12 +24,25 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/users', [AccountController::class, 'index'])->name('get_user_index');
         Route::post('/user', [AccountController::class, 'store']);
         Route::put('/user/{id}', [AccountController::class, 'put'])->name('put_user');
+        Route::put('/user/{userId}/archive', [AccountController::class, 'archive_user'])->name('put_user_archive');
+
 
         Route::get('/user/create', [AccountController::class, 'createView'])->name('get_user_create');
         Route::post('/user/create', [AccountController::class, 'create'])->name('post_user_create');
 
+        Route::get('/user/{userId}', [AccountController::class, 'get'])->name('get_user');
+
     });
 
+    Route::middleware(['isRoleAdmin'])->group(function () {
+
+
+    });
+
+    Route::middleware(['isRoleCollector'])->group(function () {
+
+
+    });
 
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 

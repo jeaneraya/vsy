@@ -31,7 +31,8 @@ class UserTableSeeder extends Seeder
             'birthday' => '2023-01-01',
             'contact' => 12345678912,
             'address' => 'test address',
-            'role' => 1
+            'role' => 1,
+            'approval_status' => '1'
         ]);
 
         $admin = User::create([
@@ -41,7 +42,8 @@ class UserTableSeeder extends Seeder
             'birthday' => '2023-01-01',
             'contact' => 12345678912,
             'address' => 'test address',
-            'role' => 2
+            'role' => 2,
+            'approval_status' => '1'
         ]);
 
         $collector = User::create([
@@ -51,7 +53,8 @@ class UserTableSeeder extends Seeder
             'birthday' => '2023-01-01',
             'contact' => 12345678912,
             'address' => 'test address',
-            'role' => 3
+            'role' => 3,
+            'approval_status' => '0'
         ]);
     }
 }

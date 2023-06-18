@@ -20,8 +20,8 @@ class CreateUsersTable extends Migration
             $table->string('birthday')->date();
             $table->string('address');
             $table->string('contact');
-            $table->integer('role')->default(0);
-            $table->integer('approval_status')->default(0);
+            $table->integer('role')->default(0)->comment('roles_table');
+            $table->integer('approval_status')->default(0)->comment('0 - pending, 1 - approved, 2 - rejected, 3 - archived');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

@@ -14,12 +14,21 @@ use Illuminate\Validation\Rule as ValidationRule;
 
 class AccountController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $where = [];
+        if ($request->has('approval_status')) {
+            $where[] = [
+                'approval_status', '=', $request->query('approval_status')
+            ];
+        }
         $users = User::leftJoin('collectors', ['users.id' => 'collectors.user_id'])
             ->select('users.*', 'collectors.code', 'collectors.ctc_no', 'collectors.cashbond')
+            ->where($where)
             ->get();
-        return view('admin/users', ['users' => $users]);
+
+        $allUsers = User::all();
+        return view('admin/users', ['users' => $users, 'allUsers' => $allUsers]);
     }
 
 
@@ -54,7 +63,7 @@ class AccountController extends Controller
                 ->withInput();
         }
 
-        User::create([
+        $user = User::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'birthday' => $request->input('birthday'),
@@ -62,9 +71,36 @@ class AccountController extends Controller
             'contact' => $request->input('contact'),
             'password' => Hash::make($request->input('password')),
             'role' => $request->input('role'),
-            'approval_status' => 1 // approved
+            'approval_status' => 1, // approved
+            // collectors
+            'code' => [
+                'required_if:role,3',
+            ],
+            'cashbond' => [
+                'required_if:role,3',
+            ],
+            'ctcnum' => [
+                'required_if:role,3',
+            ],
+            $messages = [
+                'required_if' => 'The :attribute field is required.',
+            ]
         ]);
 
+
+        if ($request->input('role') == 3) {
+            Collector::create([
+                'user_id' => $user->id,
+                'code' => $request->input('code'),
+                'fullname' => $request->input('name'),
+                'mobile' => $request->input('contact'),
+                'address' => $request->input('address'),
+                'cashbond' => $request->input('cashbond'),
+                'ctc_no' => $request->input('ctcnum'),
+                'status' => 1,
+                'row_status' => 1 // approved
+            ]);
+        }
         return redirect(route("get_user_create"))->withSuccess('Account Created');
     }
 
@@ -102,11 +138,6 @@ class AccountController extends Controller
         $user->approval_status = $request->input('approval_status');
         $user->save();
 
-        $approvedLib = [
-            1 => 'approved',
-            2 => 'reject'
-        ];
-
         if ($request->input('role') == 3) { // collector and approved
 
             $collector = Collector::where([
@@ -121,8 +152,8 @@ class AccountController extends Controller
                 $collector->address = $user->address;
                 $collector->cashbond = $request->input('cashbond');
                 $collector->ctc_no = $request->input('ctcnum');
-                $collector->status = 'active';
-                $collector->row_status = $approvedLib[$request->input('approval_status')];
+                $collector->status = 1;
+                $collector->row_status = $request->input('approval_status');
                 $collector->save();
             } else {
                 Collector::create([
@@ -133,12 +164,35 @@ class AccountController extends Controller
                     'address' => $user->address,
                     'cashbond' => $request->input('cashbond'),
                     'ctc_no' => $request->input('ctcnum'),
-                    'status' => 'active',
-                    'row_status' => $approvedLib[$request->input('approval_status')]
+                    'status' => 1,
+                    'row_status' => $request->input('approval_status')
                 ]);
             }
         }
 
+        return redirect(route("get_user_index"))
+            ->with(['success' => 'Update Successful'])
+            ->withInput();
+    }
+
+    protected function get(Request $request, User $userId)
+    {
+        return view('admin/view_user', ['user' => $userId]);
+    }
+
+    protected function archive_user(User $userId)
+    {
+        $userId->approval_status = 3; // archive
+        $userId->save();
+
+        $collector = Collector::where([
+            ['user_id','=', $userId->id]
+        ])->first();
+
+        if ($collector) {
+            $collector->row_status = 3; // archive
+            $collector->save();
+        }
         return redirect(route("get_user_index"))
             ->with(['success' => 'Update Successful'])
             ->withInput();

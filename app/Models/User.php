@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -47,5 +48,22 @@ class User extends Authenticatable
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class, 'role_user_table', 'user_id', 'role_id');
+    }
+
+    public function isSuperAdmin() {
+        return $this->role == 1;
+    }
+
+    public function isAdmin() {
+        return $this->role == 2;
+    }
+
+    public function isCollector() {
+        return $this->role == 3;
+    }
+
+    public function collectors(): BelongsTo
+    {
+        return $this->belongsTo(Collector::class, 'id', 'user_id');
     }
 }
