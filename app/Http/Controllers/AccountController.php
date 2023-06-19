@@ -173,15 +173,6 @@ class AccountController extends Controller
         $userId->approval_status = 3; // archive
         $userId->save();
 
-        $collector = Collector::where([
-            ['user_id','=', $userId->id]
-        ])->first();
-
-        if ($collector) {
-            $collector->row_status = 3; // archive
-            $collector->save();
-        }
-
         return redirect(route("get_user_index"))
             ->with(['success' => 'Update Successful'])
             ->withInput();

@@ -1,45 +1,50 @@
 @extends('layout.design')
 
 @section('contents')
-    <div>
-        @if (Session::has('info'))
-            <div class="alert alert-primary" role="alert">
-                {{ session('info') }}
-            </div>
-        @endif
-
-        @if (Session::has('success'))
-            <div class="alert alert-success" role="alert">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        @if (Session::has('danger'))
-            <div class="alert alert-danger" role="alert">
-                {{ session('danger') }}
-            </div>
-        @endif
-        @if (Session::has('warning'))
-            <div class="alert alert-warning" role="alert">
-                {{ session('warning') }}
-            </div>
-        @endif
-
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-    </div>
-
 
 
     <div class="container">
+
         <h2 class="main-title">Users</h2>
+
+        <div>
+            @if (Session::has('info'))
+                <div class="alert alert-primary" role="alert">
+                    {{ session('info') }}
+                </div>
+            @endif
+
+            @if (Session::has('success'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @if (Session::has('danger'))
+                <div class="alert alert-danger" role="alert">
+                    {{ session('danger') }}
+                </div>
+            @endif
+            @if (Session::has('warning'))
+                <div class="alert alert-warning" role="alert">
+                    {{ session('warning') }}
+                </div>
+            @endif
+
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+        </div>
+
+
+
+
         <div class="row stat-cards">
 
             <div class="col-md-6 col-xl-3">
