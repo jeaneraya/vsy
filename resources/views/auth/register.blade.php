@@ -5,8 +5,8 @@
 @section('contents')
     <main class="page-center registration-form">
         <article class="sign-up">
-            <img src="{{ asset('assets/images/logo/logo.png') }}" class="img" style="width:20%">
-            <p class="sign-up__subtitle">VSY Collection | Create New Administrator's Account</p>
+            <img src="{{ asset('assets/images/logo/logo.png') }}" class="img" style="width:10%">
+            <p class="sign-up__subtitle" style="margin:auto">VSY Collection | Create New Administrator's Account</p>
 
             <form class="sign-up-form form" method="POST" action="{{ route('register') }}">
                 @csrf
@@ -49,7 +49,7 @@
 
                     <label class="form-label-wrapper col-6">
                         <p class="form-label">Birthday</p>
-                        <input id="birthday" type="birthday"
+                        <input id="birthday" type="date"
                             class="form-control @error('birthday') is-invalid @enderror  form-input" name="birthday"
                             value="{{ old('birthday') }}" required autocomplete="birthday">
                     </label>
