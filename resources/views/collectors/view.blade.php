@@ -66,7 +66,7 @@
                       <label for="c" class="form-label">Batch #:</label>
                       <input type="text" class="form-control" id="batch_num" name="batch_num" value="{{ $batchTransCount + 1 }}" readonly>
                       <input type="number" name="collector_id" value="{{ $collector_id }}" hidden>
-                      <input type="number" name="collector_name" value="{{ $collector_name }}" hidden>
+                      <input type="text" name="collector_name" value="{{ $collector_name }}" hidden>
                     </div>
                 </div>
                 <div class="row">

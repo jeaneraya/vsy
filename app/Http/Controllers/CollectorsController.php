@@ -56,9 +56,9 @@ class CollectorsController extends Controller
 
     public function viewCollector($id,$name) {
         $batch_trans = DB::table('batchtransactions')
-            ->join('collectors', 'batchtransactions.collector_id', '=', 'collectors.id')
-            ->select('batchtransactions.*', 'collectors.fullname')
-            ->where('batchtransactions.collector_id',$id)
+            ->join('users', 'batchtransactions.collector_id', '=', 'users.id')
+            ->select('batchtransactions.*', 'users.name')
+            ->where('batchtransactions.collector_id', $id)
             ->get();
 
         $collector_id = $id;
