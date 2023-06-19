@@ -162,14 +162,6 @@
                             </div>
 
                             <div class="col-6 mb-3">
-                                <label for="validationCustom01">Collector Status</label>
-                                <input type="text" class="form-control" id="validationCustom01" placeholder=""
-                                    required
-                                    value={{ is_null($user->collectors) === false ? $user->collectors->status : null }}>
-                                <div class="valid-feedback">
-                                    Looks good!
-                                </div>
-
                                 <div class="form-group">
                                     <label for="exampleFormControlSelect1">Collector Status</label>
                                     <select class="form-control" id="exampleFormControlSelect1" required>

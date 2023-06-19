@@ -71,19 +71,8 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-         // Collector
-        if ($data['role'] == 3) {
-            Collector::create([
-                'fullname' => $data['name'],
-                // 'email' => $data['email'],
-                // 'birthday' => 123123,
-                'address' => $data['address'],
-                'mobile' => $data['contact'],
-                'row_status' => 'pending'
-            ]);
-        }
 
-        return User::create([
+        $user =  User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'birthday' =>  $data['birthday'],
@@ -93,6 +82,7 @@ class RegisterController extends Controller
             'role' => $data['role'],
             'approval_status' => 0
         ]);
+        return $user;
     }
 
     /**

@@ -5,15 +5,19 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Collector;
 use App\Models\Batchtransaction;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class CollectorsController extends Controller
 {
     public function index() {
 
-        $collectors = Collector::where([
-            ['row_status', '=', 'approved']
-        ])->get();
+        $collectors = Collector::leftJoin('users', 'users.id', '=', 'collectors.user_id')
+            ->where([
+            ['users.approval_status', '=', '1']
+        ])
+        ->get();
         return view('collectors.index', compact('collectors'));
     }
 
@@ -25,16 +29,27 @@ class CollectorsController extends Controller
             'address' => 'required|string|max:255'
         ]);
 
-        $collector = new Collector();
-        $collector->code = $validateData['code'];
-        $collector->fullname = $validateData['fullname'];
-        $collector->mobile = $validateData['mobile'];
-        $collector->address = $validateData['address'];
-        $collector->cashbond = $request->input('cashbond');
-        $collector->ctc_no = $request->input('ctcnum');
-        $collector->row_status = 'approved';
+        $user = User::create([
+            'name' => $request->input('fullname'),
+            'email' => $request->input('email'),
+            'birthday' => '2023-01-01', //$request->input('birthday'),
+            'address' => $request->input('address'),
+            'contact' => $request->input('mobile'),
+            'password' => Hash::make($request->input('password')),
+            'role' => 3, //$request->input('role'),
+            'approval_status' => 1, // approved
+        ]);
 
-        $collector->save();
+
+
+        Collector::create([
+            'user_id' => $user->id,
+            'code' => $request->input('code'),
+            'cashbond' => $request->input('cashbond'),
+            'ctc_no' => $request->input('ctcnum'),
+            'status' => 1, // active
+        ]);
+
 
         return redirect('/collectors')->with('message', 'New Collector Added Successfully!');
     }
@@ -49,7 +64,7 @@ class CollectorsController extends Controller
         $collector_id = $id;
         $collector_name = $name;
         $filteredBatchTrans = $batch_trans->where('collector_id', $collector_id);
-        $batchTransCount = $filteredBatchTrans->count();    
+        $batchTransCount = $filteredBatchTrans->count();
         return view('collectors.view', compact('batch_trans'), ['collector_id' => $id, 'batchTransCount' => $batchTransCount, 'collector_name' => $collector_name]);
     }
 
@@ -78,7 +93,7 @@ class CollectorsController extends Controller
             ->get();
 
         $batchid = $batch_id;
-        $collector_name = $name; 
+        $collector_name = $name;
         return view('collectors.viewbatch', compact('batch_withdrawals'), ['batch_id' => $batchid, 'collector_name' => $collector_name]);
     }
 }

@@ -12,6 +12,15 @@
 
             </div>
         </div>
+
+        @php
+        $statusBadgeLib = [
+            0 => '<span class="badge-pending">Pending</span>',
+            1 => '<span class="badge-success">Active</span>',
+            2 => '<span class="badge-trashed">Inactive</span>',
+        ];
+        @endphp
+
         <div class="row">
           <div class="col-lg-12">
             <div class="users-table table-wrapper">
@@ -32,15 +41,15 @@
                       <tr>
                           <td>{{ $key + 1 }}</td>
                           <td>{{ $collector->code }}</td>
-                          <td>{{ $collector->fullname }}</td>
-                          <td>{{ $collector->mobile }}</td>
+                          <td>{{ $collector->name }}</td>
+                          <td>{{ $collector->contact }}</td>
                           <td>{{ $collector->address }}</td>
-                          <td>{{ $collector->status }}</td>
+                          <td>{!! $statusBadgeLib[$collector->status] !!}</td>
                           <td class="text-center">
                               <span class="p-relative">
                                   <button class="btn p-0" data-bs-toggle="dropdown" aria-expanded="false"><iconify-icon icon="gg:more-r"></iconify-icon></button>
                                   <ul class="dropdown-menu">
-                                      <li><a class="dropdown-item fs-6" href="{{ route('collectors.show', ['id' => $collector->id, 'name' => $collector->fullname]) }}">View</a></li>
+                                      <li><a class="dropdown-item fs-6" href="{{ route('collectors.show', ['id' => $collector->user_id, 'name' => $collector->name]) }}">View</a></li>
                                       <li><a class="dropdown-item fs-6" href="#">Edit</a></li>
                                       <li><a class="dropdown-item fs-6" href="#">Trash</a></li>
                                   </ul>

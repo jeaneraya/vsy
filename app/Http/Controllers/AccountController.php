@@ -55,7 +55,20 @@ class AccountController extends Controller
             'birthday' => ['required', 'string'],
             'address' => ['required', 'string'],
             'contact' => ['required', 'string'],
-        ]);
+                // collectors
+            'code' => [
+            'required_if:role,3',
+            ],
+            'cashbond' => [
+                'required_if:role,3',
+            ],
+            'ctcnum' => [
+                'required_if:role,3',
+            ]],
+            $messages = [
+                'required_if' => 'The :attribute field is required.',
+            ]
+        );
 
         if ($validator->fails()) {
             return redirect(route("get_user_create"))
@@ -72,19 +85,6 @@ class AccountController extends Controller
             'password' => Hash::make($request->input('password')),
             'role' => $request->input('role'),
             'approval_status' => 1, // approved
-            // collectors
-            'code' => [
-                'required_if:role,3',
-            ],
-            'cashbond' => [
-                'required_if:role,3',
-            ],
-            'ctcnum' => [
-                'required_if:role,3',
-            ],
-            $messages = [
-                'required_if' => 'The :attribute field is required.',
-            ]
         ]);
 
 
@@ -92,13 +92,9 @@ class AccountController extends Controller
             Collector::create([
                 'user_id' => $user->id,
                 'code' => $request->input('code'),
-                'fullname' => $request->input('name'),
-                'mobile' => $request->input('contact'),
-                'address' => $request->input('address'),
                 'cashbond' => $request->input('cashbond'),
                 'ctc_no' => $request->input('ctcnum'),
-                'status' => 1,
-                'row_status' => 1 // approved
+                'status' => 1, // active
             ]);
         }
         return redirect(route("get_user_create"))->withSuccess('Account Created');
@@ -147,25 +143,17 @@ class AccountController extends Controller
             if ($collector) {
                 $collector->user_id = $request->input('id');
                 $collector->code = $request->input('code');
-                $collector->fullname = $user->name;
-                $collector->mobile = $user->name;
-                $collector->address = $user->address;
                 $collector->cashbond = $request->input('cashbond');
                 $collector->ctc_no = $request->input('ctcnum');
-                $collector->status = 1;
-                $collector->row_status = $request->input('approval_status');
+                $collector->status = 1; // active
                 $collector->save();
             } else {
                 Collector::create([
                     'user_id' => $request->input('id'),
                     'code' => $request->input('code'),
-                    'fullname' => $user->name,
-                    'mobile' => $user->name,
-                    'address' => $user->address,
                     'cashbond' => $request->input('cashbond'),
                     'ctc_no' => $request->input('ctcnum'),
-                    'status' => 1,
-                    'row_status' => $request->input('approval_status')
+                    'status' => 1, // active
                 ]);
             }
         }
@@ -193,6 +181,7 @@ class AccountController extends Controller
             $collector->row_status = 3; // archive
             $collector->save();
         }
+
         return redirect(route("get_user_index"))
             ->with(['success' => 'Update Successful'])
             ->withInput();
