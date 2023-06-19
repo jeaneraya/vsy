@@ -17,7 +17,7 @@ class CreateExpensesTable extends Migration
             $table->id();
             $table->string('code');
             $table->string('description');
-            $table->double('addon_interest',8,2);
+            $table->double('addon_interest',8,2)->nullable();
             $table->timestamps();
         });
     }

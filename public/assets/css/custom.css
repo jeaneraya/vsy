@@ -28,3 +28,7 @@ iconify-icon {
 .span-required {
     color: red;
 }
+
+.table-wrapper {
+  min-height: 550px;
+}

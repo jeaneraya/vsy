@@ -17,7 +17,7 @@ class CreateAplistsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('remarks');
-            $table->string('status');
+            $table->string('status')->default('active');
             $table->timestamps();
         });
     }

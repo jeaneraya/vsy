@@ -81,7 +81,7 @@
                                 <a class="{{ request()->routeIs('suppliers') ? 'active' : '' }}" href="{{ route('suppliers') }}"><span class="material-icons-outlined">group</span>Suppliers</a>
                             </li>
                             <li>
-                                <a class="{{ request()->routeIs('stocks') ? 'active' : '' }}" href="{{ route('stocks') }}"><span class="material-icons-outlined">inventory_2</span>Stocks</a>
+                                <a class="{{ request()->routeIs('products') ? 'active' : '' }}" href="{{ route('products') }}"><span class="material-icons-outlined">inventory_2</span>Products</a>
                             </li>
                             <li>
                                 <a class="{{ request()->routeIs('ap_list') ? 'active' : '' }}" href="{{ route('ap_list') }}"><span class="material-icons-outlined">list_alt</span>AP List</a>
@@ -135,7 +135,7 @@
                                         <i data-feather="settings" aria-hidden="true"></i>
                                         <span>Account settings</span>
                                     </a></li>
-                                {{-- <li class="dropdown-item"><a class="danger" href="##" href="{{ route('logout') }}"
+                                {{-- <li class="dropdown-item p-0"><a class="danger p-0" href="##" href="{{ route('logout') }}"
                                     data-feather="log-out" aria-hidden="true"
                                     onclick="event.preventDefault();
                               document.getElementById('logout-form').submit();">
@@ -170,6 +170,9 @@
 
     </div>
 
+
+    <!-- Custom scripts -->
+    <script src="{{ asset('assets/plugins/script.js') }}"></script>
     <!-- Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous">

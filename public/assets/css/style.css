@@ -194,8 +194,7 @@
   * 1. Show the overflow in Edge.
   */
  
- button,
- input {
+ button{
    /* 1 */
    overflow: visible;
  }
@@ -205,8 +204,7 @@
   * 1. Remove the inheritance of text transform in Firefox.
   */
  
- button,
- select {
+ button{
    /* 1 */
    text-transform: none;
  }
@@ -768,20 +766,6 @@
    margin-bottom: 15px;
  }
  
- .white-block.checkboxes label:last-child {
-   margin-bottom: 0;
- }
- 
- .white-block.checkboxes input {
-   margin-right: 12px;
-   width: 16px;
-   height: 16px;
- }
- 
- .white-block.checkboxes span {
-   font-size: 14px;
-   line-height: 1.71;
- }
  
  /* content of sr-only is available only for screen-readers */
  
@@ -1771,98 +1755,11 @@
    background-color: rgba(75, 222, 151, 0.1);
  }
  
- input {
-   border-radius: 6px;
-   background-color: #eff0f6;
-   border-width: 0;
-   min-height: 40px;
-   border: solid transparent 2px !important;
- }
- 
- input[type="checkbox"],
- input[type="radio"] {
-   min-height: auto;
- }
- 
- input[type="radio"] {
-   width: 24px;
-   height: 24px;
-   margin-right: 19px;
- }
- 
- input[type="radio"]:focus {
-   outline: none;
-   -webkit-box-shadow: none;
-   box-shadow: none;
- }
- 
- input::-webkit-input-placeholder {
-   font-weight: 500;
-   font-size: 14px;
-   line-height: 2.43;
-   color: #d6d7e3;
- }
- 
- input::-moz-placeholder {
-   font-weight: 500;
-   font-size: 14px;
-   line-height: 2.43;
-   color: #d6d7e3;
- }
- 
- input:-ms-input-placeholder {
-   font-weight: 500;
-   font-size: 14px;
-   line-height: 2.43;
-   color: #d6d7e3;
- }
- 
- input::-ms-input-placeholder {
-   font-weight: 500;
-   font-size: 14px;
-   line-height: 2.43;
-   color: #d6d7e3;
- }
- 
- input::placeholder {
-   font-weight: 500;
-   font-size: 14px;
-   line-height: 2.43;
-   color: #d6d7e3;
- }
- 
- input:focus {
-   outline: none;
-   border: rgba(134, 182, 254, 0.5) solid !important;
-   -webkit-box-shadow: 0 0 0 2px rgba(134, 182, 254, 0.5);
-   box-shadow: 0 0 0 2px rgba(134, 182, 254, 0.5);
- }
- 
- input:enabled:read-write:-webkit-any(:focus, :hover)::-webkit-calendar-picker-indicator {
-   display: none !important;
- }
- 
- .check {
-   position: relative;
-   display: -webkit-box;
-   display: -ms-flexbox;
-   display: flex;
-   -webkit-box-align: center;
-   -ms-flex-align: center;
-   align-items: center;
-   -ms-flex-wrap: wrap;
-   flex-wrap: wrap;
- }
- 
  label {
    width: -webkit-max-content;
    width: -moz-max-content;
    width: max-content;
    cursor: pointer;
- }
- 
- .new-page-content input {
-   padding: 5px 16px;
  }
  
  .users {
@@ -1908,10 +1805,6 @@
    width: -webkit-max-content;
    width: -moz-max-content;
    width: max-content;
- }
- 
- .users-table__checkbox input {
-   margin-right: 20px;
  }
  
  .users-table td {
@@ -2474,61 +2367,6 @@
  
  .search-wrapper {
    position: relative;
- }
- 
- .search-wrapper input {
-   width: 271px;
-   border-radius: 6px;
-   background-color: #eff0f6;
-   padding: 3px 8px 3px 42px;
-   height: 40px;
-   border-width: 0;
- }
- 
- .search-wrapper input::-webkit-input-placeholder {
-   background-color: #eff0f6;
-   font-size: 14px;
-   line-height: 2.43;
-   color: #d6d7e3;
-   -webkit-transition: 0.3s all;
-   transition: 0.3s all;
- }
- 
- .search-wrapper input::-moz-placeholder {
-   background-color: #eff0f6;
-   font-size: 14px;
-   line-height: 2.43;
-   color: #d6d7e3;
-   -moz-transition: 0.3s all;
-   transition: 0.3s all;
- }
- 
- .search-wrapper input:-ms-input-placeholder {
-   background-color: #eff0f6;
-   font-size: 14px;
-   line-height: 2.43;
-   color: #d6d7e3;
-   -ms-transition: 0.3s all;
-   transition: 0.3s all;
- }
- 
- .search-wrapper input::-ms-input-placeholder {
-   background-color: #eff0f6;
-   font-size: 14px;
-   line-height: 2.43;
-   color: #d6d7e3;
-   -ms-transition: 0.3s all;
-   transition: 0.3s all;
- }
- 
- .search-wrapper input::placeholder {
-   background-color: #eff0f6;
-   font-size: 14px;
-   line-height: 2.43;
-   color: #d6d7e3;
-   -webkit-transition: 0.3s all;
-   -o-transition: 0.3s all;
-   transition: 0.3s all;
  }
  
  .lang-switcher {

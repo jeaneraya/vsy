@@ -15,8 +15,8 @@ input:enabled:read-write:-webkit-any(:focus, :hover)::-webkit-calendar-picker-in
 
     <main class="page-center registration-form">
         <article class="sign-up">
-            <img src="{{ asset('assets/images/logo/logo.png') }}" class="img" style="width:20%">
-            <p class="sign-up__subtitle">VSY Collection | Create New Administrator's Account</p>
+            <img src="{{ asset('assets/images/logo/logo.png') }}" class="img" style="width:10%">
+            <p class="sign-up__subtitle" style="margin:auto">VSY Collection | Create New Administrator's Account</p>
 
             <div align="left">
                 @if (Session::has('info'))

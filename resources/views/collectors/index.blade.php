@@ -40,7 +40,7 @@
                               <span class="p-relative">
                                   <button class="btn p-0" data-bs-toggle="dropdown" aria-expanded="false"><iconify-icon icon="gg:more-r"></iconify-icon></button>
                                   <ul class="dropdown-menu">
-                                      <li><a class="dropdown-item fs-6" href="#">View</a></li>
+                                      <li><a class="dropdown-item fs-6" href="{{ route('collectors.show', ['id' => $collector->id, 'name' => $collector->fullname]) }}">View</a></li>
                                       <li><a class="dropdown-item fs-6" href="#">Edit</a></li>
                                       <li><a class="dropdown-item fs-6" href="#">Trash</a></li>
                                   </ul>
@@ -63,7 +63,7 @@
               <h1 class="modal-title fs-5" id="exampleModalLabel">Add Collector</h1>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('form-submit') }}" method="POST">
+            <form action="{{ route('add-collector') }}" method="POST">
                 @csrf
             <div class="modal-body">
 
@@ -90,7 +90,7 @@
                     </div>
                     <div class="col-6 mb-3">
                       <label for="" class="form-label">Address:</label>
-                      <textarea class="form-control" name="address" id="address" cols="30" rows="3"></textarea>
+                      <textarea class="form-control" name="address" id="address" cols="30" rows="3" required></textarea>
                     </div>
                   </div>
 

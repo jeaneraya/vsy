@@ -22,7 +22,7 @@ class CreateCollectorsTable extends Migration
             $table->string('address');
             $table->double('cashbond',8,2)->nullable();
             $table->string('ctc_no')->nullable();
-            $table->string('status')->default(1)->commect('0 - pending, 1 - active, 2 - inactive');
+            $table->string('status')->default(1)->comment('0 - pending, 1 - active, 2 - inactive');
             $table->string('row_status')->default(0)->comment('0 - pending, 1 - approved, 2 - rejected, 3 - archived');
             $table->timestamps();
         });
