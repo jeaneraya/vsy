@@ -102,7 +102,7 @@
                             <iconify-icon icon="mingcute:group-fill"></iconify-icon>
                         </div>
                         <div class="stat-cards-info">
-                            <p class="stat-cards-info__num">{{$allUsers->count()}}</p>
+                            <p class="stat-cards-info__num">{{ $allUsers->count() }}</p>
                             <p class="stat-cards-info__title">Total Users</p>
                         </div>
                     </article>
@@ -145,14 +145,7 @@
                                     <td>{{ App\Models\Constants::getRolevalue()[$user->role] }}</td>
                                     <td>{{ $user->name }}</td>
                                     <td>{{ $user->email }}</td>
-                                    <td><button data-bs-toggle="modal" data-bs-target="#exampleModalCenter"
-                                            data-id='{{ $user->id }}' data-role='{{ $user->role }}'
-                                            data-name='{{ $user->name }}' data-mobile='{{ $user->contact }}'
-                                            data-address='{{ $user->address }}'
-                                            data-approval-status='{{ $user->approval_status }}'
-                                            data-cashbond='{{ $user->cashbond }}' data-code='{{ $user->code }}'
-                                            data-ctc-no='{{ $user->ctc_no }}' class='approval-btn'><span
-                                                class="material-icons-outlined">mode_edit_outline</span></button>{!! $statusBadgeLib[$user->approval_status] !!}
+                                    <td>{!! $statusBadgeLib[$user->approval_status] !!}
                                     </td>
                                     <td class="text-center">
                                         <span class="p-relative">
@@ -161,7 +154,8 @@
                                             </button>
                                             <ul class="dropdown-menu">
                                                 <li><a class="dropdown-item fs-6"
-                                                        href="{{ route('get_user', ['userId' => $user->id]) }}">Edit</a>
+                                                        href="{{ route('get_user', ['userId' => $user->id]) }}">Edit
+                                                        Profile</a>
                                                 </li>
                                                 <li>
                                                     <form method="POST"
@@ -169,6 +163,18 @@
                                                         @csrf @method('PUT')
                                                         <button type="submit" class="dropdown-item fs-6">Trash</button>
                                                     </form>
+                                                </li>
+                                                <li>
+
+                                                    <a role="button" data-bs-toggle="modal"
+                                                        data-bs-target="#exampleModalCenter" data-id='{{ $user->id }}'
+                                                        data-role='{{ $user->role }}' data-name='{{ $user->name }}'
+                                                        data-mobile='{{ $user->contact }}'
+                                                        data-address='{{ $user->address }}'
+                                                        data-approval-status='{{ $user->approval_status }}'
+                                                        data-cashbond='{{ $user->cashbond }}'
+                                                        data-code='{{ $user->code }}' data-ctc-no='{{ $user->ctc_no }}'
+                                                        class='approval-btn dropdown-item fs-6'>Approval</a>
                                                 </li>
                                             </ul>
                                         </span>
@@ -200,13 +206,13 @@
                                 <div class="col-3 mb-3">
                                     <label for="code" class="form-label">Code:<span
                                             class='span-required'>*<span></label>
-                                    <input type="text" class="form-control border border-secondary-subtle" id="code"
-                                        name="code" required>
+                                    <input type="text" class="form-control border border-secondary-subtle"
+                                        id="code" name="code" required>
                                 </div>
                                 <div class="col-9 mb-3">
                                     <label for="" class="form-label">Fullname:</label>
-                                    <input type="text" class="form-control border border-secondary-subtle" id="name"
-                                        name="fullname" required readonly>
+                                    <input type="text" class="form-control border border-secondary-subtle"
+                                        id="name" name="fullname" required readonly>
                                 </div>
                                 <div class="col-6 mb-3">
                                     <label for="" class="form-label">Mobile #:</label>

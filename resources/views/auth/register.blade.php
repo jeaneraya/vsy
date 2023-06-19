@@ -11,45 +11,47 @@ input:enabled:read-write:-webkit-any(:focus, :hover)::-webkit-calendar-picker-in
 
 
 </style>
-    <div>
-        @if (Session::has('info'))
-            <div class="alert alert-primary" role="alert">
-                {{ session('info') }}
-            </div>
-        @endif
 
-        @if (Session::has('success'))
-            <div class="alert alert-success" role="alert">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        @if (Session::has('danger'))
-            <div class="alert alert-danger" role="alert">
-                {{ session('danger') }}
-            </div>
-        @endif
-        @if (Session::has('warning'))
-            <div class="alert alert-warning" role="alert">
-                {{ session('warning') }}
-            </div>
-        @endif
-
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-    </div>
 
     <main class="page-center registration-form">
         <article class="sign-up">
             <img src="{{ asset('assets/images/logo/logo.png') }}" class="img" style="width:20%">
             <p class="sign-up__subtitle">VSY Collection | Create New Administrator's Account</p>
+
+            <div align="left">
+                @if (Session::has('info'))
+                    <div class="alert alert-primary" role="alert">
+                        {{ session('info') }}
+                    </div>
+                @endif
+
+                @if (Session::has('success'))
+                    <div class="alert alert-success" role="alert">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @if (Session::has('danger'))
+                    <div class="alert alert-danger" role="alert">
+                        {{ session('danger') }}
+                    </div>
+                @endif
+                @if (Session::has('warning'))
+                    <div class="alert alert-warning" role="alert">
+                        {{ session('warning') }}
+                    </div>
+                @endif
+
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+            </div>
 
             <form class="sign-up-form form" method="POST" action="{{ route('register') }}">
                 @csrf

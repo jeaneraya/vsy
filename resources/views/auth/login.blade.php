@@ -38,7 +38,7 @@
                     </ul>
                 </div>
             @endif
-            </div>
+        </div>
 
         <article class="sign-up">
             <img src="{{ asset('assets/images/logo/logo.png') }}" class="img" style="width:35%">

@@ -194,7 +194,7 @@
             });
 
             // initialize
-            $('.collector-div').show();
+            $('.collector-div').hide();
 
             // end initialize
 
