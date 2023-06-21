@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Collector;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -55,6 +56,14 @@ class UserTableSeeder extends Seeder
             'address' => 'test address',
             'role' => 3,
             'approval_status' => '0'
+        ]);
+
+        Collector::create([
+            'user_id' => $collector->id,
+            'code' => 1,
+            'cashbond' => 2,
+            'ctc_no' => 3,
+            'status' => 1
         ]);
     }
 }
