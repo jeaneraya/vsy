@@ -44,6 +44,8 @@
 
 
 
+    <div class="container users-page">
+        <h2 class="main-title">Users</h2>
 
         <div class="row stat-cards">
 
