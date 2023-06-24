@@ -82,27 +82,14 @@
                                             </button>
                                             <ul class="dropdown-menu">
                                                 <li><a class="dropdown-item fs-6"
-                                                        href="{{ route('get_user', ['userId' => $reminder->id]) }}">Edit
-                                                        Profile</a>
+                                                        href="{{ route('show_reminder', ['id' => $reminder->id]) }}">View/Update</a>
                                                 </li>
                                                 <li>
                                                     <form method="POST"
                                                         action="{{ route('put_user_archive', ['userId' => $reminder->id]) }}">
                                                         @csrf @method('PUT')
-                                                        <button type="submit" class="dropdown-item fs-6">Trash</button>
+                                                        <button type="submit" class="dropdown-item fs-6">Cancel</button>
                                                     </form>
-                                                </li>
-                                                <li>
-
-                                                    <a role="button" data-bs-toggle="modal"
-                                                        data-bs-target="#exampleModalCenter" data-id='{{ $reminder->id }}'
-                                                        data-role='{{ $reminder->role }}' data-name='{{ $reminder->name }}'
-                                                        data-mobile='{{ $reminder->contact }}'
-                                                        data-address='{{ $reminder->address }}'
-                                                        data-approval-status='{{ $reminder->approval_status }}'
-                                                        data-cashbond='{{ $reminder->cashbond }}'
-                                                        data-code='{{ $reminder->code }}' data-ctc-no='{{ $reminder->ctc_no }}'
-                                                        class='approval-btn dropdown-item fs-6'>Approval</a>
                                                 </li>
                                             </ul>
                                         </span>

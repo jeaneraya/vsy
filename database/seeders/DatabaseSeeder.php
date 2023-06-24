@@ -19,5 +19,6 @@ class DatabaseSeeder extends Seeder
         $this->call(EmployeeSeeder::class);
         $this->call(RemindersSeeder::class);
         $this->call(ReminderTypesSeeder::class);
+        $this->call(PayrollSchedulesSeeder::class);
     }
 }

@@ -10,7 +10,9 @@ use App\Http\Controllers\APListController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\ExpensesController;
+use App\Http\Controllers\PayrollScheduleController;
 use App\Http\Controllers\ReminderController;
+use App\Models\PayrollSchedule;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,7 +68,12 @@ Route::middleware(['auth'])->group(function () {
         // employees
         Route::get('/reminders',[ReminderController::class, 'index'])->name('reminders');
         Route::get('/reminder/create',[ReminderController::class, 'view_add_reminder'])->name('view_add_reminder');
-        Route::post('/reminder/create',[ReminderController::class, 'create'])->name('post_add_reminder');
+        Route::post('/reminder/create',[ReminderController::class, 'store'])->name('post_add_reminder');
+        Route::get('/reminder/{id}',[ReminderController::class, 'show'])->name('show_reminder');
+        Route::put('/reminder/{id}',[ReminderController::class, 'update'])->name('update_reminder');
+
+        Route::get('/payroll/schedule',[PayrollScheduleController::class, 'index'])->name('payroll_schedule');
+        Route::post('/payroll/schedule/add',[PayrollScheduleController::class, 'store'])->name('store_payroll_schedule');
     // });
 
     Route::get('/collectors',[CollectorsController::class, 'index'])->name('collectors');

@@ -82,10 +82,7 @@
                                 <a class="{{ request()->routeIs('employees') ? 'active' : '' }}" href="{{ route('employees') }}"><span class="material-icons-outlined">diversity_3</span>Employees</a>
                             </li>
                             <li>
-                                <a href="##"><span class="material-icons-outlined">receipt_long</span>Records</a>
-                            </li>
-                            <li>
-                                <a href="appearance.html"><span class="material-icons-outlined">summarize</span>Payroll</a>
+                                <a class="{{ request()->routeIs('payroll_schedule') ? 'active' : '' }}" href="{{ route('payroll_schedule') }}"><span class="material-icons-outlined">diversity_3</span>Payroll</a>
                             </li>
                             <li>
                                 <a class="{{ request()->routeIs('reminders') ? 'active' : '' }}" href="{{ route('reminders') }}"><span class="material-icons-outlined">diversity_3</span>Reminders</a>

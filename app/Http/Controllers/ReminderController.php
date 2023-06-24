@@ -26,12 +26,12 @@ class ReminderController extends Controller
         return view('reminder_create');
     }
 
-    public function create(Request $request)
+    public function store(Request $request)
     {
 
         $validator = Validator::make($request->all(), [
             'description' => ['required'],
-            'schedule' => ['required', 'date', 'after:tomorrow'],
+            'schedule' => ['required', 'date', 'after:today'],
             'message' => ['required'],
             'type' => ['required'],
         ]);
@@ -60,25 +60,21 @@ class ReminderController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param  \App\Models\Reminder  $reminder
      * @return \Illuminate\Http\Response
      */
-    public function show(Reminder $reminder)
+    public function show(Request $requests, $id)
     {
-        //
+        $reminders = Reminder::find($id);
+
+        if ($reminders) {
+            return view('reminder_update', ['reminder' => $reminders]);
+        }
+        return redirect(route('reminders'))
+        ->withErrors(['Reminder does not exist.'])
+        ->withInput();
     }
 
     /**
@@ -99,9 +95,39 @@ class ReminderController extends Controller
      * @param  \App\Models\Reminder  $reminder
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Reminder $reminder)
+    public function update(Request $request, $id)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'description' => ['required'],
+            'schedule' => ['required', 'date', 'after:today'],
+            'message' => ['required'],
+            'type' => ['required'],
+        ]);
+
+        if ($validator->fails()) {
+            return redirect(route("show_reminder"))
+                ->withErrors($validator)
+                ->withInput();
+        }
+        $reminder = Reminder::find($id);
+        if (is_null($reminder) === true) {
+            return redirect(route('reminders'))
+                ->withErrors(['Reminder does not exist.'])
+                ->withInput();
+        }
+        try {
+            $reminder->description = $request->input('description');
+            $reminder->schedule = $request->input('schedule');
+            // $reminder->message = $request->input('message');
+            $reminder->type = $request->input('type');
+            $reminder->save();
+        } catch (Exception $e) {
+            return redirect()->back()
+                ->withErrors([$e->getMessage()])
+                ->withInput();
+        }
+        return redirect()->back()->withSuccess('Account Updated');
+
     }
 
     /**
