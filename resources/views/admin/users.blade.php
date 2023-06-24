@@ -1,8 +1,6 @@
 @extends('layout.design')
 
 @section('contents')
-
-
     <div class="container">
 
         <h2 class="main-title">Users</h2>
@@ -45,8 +43,6 @@
 
 
     <div class="container users-page">
-        <h2 class="main-title">Users</h2>
-
         <div class="row stat-cards">
 
             <div class="col-md-6 col-xl-3">
@@ -133,7 +129,6 @@
                                 <th>Email</th>
                                 <th>Status</th>
                                 <th>Action</th>
-
                             </tr>
                         </thead>
 

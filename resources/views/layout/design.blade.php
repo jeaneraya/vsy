@@ -61,7 +61,21 @@
                         <ul class="sidebar-body-menu">
                             @if (Auth::user()->role == 1)
                                 <li>
-                                    <a class="{{ request()->routeIs('get_user_index') ? 'active' : '' }}" href="{{ route('get_user_index') }}"><span class="material-icons-outlined">groups</span>Users</a>
+                                    @php
+                                    $forApprovalCount = count(\App\Models\User::where([
+                                        ['approval_status', '=', '0']
+                                        ])->get());
+
+
+                                    $approvalBadge = $forApprovalCount > 0
+                                     ? "<span class='badge badge-danger'>$forApprovalCount</span>"
+                                     : ''
+                                 @endphp
+
+
+                                    <a class="{{ request()->routeIs('get_user_index') ? 'active' : '' }}" href="{{ route('get_user_index') }}"><span class="material-icons-outlined">groups</span>Users {!!$approvalBadge!!}
+
+                                    </a>
                                 </li>
                             @endif
                             <li>
@@ -72,6 +86,9 @@
                             </li>
                             <li>
                                 <a href="appearance.html"><span class="material-icons-outlined">summarize</span>Payroll</a>
+                            </li>
+                            <li>
+                                <a href="appearance.html"><span class="material-icons-outlined">summarize</span>Reminder</a>
                             </li>
                         </ul>
                         <span class="system-menu__title">vsy collections</span>

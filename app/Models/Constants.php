@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Constants
 {
-    public static function getAccountStatusValue() {
+    public static function getAccountStatusValue()
+    {
         return [
             0 => 'Pending',
             1 => 'Approved',
@@ -15,11 +16,32 @@ class Constants
         ];
     }
 
-    public static function getRoleValue() {
+    public static function getRoleValue()
+    {
         return [
             1 => 'Super Admin',
             2 => 'Admin',
             3 => 'Collector'
+        ];
+    }
+
+
+    public static function getEmployeeStatus()
+    {
+        return [
+            1 => 'Contractual',
+            2 => 'Floating',
+            3 => 'OJT',
+            4 => 'Regular',
+            5 => 'Temporary'
+        ];
+    }
+
+    public static function getHiringStatus()
+    {
+        return [
+            0 => 'Hired',
+            1 => 'Resigned',
         ];
     }
 }

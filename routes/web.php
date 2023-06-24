@@ -54,6 +54,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
     Route::get('/employees',[EmployeesController::class, 'index'])->name('employees');
+    Route::get('/employees/create',[EmployeesController::class, 'createView'])->name('create_view_employees');
+    Route::post('/employees/create',[EmployeesController::class, 'create'])->name('create_post_employees');
+    Route::put('/employee/resign',[EmployeesController::class, 'resign'])->name('resign_employee');
+    Route::get('/employee/{id}',[EmployeesController::class, 'show'])->name('show_employee');
+    Route::put('/employee/{id}',[EmployeesController::class, 'put'])->name('update_employee');
+
 
     Route::get('/collectors',[CollectorsController::class, 'index'])->name('collectors');
     Route::post('add-collector', [CollectorsController::class, 'addCollector'])->name('add-collector');
