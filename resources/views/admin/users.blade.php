@@ -263,7 +263,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 
 
@@ -279,40 +278,12 @@
 
             // DataTable
             var table = $('#example').DataTable({
-                // dom: 'lfrtip',
                 initComplete: function() {
-                    // Apply the search
-                    this.api()
-                        .columns()
-                        .every(function() {
-                            var that = this;
-
-                            $('input', this.footer()).on('keyup change clear', function() {
-                                if (that.search() !== this.value) {
-                                    that.search(this.value).draw();
-                                }
-                            });
-                        });
                 },
                 dom: 'lBfrtip',
                 responsive: true,
                 scrollX: true,
-                // dom: 'B',
-                // dom: 'Pfrtip',
-                // colReorder: true,
-                // buttons: [
-                //     'excel',
-                //     'print',
-                // ],
-                // select: true,
-                // "ordering": false,
-                // paging: true,
-                // lengthMenu: [
-                //     [10, 25, 50, -1],
-                //     [10, 25, 50, 'All'],
-                // ],
                 lengthChange: false,
-
             });
 
             $(".approval-btn").click(function() {

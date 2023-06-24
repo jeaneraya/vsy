@@ -44,4 +44,26 @@ class Constants
             1 => 'Resigned',
         ];
     }
+
+    public static function getRemindersStatus()
+    {
+        return [
+            0 => 'Pending',
+            1 => 'Sent',
+            2 => 'Failed',
+            3 => 'Cancelled'
+        ];
+    }
+
+    public static function getRemindersTypes()
+    {
+        return [
+            1 => 'Custom',
+            2 => 'Template',
+            3 => 'Birthday',
+            4 => 'Renewal',
+            5 => 'Registration',
+            6 => 'Insurance'
+        ];
+    }
 }

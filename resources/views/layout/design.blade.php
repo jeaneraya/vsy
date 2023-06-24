@@ -88,7 +88,7 @@
                                 <a href="appearance.html"><span class="material-icons-outlined">summarize</span>Payroll</a>
                             </li>
                             <li>
-                                <a href="appearance.html"><span class="material-icons-outlined">summarize</span>Reminder</a>
+                                <a class="{{ request()->routeIs('reminders') ? 'active' : '' }}" href="{{ route('reminders') }}"><span class="material-icons-outlined">diversity_3</span>Reminders</a>
                             </li>
                         </ul>
                         <span class="system-menu__title">vsy collections</span>
