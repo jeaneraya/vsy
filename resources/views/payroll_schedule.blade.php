@@ -51,13 +51,13 @@
                 <div class="row">
                     <div class="col-lg-12 mb-2">
                         <div class="col-lg-3">
-                            <button class="btn btn-primary  dropdown-toggle" type="button" data-bs-toggle="collapse"
+                            <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                                 Add Schedule
                             </button>
                         </div>
 
-                        <div class="collapse show mt-2" id="collapseExample">
+                        <div class="collapse mt-2" id="collapseExample">
                             <form class="sign-up-form form" method="POST" action="{{ route('store_payroll_schedule') }}">
                                 @csrf
                                 <h2 class="main-title">Add Payroll Schedule</h2>
@@ -67,7 +67,7 @@
                                             <p class="form-label">Period Start Date</p>
                                             <input id="" type="date"
                                                 class="form-control @error('period_start') is-invalid @enderror  form-input"
-                                                value="{{ old('period_start') }}" required name="period_start">
+                                                value="{{ old('period_start') }}"  name="period_start">
                                         </label>
                                     </div>
 
@@ -170,13 +170,12 @@
                 });
 
                 let hasError = {{ json_encode($errors->any()) }}
+
                 if (hasError) {
                     $('#collapseExample').collapse(
                         'show'
                     )
                 }
-
-
             });
         </script>
     @endsection
