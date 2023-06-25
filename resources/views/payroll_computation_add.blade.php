@@ -39,9 +39,6 @@
                 </div>
             @endif
         </div>
-
-
-
         <div class="container users-page">
             <div class="col-lg-12">
                 <div class='form mt-2'>
@@ -54,7 +51,6 @@
                                 <th></th>
                                 <td></td>
                             </tr>
-
                             <tr>
                                 <th scope="row">Name</th>
                                 <td>{{ $results['employee']->fullname }}</td>
@@ -130,7 +126,7 @@
                                             autocomplete="no_of_days_worked" maxlength="50" autofocus>
                                     </td>
 
-                                    <td><span id="span_days_worked" class="amounts for_gross">0</span></td>
+                                    <td><span id="span_days_worked" class="amounts for_gross">0.00</span></td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Bonuses</th>
@@ -147,7 +143,7 @@
                                             name="no_of_hours_overtime" value="{{ old('no_of_hours_overtime') }}" required
                                             autocomplete="no_of_hours_overtime" maxlength="50" autofocus></td>
 
-                                    <td><span id="hours_overtime" class="for_gross amounts">0</span></td>
+                                    <td><span id="hours_overtime" class="for_gross amounts">0.00</span></td>
                                 </tr>
                                 <tr>
                                     <th scope="row"></th>
@@ -166,7 +162,7 @@
                                             name="no_of_days_absent" value="{{ old('no_of_days_absent') }}"
                                             required autocomplete="no_of_days_absent" maxlength="50" autofocus></td>
 
-                                    <td><span id="days_absent" class="amounts for_deductions">0</span></td>
+                                    <td><span id="days_absent" class="amounts for_deductions">0.00</span></td>
                                 </tr>
                                 <tr>
                                     <th scope="row">No. of hours late</th>
@@ -174,7 +170,7 @@
                                             class="form-control input-numbers @error('no_hours_late') is-invalid @enderror form-input"
                                             name="no_hours_late" value="{{ old('no_hours_late') }}"
                                             required autocomplete="name" maxlength="50" autofocus></td>
-                                    <td><span id="hours_late" class="for_deductions amounts">0</span></td>
+                                    <td><span id="hours_late" class="for_deductions amounts">0.00</span></td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Deductions</th>
@@ -219,7 +215,7 @@
                         </table>
 
                         <input type="text" name="employee_id" value="{{ $results['employee']->id }}">
-                        <input type="text" name="schedule_d" value="{{ $results['payroll_schedule']->id }}">
+                        <input type="text" name="schedule_id" value="{{ $results['payroll_schedule']->id }}">
 
                         <div class="col-auto">
                             <button type="submit" class="btn btn-primary mb-3">Submit</button>
