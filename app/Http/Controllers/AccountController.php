@@ -5,12 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Collector;
 use App\Models\Role;
 use App\Models\User;
-use Collator;
-use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule as ValidationRule;
 
 class AccountController extends Controller
 {

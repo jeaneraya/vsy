@@ -2,9 +2,6 @@
 
 @section('contents')
     <div class="container">
-
-        <h2 class="main-title">Payroll</h2>
-
         <div>
             @if (Session::has('info'))
                 <div class="alert alert-primary" role="alert">
@@ -46,17 +43,21 @@
                 </div>
             @endif
         </div>
+
+        <div class="row">
+            <div class="col-4">
+                <h2 class="main-title">Payroll</h2>
+            </div>
+            <div class="col-2"> <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                Add Schedule
+            </button></div>
+        </div>
+
         <div class="container users-page">
             <div class="col-lg-12">
                 <div class="row">
                     <div class="col-lg-12 mb-2">
-                        <div class="col-lg-3">
-                            <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                                Add Schedule
-                            </button>
-                        </div>
-
                         <div class="collapse mt-2" id="collapseExample">
                             <form class="sign-up-form form" method="POST" action="{{ route('store_payroll_schedule') }}">
                                 @csrf
@@ -67,7 +68,7 @@
                                             <p class="form-label">Period Start Date</p>
                                             <input id="" type="date"
                                                 class="form-control @error('period_start') is-invalid @enderror  form-input"
-                                                value="{{ old('period_start') }}"  name="period_start">
+                                                value="{{ old('period_start') }}" name="period_start">
                                         </label>
                                     </div>
 
@@ -103,7 +104,6 @@
                                     <th>Name</th>
                                     <th>Description</th>
                                     <th>From</th>
-                                    {{-- <th>Message</th> --}}
                                     <th>To</th>
                                     <th>Status</th>
                                     <th>Action</th>
@@ -117,8 +117,6 @@
                                         <td>{{ $result->description }}</td>
                                         <td>{{ $result->from }}</td>
                                         <td>{{ $result->to }}</td>
-                                        {{-- <td>{{ $result->template_id }}</td> --}}
-                                        {{-- <td>{{ App\Models\Constants::getRemindersStatus()[$result->status]}}</td> --}}
                                         <td>{{ $result->status }}</td>
                                         </td>
                                         <td class="text-center">
@@ -128,7 +126,7 @@
                                                 </button>
                                                 <ul class="dropdown-menu">
                                                     <li><a class="dropdown-item fs-6"
-                                                            href="{{ route('show_reminder', ['id' => $result->id]) }}">View/Update</a>
+                                                            href="{{ route('payroll_computations', ['id' => $result->id]) }}">View/Update</a>
                                                     </li>
                                                     <li>
                                                         <form method="POST"

@@ -10,8 +10,10 @@ use App\Http\Controllers\APListController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\ExpensesController;
+use App\Http\Controllers\PayrollComputationsController;
 use App\Http\Controllers\PayrollScheduleController;
 use App\Http\Controllers\ReminderController;
+use App\Models\PayrollComputations;
 use App\Models\PayrollSchedule;
 
 /*
@@ -74,6 +76,10 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('/payroll/schedule',[PayrollScheduleController::class, 'index'])->name('payroll_schedule');
         Route::post('/payroll/schedule/add',[PayrollScheduleController::class, 'store'])->name('store_payroll_schedule');
+
+        Route::get('/payroll/schedule/computation/{schedule_id}',[PayrollComputationsController::class, 'view_create'])->name('view_add_payroll_computations');
+        Route::get('/payroll/schedule/computation',[PayrollComputationsController::class, 'index'])->name('payroll_computations');
+
     // });
 
     Route::get('/collectors',[CollectorsController::class, 'index'])->name('collectors');

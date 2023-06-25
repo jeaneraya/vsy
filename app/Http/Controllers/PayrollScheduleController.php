@@ -30,7 +30,6 @@ class PayrollScheduleController extends Controller
             'description' => ['required'],
         ]);
 
-
         if ($validator->fails()) {
             return redirect(route("payroll_schedule"))
                 ->withErrors($validator)
@@ -54,6 +53,6 @@ class PayrollScheduleController extends Controller
                 ->withErrors([$e->getMessage()])
                 ->withInput();
         }
-        return redirect(route("payroll_schedule"))->withSuccess("Payroll Schedule Added: $description");
+        return redirect(route("payroll_computations", ['id' => $payrollSchedule->id]))->withSuccess("Payroll Schedule Added: $description");
     }
 }
