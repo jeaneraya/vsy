@@ -2,7 +2,6 @@
 
 @section('contents')
     <div class="container">
-        {{ request()->headers->get('referer')}}
 
         <div>
             @if (Session::has('info'))
