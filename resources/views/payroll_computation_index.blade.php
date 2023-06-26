@@ -117,7 +117,7 @@
                                 <td>{{ $withComputations->computations_gross }}</td>
                                 <td>{{ $withComputations->computations_total_deductions }}</td>
                                 <td>{{ $withComputations->computations_net_pay }}</td>
-                                <td>{{ $withComputations->computations_is_claimed }}</td>
+                                <td>{{ App\Models\Constants::getPayrollClaimed()[$withComputations->computations_is_claimed] }}</td>
                                 <td class="text-center">
                                     <span class="p-relative">
                                         <button class="btn p-0" data-bs-toggle="dropdown" aria-expande="false">
@@ -128,11 +128,13 @@
                                                 <a class="dropdown-item fs-6">View/Update</a>
                                             </li>
                                             <li>
-                                                <form method="POST">
-                                                    {{-- action="{{ route('put_user_archive', ['userId' => $withComputations->id]) }}">
-                                                    @csrf @method('PUT') --}}
-                                                    <button type="submit" class="dropdown-item fs-6">Mark as
-                                                        Claimed</button>
+                                                <form method="POST"
+                                                    action="{{ route('put_payroll_computation_claim', ['id' => $withComputations->computations_id]) }}">
+                                                    @csrf @method('PUT')
+                                                    <input hidden name='is_claimed' value="{{ $withComputations->computations_is_claimed == 1 ? 0 : 1 }}">
+                                                    <button type="submit" class="dropdown-item fs-6">
+                                                        {{$withComputations->computations_is_claimed == 1 ? 'Unclaim' : 'Mark as Claimed' }}
+                                                    </button>
                                                 </form>
                                             </li>
                                         </ul>

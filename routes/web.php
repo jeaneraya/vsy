@@ -75,8 +75,10 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/reminder/{id}',[ReminderController::class, 'update'])->name('update_reminder');
 
         Route::get('/payroll/schedule/computation',[PayrollComputationsController::class, 'index'])->name('payroll_computations');
+        Route::put('/payroll/schedule/computation/{id}/claimed',[PayrollComputationsController::class, 'put_claimed'])->name('put_payroll_computation_claim');
         Route::get('/payroll/schedule/computation/{id}',[PayrollComputationsController::class, 'view_create'])->name('view_add_payroll_computations');
         Route::post('/payroll/schedule/computation/{id}',[PayrollComputationsController::class, 'create'])->name('create_add_payroll_computations');
+
 
 
         Route::get('/payroll/schedule/{schedule_id}',[PayrollScheduleController::class, 'show'])->name('show_payroll_schedule');

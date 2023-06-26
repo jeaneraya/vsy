@@ -50,6 +50,8 @@ class PayrollComputationsController extends Controller
                 'employees.id as employee_id',
                 'employees.employee_code as employee_code',
                 'employees.fullname as employee_full_name',
+
+                'payroll_computations.id as computations_id',
             )
             ->where([
                 ['payroll_schedules.id', '=', $request->input('id')]
@@ -141,4 +143,31 @@ class PayrollComputationsController extends Controller
         return redirect(route('payroll_computations', ['id' => $schedule_id]))
             ->withSuccess("Created!");
     }
+
+    public function put_claimed(Request $request, $id)
+    {
+
+        $validator = Validator::make([...$request->all(), 'id' => $id], [
+            'id' => ['required', 'exists:payroll_computations,id'],
+            'is_claimed' => ['required'],
+        ], [
+            'id.exists' => 'Computation is Invalid.'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect(route('payroll_computations', ['id' => $id]))
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $computations = PayrollComputations::find($id);
+        $computations->is_claimed = $request->input('is_claimed');
+        $computations->save();
+
+        $claimed = $request->input('is_claimed') == 1 ? 'Clamed' : 'Unclaimed';
+
+        return redirect(route('payroll_computations', ['id' => $id]))
+            ->withSuccess("Mark as $claimed successful!");
+    }
+
 }

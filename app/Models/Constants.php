@@ -66,4 +66,12 @@ class Constants
             6 => 'Insurance'
         ];
     }
+
+    public static function getPayrollClaimed()
+    {
+        return [
+            0 => 'NO',
+            1 => 'YES'
+        ];
+    }
 }
