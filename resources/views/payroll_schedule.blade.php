@@ -2,6 +2,8 @@
 
 @section('contents')
     <div class="container">
+        {{ request()->headers->get('referer')}}
+
         <div>
             @if (Session::has('info'))
                 <div class="alert alert-primary" role="alert">
@@ -49,9 +51,9 @@
                 <h2 class="main-title">Payroll</h2>
             </div>
             <div class="col-2"> <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="collapse"
-                data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                Add Schedule
-            </button></div>
+                    data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                    Add Schedule
+                </button></div>
         </div>
 
         <div class="container users-page">
@@ -63,6 +65,17 @@
                                 @csrf
                                 <h2 class="main-title">Add Payroll Schedule</h2>
                                 <div class="row">
+                                    <div class="col-12">
+                                        <label class="form-label-wrapper">
+                                            <p class="form-label">Name</p>
+                                            <input id="name" type="text"
+                                                class="form-control input_name @error('name') is-invalid @enderror form-input"
+                                                name="name" value="{{ old('name') }}" placeholder="Enter your name"
+                                                required autocomplete="name" maxlength="50" autofocus>
+                                        </label>
+                                    </div>
+
+
                                     <div class="col-6">
                                         <label class="form-label-wrapper">
                                             <p class="form-label">Period Start Date</p>
@@ -126,16 +139,19 @@
                                                 </button>
                                                 <ul class="dropdown-menu">
                                                     <li><a class="dropdown-item fs-6"
-                                                            href="{{ route('payroll_computations', ['id' => $result->id]) }}">View/Update</a>
+                                                            href="{{ route('show_payroll_schedule', ['schedule_id' => $result->id]) }}">View/Update<a>
                                                     </li>
-                                                    <li>
+                                                    <li><a class="dropdown-item fs-6"
+                                                            href="{{ route('payroll_computations', ['id' => $result->id]) }}">Computations<a>
+                                                    </li>
+                                                    {{-- <li>
                                                         <form method="POST"
                                                             action="{{ route('put_user_archive', ['userId' => $result->id]) }}">
                                                             @csrf @method('PUT')
                                                             <button type="submit"
                                                                 class="dropdown-item fs-6">Cancel</button>
                                                         </form>
-                                                    </li>
+                                                    </li> --}}
                                                 </ul>
                                             </span>
                                         </td>

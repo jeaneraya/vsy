@@ -69,7 +69,7 @@
 
                 <form class="sign-up-form form mt-2" method="GET"
                     action="{{ route('view_add_payroll_computations', [
-                        'schedule_id' => request()->get('id'),
+                        'id' => request()->get('id'),
                     ]) }}">
                     <div class="row">
                         <label class="form-label-wrapper col-12">

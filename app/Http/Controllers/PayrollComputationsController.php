@@ -67,8 +67,9 @@ class PayrollComputationsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function view_create(Request $request, $schedule_id)
+    public function view_create(Request $request, $id)
     {
+        $schedule_id = $id;
         $validator = Validator::make([...$request->all(), 'schedule_id' => $schedule_id], [
             'employee_id' => ['required', 'exists:employees,id'],
             'schedule_id' => ['required', 'exists:payroll_schedules,id']
@@ -89,11 +90,10 @@ class PayrollComputationsController extends Controller
         return view('payroll_computation_add', ['results' => $results]);
     }
 
-    public function create(Request $request)
+    public function create(Request $request, $id)
     {
-        $employee = Employee::find($request->input('employee_id'));
-
-        $validator = Validator::make($request->all(), [
+        $schedule_id = $id;
+        $validator = Validator::make([...$request->all(), 'schedule_id' => $id], [
             'employee_id' => ['required', 'exists:employees,id'],
             'schedule_id' => ['required', 'exists:payroll_schedules,id'],
             'employee_id' => ['required'],
@@ -116,14 +116,14 @@ class PayrollComputationsController extends Controller
                 ->withInput();
         }
 
-        $payroll_schedule = PayrollSchedule::find($request->input('schedule_id'));
+        $payroll_schedule = PayrollSchedule::find($schedule_id);
         if ($payroll_schedule == false) {
             return redirect(route('payroll_schedule'))
                 ->withErrors(['Please Select valid Computation Schedule']);
         }
-
+        $employee = Employee::find($request->input('employee_id'));
         $payrollComputations = PayrollComputations::create([
-            'payroll_schedule_id' => $request->input('schedule_id'),
+            'payroll_schedule_id' => $schedule_id,
             'employee_id' => $request->input('employee_id'),
             'rate_per_day' => $employee->rate_per_day,
             'hours_overtime' => $request->input('no_of_hours_overtime'),
@@ -138,7 +138,7 @@ class PayrollComputationsController extends Controller
             'status' => 1,
             'is_claimed' => 0,
         ]);
-        return redirect(route('payroll_computations', ['id' => $request->input('schedule_id')]))
-            ->withSuccess("Created!");;
+        return redirect(route('payroll_computations', ['id' => $schedule_id]))
+            ->withSuccess("Created!");
     }
 }

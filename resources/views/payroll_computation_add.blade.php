@@ -106,7 +106,7 @@
                     </table>
 
 
-                    <form action="{{route('create_add_payroll_computations', ['schedule_id' => $results['payroll_schedule']->id])}}" method="POST">
+                    <form action="{{route('create_add_payroll_computations', ['id' => $results['payroll_schedule']->id])}}" method="POST">
                         @csrf
                         <table class="table">
                             <thead class="thead-light">

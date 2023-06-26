@@ -74,12 +74,19 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/reminder/{id}',[ReminderController::class, 'show'])->name('show_reminder');
         Route::put('/reminder/{id}',[ReminderController::class, 'update'])->name('update_reminder');
 
-        Route::get('/payroll/schedule',[PayrollScheduleController::class, 'index'])->name('payroll_schedule');
-        Route::post('/payroll/schedule/add',[PayrollScheduleController::class, 'store'])->name('store_payroll_schedule');
-
-        Route::get('/payroll/schedule/computation/{schedule_id}',[PayrollComputationsController::class, 'view_create'])->name('view_add_payroll_computations');
-        Route::post('/payroll/schedule/computation/{schedule_id}',[PayrollComputationsController::class, 'create'])->name('create_add_payroll_computations');
         Route::get('/payroll/schedule/computation',[PayrollComputationsController::class, 'index'])->name('payroll_computations');
+        Route::get('/payroll/schedule/computation/{id}',[PayrollComputationsController::class, 'view_create'])->name('view_add_payroll_computations');
+        Route::post('/payroll/schedule/computation/{id}',[PayrollComputationsController::class, 'create'])->name('create_add_payroll_computations');
+
+
+        Route::get('/payroll/schedule/{schedule_id}',[PayrollScheduleController::class, 'show'])->name('show_payroll_schedule');
+        Route::put('/payroll/schedule/{schedule_id}',[PayrollScheduleController::class, 'update'])->name('put_payroll_schedule');
+        Route::post('/payroll/schedule/add',[PayrollScheduleController::class, 'store'])->name('store_payroll_schedule');
+        Route::get('/payroll/schedule',[PayrollScheduleController::class, 'index'])->name('payroll_schedule');
+
+
+
+
 
     // });
 
