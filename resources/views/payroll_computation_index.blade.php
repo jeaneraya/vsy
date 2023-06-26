@@ -67,28 +67,28 @@
                     </div>
                 </form>
 
-                <form class="sign-up-form form mt-2" method="GET" action="{{ route('view_add_payroll_computations',[
-                    'schedule_id' => request()->get('id')
-                ]) }}">
-                    <div class="sign-up-form form mt-2">
-                        <div class="row">
-                            <label class="form-label-wrapper col-12">
-                                <p class="form-label">Employee</p>
-                                <select id="id" type="text"
-                                    class="form-control @error('id') is-invalid @enderror form-input autofocus" name="employee_id">
-                                    <option disabled selected>Select Employee</option>
-                                    @foreach ($results['withOutComputations'] as $user)
-                                        <option value="{{ $user->id }}" {{ $user->id == '' ? 'selected' : '' }}>
-                                            {{ $user->fullname }} - {{ $user->position }}</option>
-                                    @endforeach
-                                </select>
-                            </label>
-                            <label class="form-label-wrapper col-12">
-                                <div class="">
-                                    <button type="submit" class="btn btn-primary mb-3">Add Computations</button>
-                                </div>
-                            </label>
-                        </div>
+                <form class="sign-up-form form mt-2" method="GET"
+                    action="{{ route('view_add_payroll_computations', [
+                        'schedule_id' => request()->get('id'),
+                    ]) }}">
+                    <div class="row">
+                        <label class="form-label-wrapper col-12">
+                            <p class="form-label">Employee</p>
+                            <select id="employee_dropdown" type="text"
+                                class="form-control @error('id') is-invalid @enderror form-input autofocus"
+                                name="employee_id">
+                                <option disabled selected>Select Employee</option>
+                                @foreach ($results['withOutComputations'] as $user)
+                                    <option value="{{ $user->id }}" {{ $user->id == '' ? 'selected' : '' }}>
+                                        {{ $user->fullname }} - {{ $user->position }}</option>
+                                @endforeach
+                            </select>
+                        </label>
+                        <label class="form-label-wrapper col-12">
+                            <div class="">
+                                <button disabled id="add-computations-btn" type="submit" class="btn btn-primary mb-3">Add Computations</button>
+                            </div>
+                        </label>
                     </div>
                 </form>
 
@@ -156,7 +156,6 @@
 
     <script>
         $(document).ready(function() {
-
             // DataTable
             var table = $('#example').DataTable({
                 initComplete: function() {},
@@ -165,6 +164,12 @@
                 scrollX: true,
                 lengthChange: false,
             });
+
+            $('#employee_dropdown').change(function() {
+                let val = $(this).val();
+                $("#add-computations-btn").prop('disabled', false);
+            })
+
         });
     </script>
 @endsection

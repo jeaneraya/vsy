@@ -78,6 +78,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/payroll/schedule/add',[PayrollScheduleController::class, 'store'])->name('store_payroll_schedule');
 
         Route::get('/payroll/schedule/computation/{schedule_id}',[PayrollComputationsController::class, 'view_create'])->name('view_add_payroll_computations');
+        Route::post('/payroll/schedule/computation/{schedule_id}',[PayrollComputationsController::class, 'create'])->name('create_add_payroll_computations');
         Route::get('/payroll/schedule/computation',[PayrollComputationsController::class, 'index'])->name('payroll_computations');
 
     // });

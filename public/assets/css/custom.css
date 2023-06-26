@@ -34,12 +34,14 @@ iconify-icon {
 }
 
 .users-page .table-wrapper table.posts-table,
-#employees-table {
+#employees-table,
+#example {
   width: 100% !important;
 }
 
 .users-page .dt-buttons button,
-#employees-table_wrapper .dt-buttons button {
+#employees-table_wrapper .dt-buttons button,
+#example-table_wrapper .dt-buttons button {
   background-color: #0d6efd;
   color: white;
   padding: 0.5em;

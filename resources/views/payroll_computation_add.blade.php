@@ -106,7 +106,8 @@
                     </table>
 
 
-                    <form action="" method="">
+                    <form action="{{route('create_add_payroll_computations', ['schedule_id' => $results['payroll_schedule']->id])}}" method="POST">
+                        @csrf
                         <table class="table">
                             <thead class="thead-light">
                             </thead>
@@ -159,8 +160,8 @@
                                     <th scope="row">No. of Days Absent</th>
                                     <td><input id="no_of_days_absent" type="text"
                                             class="form-control input-numbers @error('no_of_days_absent') is-invalid @enderror form-input"
-                                            name="no_of_days_absent" value="{{ old('no_of_days_absent') }}"
-                                            required autocomplete="no_of_days_absent" maxlength="50" autofocus></td>
+                                            name="no_of_days_absent" value="{{ old('no_of_days_absent') }}" required
+                                            autocomplete="no_of_days_absent" maxlength="50" autofocus></td>
 
                                     <td><span id="days_absent" class="amounts for_deductions">0.00</span></td>
                                 </tr>
@@ -168,54 +169,81 @@
                                     <th scope="row">No. of hours late</th>
                                     <td><input id="no_hours_late" type="text"
                                             class="form-control input-numbers @error('no_hours_late') is-invalid @enderror form-input"
-                                            name="no_hours_late" value="{{ old('no_hours_late') }}"
-                                            required autocomplete="name" maxlength="50" autofocus></td>
+                                            name="no_hours_late" value="{{ old('no_hours_late') }}" required
+                                            autocomplete="name" maxlength="50" autofocus></td>
                                     <td><span id="hours_late" class="for_deductions amounts">0.00</span></td>
                                 </tr>
-                                <tr>
-                                    <th scope="row">Deductions</th>
-                                    <td><input id="name" type="text"
-                                            class="form-control input-numbers @error('name') is-invalid @enderror form-input"
-                                            name="name" value="{{ old('name') }}"
-                                            required autocomplete="name" maxlength="50" autofocus></td>
 
-                                    <td><span class="for_deductions amounts">0.00</span></td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Deductions</th>
-                                    <td><input id="name" type="text"
-                                            class="form-control input-numbers @error('name') is-invalid @enderror form-input"
-                                            name="name" value="{{ old('name') }}"
-                                            required autocomplete="name" maxlength="50" autofocus></td>
+                                @php
+                                    $deductionList = [
+                                        'sss' => [
+                                            'name' => 'SSS',
+                                            'amount' => 100,
+                                            'is_fix' => '1'
+                                        ],
+                                        'pagibig' => [
+                                            'name' => 'Pag-ibig',
+                                            'amount' => 200,
+                                            'is_fix' => '1'
+                                        ],
+                                        'philhealth' => [
+                                            'name' => 'Philhealth',
+                                            'amount' => 100,
+                                            'is_fix' => '1'
+                                        ],
+                                        'others' => [
+                                            'name' => 'Others',
+                                            'amount' => 0,
+                                            'is_fix' => '0'
+                                        ],
+                                    ];
+                                @endphp
 
-                                    <td><span class="for_deductions amounts">0.00</span></td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Deductions</th>
-                                    <td><input id="name" type="text"
-                                            class="form-control input-numbers @error('name') is-invalid @enderror form-input"
-                                            name="name" value="{{ old('name') }}"
-                                            required autocomplete="name" maxlength="50" autofocus></td>
+                                @foreach ($deductionList as $key => $deduction)
+                                    <tr>
+                                        <th scope="row">Deductions: {{ $deduction['name'] }}</th>
+                                        <td><input id="deductions-{{$deduction['name']}}" type="text"
+                                                class="form-control input-numbers @error("") is-invalid @enderror form-input input_deductions"
+                                                data-name="deductions-{{$deduction['name']}}"
+                                                name="deductions-{{$deduction['name']}}" value="{{ $deduction['amount'] }}" required autocomplete="deductions-{{$deduction['name']}}"
+                                                {{ $deduction['is_fix'] == 1 ? 'readonly' : '' }}
+                                                maxlength="6" autofocus></td>
 
-                                    <td><span class="for_deductions amounts">0.00</span></td>
-                                </tr>
-                                <tr>
-                                    <th scope="row"></th>
-                                    <td class="table-light"><span class="fw-bold">Total Deductions:</p>
-                                    </td>
-                                    <td class="table-light"><span id="total_deductions" class="amounts">0.00</span></td>
-                                </tr>
-                                <tr>
-                                    <th scope="row"></th>
-                                    <td class="table-light"><span class="fw-bold">Net Pay:</p>
-                                    </td>
-                                    <td class="table-light"><span id="net_pay" class="amounts">0.00</span></td>
-                                </tr>
+                                        <td><span id="span_deductions-{{$deduction['name']}}" name="span_deductions-{{$deduction['name']}}" class="for_deductions amounts">{{ $deduction['amount'] }}</span></td>
+                                    </tr>
+                                @endforeach
+
+                                    <tr>
+                                        <th scope="row"></th>
+                                        <td class="table-light"><span class="fw-bold">Total Deductions:</p>
+                                        </td>
+                                        <td class="table-light"><span id="total_deductions" class="amounts">0.00</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"></th>
+                                        <td class="table-light"><span class="fw-bold">Net Pay:</p>
+                                        </td>
+                                        <td class="table-light"><span id="net_pay" class="amounts">0.00</span></td>
+                                    </tr>
                             </tbody>
                         </table>
+                        {{-- hidden --}}
+                        <input type="hidden" name="employee_id" value="{{ $results['employee']->id }}">
+                        <input type="hidden" name="schedule_id" value="{{ $results['payroll_schedule']->id }}">
 
-                        <input type="text" name="employee_id" value="{{ $results['employee']->id }}">
-                        <input type="text" name="schedule_id" value="{{ $results['payroll_schedule']->id }}">
+                        <input type="hidden" name="input_amount_no_of_days_worked" id="input_amount_no_of_days_worked">
+                        <input type="hidden" name="input_amount_bonuses" id="input_amount_bonuses">
+                        <input type="hidden" name="input_amount_no_of_hours_overtime"
+                            id="input_amount_no_of_hours_overtime">
+                        <input type="hidden" name="input_gross" id="input_gross">
+
+                        <input type="hidden" name="input_amount_no_of_days_absent" id="input_amount_no_of_days_absent">
+                        <input type="hidden" name="input_amount_no_of_hours_late" id="input_amount_no_of_hours_late">
+                        <input type="hidden" name="input_deduction_list_csv" id="input_deduction_list_csv">
+
+                        <input type="hidden" name="input_amount_total_deductions" id="input_amount_total_deductions">
+                        <input type="hidden" name="input_amount_net_pay" id="input_amount_net_pay">
 
                         <div class="col-auto">
                             <button type="submit" class="btn btn-primary mb-3">Submit</button>
@@ -248,6 +276,8 @@
             $(".input-numbers").keypress(function(event) {
                 return /\d/.test(String.fromCharCode(event.keyCode));
             });
+            // Initial Computations
+            computeInitialValues();
 
             // GROSS
             $('#no_of_days_worked').keyup(function() {
@@ -256,6 +286,7 @@
                     value = 0;
                 }
                 $('#span_days_worked').text(value)
+                $('#input_amount_no_of_days_worked').val(value)
                 computeGross();
             });
 
@@ -265,6 +296,7 @@
                     value = 0.00;
                 }
                 $('#span_bonuses').text(value)
+                $('#input_amount_bonuses').val(value)
                 computeGross();
             });
 
@@ -274,17 +306,9 @@
                     value = 0.00;
                 }
                 $('#hours_overtime').text(value)
+                $('#input_amount_no_of_hours_overtime').val(value)
                 computeGross();
 
-            });
-
-            $('#no_of_hours_overtime').keyup(function() {
-                let value = parseFloat($(this).val());
-                if (Number.isNaN(value) == true) {
-                    value = 0.00;
-                }
-                $('#hours_overtime').text(value)
-                computeGross();
             });
 
             function computeGross() {
@@ -293,6 +317,7 @@
                     sum += parseFloat($(this).text()); // Or this.innerHTML, this.innerText
                 });
                 $('#gross_pay').text(sum)
+                $('#input_gross').val(sum)
                 computeNetPay()
             }
             // END GROSS
@@ -304,6 +329,7 @@
                     value = 0.00;
                 }
                 $('#days_absent').text(value)
+                $('#input_amount_no_of_hours_late').val(value)
                 computeDeductions();
             });
 
@@ -313,6 +339,19 @@
                     value = 0.00;
                 }
                 $('#hours_late').text(value)
+                $('#input_amount_no_of_days_absent').val(value)
+                computeDeductions();
+            });
+
+            $('.input_deductions').keyup(function() {
+                console.log($(this).val())
+                let value = parseFloat($(this).val());
+                if (Number.isNaN(value) == true) {
+                    value = 0.00;
+                }
+                let name = $(this).attr('data-name');
+                $(`#span_${name}`).text(value)
+                $(`#span_${name}`).val(value)
                 computeDeductions();
             });
 
@@ -325,6 +364,7 @@
                     sum = 0.00;
                 }
                 $('#total_deductions').text(sum)
+                $('#input_amount_total_deductions').val(sum)
                 computeNetPay()
             }
 
@@ -338,8 +378,15 @@
                     net = 0.00;
                 }
                 $('#net_pay').text(net)
+                $('#input_amount_net_pay').val(net)
             }
             // END NET PAY
+
+            function computeInitialValues() {
+                computeDeductions();
+                computeGross();
+                computeNetPay();
+            }
         });
     </script>
 @endsection
