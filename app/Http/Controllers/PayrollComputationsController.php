@@ -155,7 +155,7 @@ class PayrollComputationsController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect(route('payroll_computations', ['id' => $id]))
+            return redirect(route('payroll_computations', ['id' => $computations->payroll_schedule_id]))
                 ->withErrors($validator)
                 ->withInput();
         }
@@ -166,7 +166,7 @@ class PayrollComputationsController extends Controller
 
         $claimed = $request->input('is_claimed') == 1 ? 'Clamed' : 'Unclaimed';
 
-        return redirect(route('payroll_computations', ['id' => $id]))
+        return redirect(route('payroll_computations', ['id' => $computations->payroll_schedule_id]))
             ->withSuccess("Mark as $claimed successful!");
     }
 
