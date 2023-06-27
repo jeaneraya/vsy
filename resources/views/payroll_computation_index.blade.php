@@ -125,7 +125,7 @@
                                         </button>
                                         <ul class="dropdown-menu">
                                             <li>
-                                                <a class="dropdown-item fs-6">View/Update</a>
+                                                <a href="{{ route('payroll_computations_employee', ['id' => $withComputations->computations_id, 'employee_id' => $withComputations->employee_id]) }}" class="dropdown-item fs-6">View/Update</a>
                                             </li>
                                             <li>
                                                 <form method="POST"
@@ -137,6 +137,8 @@
                                                         {{$withComputations->computations_is_claimed == 1 ? 'Unclaim' : 'Mark as Claimed' }}
                                                     </button>
                                                 </form>
+
+
                                             </li>
                                         </ul>
                                     </span>
