@@ -58,41 +58,34 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-    // Route::middleware(['isRoleSuperAdmin', 'isRoleAdmin'])->group(function () {
-        // employees
-        Route::get('/employees',[EmployeesController::class, 'index'])->name('employees');
-        Route::get('/employees/create',[EmployeesController::class, 'createView'])->name('create_view_employees');
-        Route::post('/employees/create',[EmployeesController::class, 'create'])->name('create_post_employees');
-        Route::put('/employee/resign',[EmployeesController::class, 'resign'])->name('resign_employee');
-        Route::get('/employee/{id}',[EmployeesController::class, 'show'])->name('show_employee');
-        Route::put('/employee/{id}',[EmployeesController::class, 'put'])->name('update_employee');
+    // employees
+    Route::get('/employees',[EmployeesController::class, 'index'])->name('employees');
+    Route::get('/employees/create',[EmployeesController::class, 'createView'])->name('create_view_employees');
+    Route::post('/employees/create',[EmployeesController::class, 'create'])->name('create_post_employees');
+    Route::put('/employee/resign',[EmployeesController::class, 'resign'])->name('resign_employee');
+    Route::get('/employee/{id}',[EmployeesController::class, 'show'])->name('show_employee');
+    Route::put('/employee/{id}',[EmployeesController::class, 'put'])->name('update_employee');
 
-        // employees
-        Route::get('/reminders',[ReminderController::class, 'index'])->name('reminders');
-        Route::get('/reminder/create',[ReminderController::class, 'view_add_reminder'])->name('view_add_reminder');
-        Route::post('/reminder/create',[ReminderController::class, 'store'])->name('post_add_reminder');
-        Route::get('/reminder/{id}',[ReminderController::class, 'show'])->name('show_reminder');
-        Route::put('/reminder/{id}',[ReminderController::class, 'update'])->name('update_reminder');
+    // reminders
+    Route::get('/reminders',[ReminderController::class, 'index'])->name('reminders');
+    Route::get('/reminder/create',[ReminderController::class, 'view_add_reminder'])->name('view_add_reminder');
+    Route::post('/reminder/create',[ReminderController::class, 'store'])->name('post_add_reminder');
+    Route::get('/reminder/{id}',[ReminderController::class, 'show'])->name('show_reminder');
+    Route::put('/reminder/{id}',[ReminderController::class, 'update'])->name('update_reminder');
 
-        Route::get('/payroll/schedule/computation',[PayrollComputationsController::class, 'index'])->name('payroll_computations');
-        Route::put('/payroll/schedule/computation/{id}/claimed',[PayrollComputationsController::class, 'put_claimed'])->name('put_payroll_computation_claim');
-        Route::get('/payroll/schedule/computation/{id}/employee/{employee_id}',[PayrollComputationsController::class, 'show_employee'])->name('payroll_computations_employee');
-        Route::put('/payroll/schedule/computation/{id}/employee/{employee_id}',[PayrollComputationsController::class, 'update_employee'])->name('payroll_computations_employee_put');
-        Route::get('/payroll/schedule/computation/{id}',[PayrollComputationsController::class, 'view_create'])->name('view_add_payroll_computations');
-        Route::post('/payroll/schedule/computation/{id}',[PayrollComputationsController::class, 'create'])->name('create_add_payroll_computations');
+    // payroll computations
+    Route::get('/payroll/schedule/computation',[PayrollComputationsController::class, 'index'])->name('payroll_computations');
+    Route::put('/payroll/schedule/computation/{id}/claimed',[PayrollComputationsController::class, 'put_claimed'])->name('put_payroll_computation_claim');
+    Route::get('/payroll/schedule/computation/{id}/employee/{employee_id}',[PayrollComputationsController::class, 'show_employee'])->name('payroll_computations_employee');
+    Route::put('/payroll/schedule/computation/{id}/employee/{employee_id}',[PayrollComputationsController::class, 'update_employee'])->name('payroll_computations_employee_put');
+    Route::get('/payroll/schedule/computation/{id}',[PayrollComputationsController::class, 'view_create'])->name('view_add_payroll_computations');
+    Route::post('/payroll/schedule/computation/{id}',[PayrollComputationsController::class, 'create'])->name('create_add_payroll_computations');
 
-
-
-        Route::get('/payroll/schedule/{schedule_id}',[PayrollScheduleController::class, 'show'])->name('show_payroll_schedule');
-        Route::put('/payroll/schedule/{schedule_id}',[PayrollScheduleController::class, 'update'])->name('put_payroll_schedule');
-        Route::post('/payroll/schedule/add',[PayrollScheduleController::class, 'store'])->name('store_payroll_schedule');
-        Route::get('/payroll/schedule',[PayrollScheduleController::class, 'index'])->name('payroll_schedule');
-
-
-
-
-
-    // });
+    // payroll schedule
+    Route::get('/payroll/schedule/{schedule_id}',[PayrollScheduleController::class, 'show'])->name('show_payroll_schedule');
+    Route::put('/payroll/schedule/{schedule_id}',[PayrollScheduleController::class, 'update'])->name('put_payroll_schedule');
+    Route::post('/payroll/schedule/add',[PayrollScheduleController::class, 'store'])->name('store_payroll_schedule');
+    Route::get('/payroll/schedule',[PayrollScheduleController::class, 'index'])->name('payroll_schedule');
 
     Route::get('/collectors',[CollectorsController::class, 'index'])->name('collectors');
     Route::post('add-collector', [CollectorsController::class, 'addCollector'])->name('add-collector');
@@ -111,6 +104,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/expenses',[ExpensesController::class, 'index'])->name('expenses');
     Route::post('add-expenses',[ExpensesController::class, 'saveExpenses'])->name('add-expenses');
+
+
 
 });
 
