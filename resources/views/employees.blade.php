@@ -84,7 +84,10 @@
                                                     <form method="POST" action="{{ route('resign_employee') }}">
                                                         @csrf @method('PUT')
                                                         <input hidden name="id" value="{{ $employee->id }}">
-                                                        <button class="dropdown-item fs-6" type="submit">Resign</button>
+                                                        <input hidden name="hiring_status" value="{{ $employee->hiring_status == 0 ? '1' : '0' }}">
+                                                        <button class="dropdown-item fs-6" type="submit">
+                                                            {{ $employee->hiring_status == 0 ? 'Mark as Resigned' : 'Mark as Hired' }}
+                                                        </button>
                                                     </form>
                                                 </li>
                                             </ul>

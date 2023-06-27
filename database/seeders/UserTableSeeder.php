@@ -58,8 +58,27 @@ class UserTableSeeder extends Seeder
             'approval_status' => '0'
         ]);
 
+        $areaManager = User::create([
+            'name' => 'Area Manager',
+            'email' => 'areaManager@test.com',
+            'password' => Hash::make('Testing123'),
+            'birthday' => '2023-01-01',
+            'contact' => 12345678912,
+            'address' => 'test address',
+            'role' => 4,
+            'approval_status' => '0'
+        ]);
+
         Collector::create([
             'user_id' => $collector->id,
+            'code' => 1,
+            'cashbond' => 2,
+            'ctc_no' => 3,
+            'status' => 1
+        ]);
+
+        Collector::create([
+            'user_id' => $areaManager->id,
             'code' => 1,
             'cashbond' => 2,
             'ctc_no' => 3,

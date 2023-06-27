@@ -123,56 +123,51 @@
                         </label>
                     </div>
 
-                    <div class="collector-div row">
-                        <h2 class="main-title">Collector Details</h2>
+                </div>
+                <div class="collector-div row">
+                    <h2 class="main-title">Collector Details</h2>
 
-                        <div class="col-6 mb-3">
-                            <label for="validationCustom01">Collector Code</label>
-                            <input type="text" class="form-control input-numbers form-input" id="code" name="code"
-                                placeholder=""  value="{{ old('code') }}">
+                    <div class="col-6">
+                        <label for="validationCustom01">Collector Code</label>
+                        <input type="text"
+                            class="form-control input-numbers  @error('code') is-invalid @enderror  form-input"
+                            id="code" name="code" placeholder="" value="{{ old('code') }}">
+                    </div>
+                    <div class="col-6">
+                        <label for="validationCustom01">Cashbond</label>
+                        <input type="text"
+                            class="form-control input-numbers  @error('cashbond') is-invalid @enderror form-input"
+                            id="cashbond" name="cashbond" placeholder="" value="{{ old('cashbond') }}">
+                    </div>
+
+                    <div class="col-6">
+                        <label for="validationCustom01">CTC no.</label>
+                        <input type="text"
+                            class="form-control input-numbers  @error('ctcnum') is-invalid @enderror  form-input"
+                            id="ctcnum" name="ctcnum" placeholder="" value="{{ old('ctcnum') }}">
+                    </div>
+
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect1">Collector Status</label>
+                            <select class="form-control  @error('collector_status') is-invalid @enderror  form-input"
+                                id="collector_status" name="collector_status">
+                                <option value="1" {{ old('ctcnum') == 1 ? 'selected' : '' }}>Pending
+                                </option>
+                                <option value="2" {{ old('ctcnum') == 2 ? 'selected' : '' }}>Approved
+                                </option>
+                                <option value="3" {{ old('ctcnum') == 3 ? 'selected' : '' }}>Rejected
+                                </option>
+                                <option value="4" {{ old('ctcnum') == 4 ? 'selected' : '' }}>Archived
+                                </option>
+                            </select>
                             <div class="valid-feedback">
                                 Looks good!
                             </div>
-                        </div>
-                        <div class="col-6 mb-3">
-                            <label for="validationCustom01">Cashbond</label>
-                            <input type="text" class="form-control input-numbers form-input" id="cashbond" name="cashbond"
-                                placeholder="" value="{{ old('cashbond') }}" >
-                            <div class="valid-feedback">
-                                Looks good!
-                            </div>
-                        </div>
-
-                        <div class="col-6 mb-3">
-                            <label for="validationCustom01">CTC no.</label>
-                            <input type="text" class="form-control input-numbers form-input" id="ctcnum" name="ctcnum"
-                                placeholder=""  value="{{ old('ctcnum') }}">
-                            <div class="valid-feedback">
-                                Looks good!
-                            </div>
-                        </div>
-
-                        <div class="col-6 mb-3">
-                            <div class="form-group">
-                                <label for="exampleFormControlSelect1">Collector Status</label>
-                                <select class="form-control form-input" id="collector_status" name="collector_status" >
-                                    <option value="1" {{ old('ctcnum') == 1 ? 'selected' : '' }}>Pending
-                                    </option>
-                                    <option value="2" {{ old('ctcnum') == 2 ? 'selected' : '' }}>Approved
-                                    </option>
-                                    <option value="3" {{ old('ctcnum') == 3 ? 'selected' : '' }}>Rejected
-                                    </option>
-                                    <option value="4" {{ old('ctcnum') == 4 ? 'selected' : '' }}>Archived
-                                    </option>
-                                </select>
-                                <div class="valid-feedback">
-                                    Looks good!
-                                </div>
-                            </div>
-
                         </div>
                     </div>
                 </div>
+
                 <button type="submit" class="form-btn primary-default-btn transparent-btn">
                     Create Account
                 </button>
@@ -198,7 +193,7 @@
 
             // end initialize
 
-            $('#role').change(function(){
+            $('#role').change(function() {
                 $("#code").prop('required', false);
                 $("#ctcnum").prop('required', false);
                 $("#code").prop('required', false);

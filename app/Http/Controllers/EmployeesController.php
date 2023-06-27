@@ -91,6 +91,7 @@ class EmployeesController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'id' => ['required'],
+            'hiring_status' => ['required']
         ]);
 
         if ($validator->fails()) {
@@ -106,7 +107,7 @@ class EmployeesController extends Controller
         }
 
         try {
-            $employees->hiring_status = 1; // resigned
+            $employees->hiring_status = $request->input('hiring_status');
             $employees->save();
         } catch (Exception $e) {
             return redirect()->back()
