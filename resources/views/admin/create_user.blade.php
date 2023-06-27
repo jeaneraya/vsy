@@ -211,16 +211,16 @@
 
                 let val = $(this).val();
 
-                if (val == 3) { // collector
+                if (val == 4) { // area manager
                     $('.collector-div').show()
 
                     $("#code").prop('required', true);
-                    $("#ctcnum").prop('required', true);
-                    $("#cashbond").prop('required', true);
+                    // $("#ctcnum").prop('required', true);
+                    // $("#cashbond").prop('required', true);
 
                     $("#code").prop('disabled', false);
-                    $("#cashbond").prop('disabled', false);
-                    $("#ctcnum").prop('disabled', false);
+                    // $("#cashbond").prop('disabled', false);
+                    // $("#ctcnum").prop('disabled', false);
 
                     $(".span-required").show();
                 }

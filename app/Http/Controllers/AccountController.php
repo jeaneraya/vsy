@@ -32,7 +32,9 @@ class AccountController extends Controller
     public function createView()
     {
         $users = User::all();
-        $roles = Role::all();
+        $roles = Role::where([
+            ['for_registration', '=', 1]
+        ])->get(); // yes
 
         return view('admin/create_user', ['users' => $users, 'roles' => $roles]);
     }

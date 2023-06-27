@@ -66,7 +66,7 @@ input:enabled:read-write:-webkit-any(:focus, :hover)::-webkit-calendar-picker-in
                         <select name="role" id="role" type="text"
                             class="form-control @error('role') is-invalid @enderror form-input autofocus">
                             @php
-                                $roles = App\Models\Role::all();
+                                $roles = App\Models\Role::where([['for_registration', '=', 1]])->get();
                             @endphp
                             @foreach ($roles as $role)
                                 <option value="{{ $role->id }}" {{ $role->id == old('role') ? 'selected' : '' }}>

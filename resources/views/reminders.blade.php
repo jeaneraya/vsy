@@ -44,6 +44,12 @@
             <div class="col-2"> <a type="button" class="btn btn-primary" href="{{ route('view_add_reminder') }}">Add Reminder</a></div>
         </div>
 
+        @php
+            $isActiveBadge = [
+                1 => 'Active',
+                2 => 'Inactive'
+            ];
+        @endphp
     <div class="container users-page">
         <div class="col-lg-12">
             <div class="row">
@@ -56,6 +62,8 @@
                                 <th>Description</th>
                                 <th>Schedule</th>
                                 <th>Status</th>
+                                <th>Active</th>
+                                <th>Frequency</th>
                                 <th>Created by</th>
                                 <th>Action</th>
                             </tr>
@@ -67,9 +75,11 @@
                                     <td>{{ App\Models\Constants::getRemindersTypes()[$reminder->type] }}</td>
                                     <td>{{ $reminder->description }}</td>
                                     <td>{{ $reminder->schedule }}</td>
-                                    {{-- <td>{{ $reminder->template_id }}</td> --}}
                                     <td>{{ App\Models\Constants::getRemindersStatus()[$reminder->status]}}</td>
+                                    <td>{{ App\Models\Constants::reminderIsActiveStatus()[$reminder->is_active] }}</td>
+                                    <td>{{ App\Models\Constants::getReminderFrequencies()[$reminder->frequency] }}</td>
                                     <td>{{ $reminder->created_by }}</td>
+
                                     </td>
                                     <td class="text-center">
                                         <span class="p-relative">

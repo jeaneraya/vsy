@@ -72,10 +72,10 @@
                         </label>
                     </div>
 
-                    <div class="col-6">
+                    <div class="col-4">
                         <label class="form-label-wrapper">
                             <p class="form-label">Schedule</p>
-                            <input id="schedule" type="datetime-local"
+                            <input id="schedule" type="date"
                                 class="form-control @error('schedule') is-invalid @enderror  form-input" name="schedule"
                                 value="{{ $reminder->schedule }}"
                                 {{-- min="{{ Carbon\Carbon::now()->addDays(1)->format('Y-m-d 00:00:00')}}" --}}
@@ -83,6 +83,39 @@
                         </label>
                     </div>
 
+                    <div class="col-4">
+                        <label class="form-label-wrapper">
+                            <p class="form-label">Frequency</p>
+                            <select name="frequency" id="frequency" type="text"
+                                class="form-control @error('frequency') is-invalid @enderror form-input autofocus" required>
+                                @php
+                                    $frequency = App\Models\Constants::getReminderFrequencies();
+                                @endphp
+
+                                @foreach ($frequency as $key => $value)
+                                    <option value="{{ $key }}" {{ $key == $reminder->frequency ? 'selected' : '' }}>
+                                        {{ $value }}</option>
+                                @endforeach
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="col-4">
+                        <label class="form-label-wrapper">
+                            <p class="form-label">Is Active</p>
+                            <select name="is_active" id="is_active" type="text"
+                                class="form-control @error('is_active') is-invalid @enderror form-input autofocus" required>
+                                @php
+                                    $isActiveStatus = App\Models\Constants::reminderIsActiveStatus();
+                                @endphp
+
+                                @foreach ($isActiveStatus as $key => $value)
+                                    <option value="{{ $key }}" {{ $key == $reminder->is_active ? 'selected' : '' }}>
+                                        {{ $value }}</option>
+                                @endforeach
+                            </select>
+                        </label>
+                    </div>
 
                     <div class="col-12">
                         <label class="form-label-wrapper">

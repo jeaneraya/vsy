@@ -17,32 +17,38 @@ class ReminderTypesSeeder extends Seeder
         ReminderTypes::truncate();
         ReminderTypes::create([
             'id' => '1',
-            'name' => 'Custom',
-            'description' => 'Custom'
+            'name' => '1st Collection',
+            'description' => '1st Collection'
         ]);
 
         ReminderTypes::create([
             'id' => '2',
-            'name' => 'Template',
-            'description' => 'Template'
+            'name' => '15th Collection',
+            'description' => '15th Collection'
         ]);
 
         ReminderTypes::create([
             'id' => '3',
+            'name' => '30th/31st Collection',
+            'description' => '30th/31st Collection',
+        ]);
+
+        ReminderTypes::create([
+            'id' => '4',
             'name' => 'Birthday',
             'description' => 'Birthday'
         ]);
 
         ReminderTypes::create([
-            'id' => '4',
-            'name' => 'Renewal',
-            'description' => 'Renewal'
+            'id' => '5',
+            'name' => 'Insurance',
+            'description' => 'Registration'
         ]);
 
         ReminderTypes::create([
-            'id' => '5',
-            'name' => 'Insurance',
-            'description' => 'Insurance'
+            'id' => '6',
+            'name' => 'Custom',
+            'description' => 'Custom'
         ]);
     }
 }

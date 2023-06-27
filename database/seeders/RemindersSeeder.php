@@ -20,6 +20,7 @@ class RemindersSeeder extends Seeder
             'schedule' => Carbon::now()->addDay(2),
             'template_id' => '0',
             'type' => '4',
+            'frequency' => '1',
             'status' => '0',
             'created_by' => '1',
         ]);
@@ -29,6 +30,7 @@ class RemindersSeeder extends Seeder
             'schedule' => Carbon::now()->addDay(2),
             'template_id' => '0',
             'type' => '3',
+            'frequency' => '2',
             'status' => '1',
             'created_by' => '1',
         ]);
@@ -38,6 +40,7 @@ class RemindersSeeder extends Seeder
             'schedule' => Carbon::now()->addDay(2),
             'template_id' => '0',
             'type' => '2',
+            'frequency' => '3',
             'status' => '2',
             'created_by' => '1',
         ]);
@@ -47,6 +50,7 @@ class RemindersSeeder extends Seeder
             'schedule' => Carbon::now()->addDay(2),
             'template_id' => '0',
             'type' => '5',
+            'frequency' => '4',
             'status' => '3',
             'created_by' => '1',
         ]);

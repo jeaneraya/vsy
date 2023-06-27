@@ -74,4 +74,23 @@ class Constants
             1 => 'YES'
         ];
     }
+
+    public static function getReminderFrequencies()
+    {
+        return [
+            1 => 'One time',
+            2 => 'Daily',
+            3 => 'Weekly',
+            4 => 'Monthly',
+            5 => 'Yearly'
+        ];
+    }
+
+    public static function reminderIsActiveStatus()
+    {
+        return [
+            1 => 'Active',
+            2 => 'Inactive'
+        ];
+    }
 }

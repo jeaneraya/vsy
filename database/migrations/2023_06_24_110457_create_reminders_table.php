@@ -17,14 +17,17 @@ class CreateRemindersTable extends Migration
         Schema::create('reminders', function (Blueprint $table) {
             $table->id();
             $table->string('description');
-            $table->datetime('schedule');
+            $table->date('schedule');
             $table->integer('template_id')->default(0);
             $table->integer('type')->default(1)->comment('1 - custom, 2 - template, 3 - birthday, 4 - renewal, 5 - registration, 6 - insurance');
+            $table->integer('frequency')->default(1)->comment('1 - One time, 2 - Daily, 3 - Weekly, 4 - Monthly, 5 - Yearly');
             $table->integer('status')->default(0)->comment('0 - pending, 1 - sent, 2 - failed, 3 - cancelled');
+            $table->integer('is_active')->default(1)->comment('1 - active, 2 - inactive');
             $table->integer('created_by')->comment('users.id');
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.

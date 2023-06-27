@@ -28,16 +28,17 @@ class ReminderController extends Controller
 
     public function store(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'description' => ['required'],
             'schedule' => ['required', 'date', 'after:today'],
             'message' => ['required'],
             'type' => ['required'],
+            'frequency' => ['required'],
+            'is_active' => ['required']
         ]);
 
         if ($validator->fails()) {
-            return redirect(route("get_user_create"))
+            return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
         }
@@ -49,10 +50,13 @@ class ReminderController extends Controller
                 'template_id' => 0, // todo,
                 'type' => $request->input('type'), // todo
                 'status' => 0, // pending
-                'created_by' => Auth::user()->id
+                'frequency' => $request->input('frequency'),
+                'created_by' => Auth::user()->id,
+                'is_active' => $request->input('is_active'), // active
             ]);
+
         } catch (Exception $e) {
-            return redirect(route("view_add_reminder"))
+            return redirect()->back()
                 ->withErrors([$e->getMessage()])
                 ->withInput();
         }
@@ -102,6 +106,8 @@ class ReminderController extends Controller
             'schedule' => ['required', 'date', 'after:today'],
             'message' => ['required'],
             'type' => ['required'],
+            'frequency' => ['required'],
+            'is_active' => ['required'],
         ]);
 
         if ($validator->fails()) {
@@ -118,8 +124,10 @@ class ReminderController extends Controller
         try {
             $reminder->description = $request->input('description');
             $reminder->schedule = $request->input('schedule');
+            $reminder->frequency = $request->input('frequency');
             // $reminder->message = $request->input('message');
             $reminder->type = $request->input('type');
+            $reminder->is_active = $request->input('is_active');
             $reminder->save();
         } catch (Exception $e) {
             return redirect()->back()
