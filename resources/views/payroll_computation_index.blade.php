@@ -132,6 +132,7 @@
                                                     action="{{ route('put_payroll_computation_claim', ['id' => $withComputations->computations_id]) }}">
                                                     @csrf @method('PUT')
                                                     <input hidden name='is_claimed' value="{{ $withComputations->computations_is_claimed == 1 ? 0 : 1 }}">
+                                                    <input hidden name='schedule_id' value="{{ request()->get('id') }}">
                                                     <button type="submit" class="dropdown-item fs-6">
                                                         {{$withComputations->computations_is_claimed == 1 ? 'Unclaim' : 'Mark as Claimed' }}
                                                     </button>

@@ -150,12 +150,13 @@ class PayrollComputationsController extends Controller
         $validator = Validator::make([...$request->all(), 'id' => $id], [
             'id' => ['required', 'exists:payroll_computations,id'],
             'is_claimed' => ['required'],
+            'schedule_id' => ['required']
         ], [
             'id.exists' => 'Computation is Invalid.'
         ]);
 
         if ($validator->fails()) {
-            return redirect(route('payroll_computations', ['id' => $computations->payroll_schedule_id]))
+            return redirect(route('payroll_computations', ['id' => $request->input('schedule_id')]))
                 ->withErrors($validator)
                 ->withInput();
         }
