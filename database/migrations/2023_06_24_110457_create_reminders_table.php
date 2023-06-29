@@ -20,7 +20,7 @@ class CreateRemindersTable extends Migration
             $table->date('schedule');
             $table->integer('template_id')->default(0);
             $table->integer('type')->default(1)->comment('1 - custom, 2 - template, 3 - birthday, 4 - renewal, 5 - registration, 6 - insurance');
-            $table->string('recipient')->default(0)->comment('0 - to system, not 0 - users.id');
+            $table->integer('recipient')->default(0)->comment('0 - to system, not 0 - users.id');
             $table->string('message')->nullable();
             $table->integer('frequency')->default(1)->comment('1 - One time, 2 - Daily, 3 - Weekly, 4 - Monthly, 5 - Yearly');
             $table->integer('status')->default(0)->comment('0 - pending, 1 - sent, 2 - failed, 3 - cancelled');
