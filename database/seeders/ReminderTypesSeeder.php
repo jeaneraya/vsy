@@ -31,7 +31,7 @@ class ReminderTypesSeeder extends Seeder
         ]);
         ReminderTypes::create([
             'id' => '3',
-            'name' => 'Custome',
+            'name' => 'Custom',
             'description' => 'Custom',
             'type' => '1' // custom
         ]);

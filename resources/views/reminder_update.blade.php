@@ -121,8 +121,8 @@
                         <label class="form-label-wrapper">
                             <p class="form-label">Message</p>
                             <textarea id="message" type="text"
-                                class="form-control @error('name') is-invalid @enderror form-input" name="message"
-                                value="{{ $reminder->message }}" placeholder="Enter your name" required style="height: 10em;" maxlenth="255"></textarea>
+                                class="form-control @error('message') is-invalid @enderror form-input" name="message"
+                                placeholder="Enter your name" required style="height: 10em;" maxlenth="255">{{ $reminder->message }}</textarea>
                         </label>
                     </div>
                 </div>

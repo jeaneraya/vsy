@@ -62,7 +62,7 @@
                             <select name="type" id="type" type="text"
                                 class="form-control @error('type') is-invalid @enderror form-input autofocus" required>
                                 @php
-                                    $types = App\Models\ReminderTypes::all();
+                                    $types = App\Models\ReminderTypes::where([['type', '=', '1']])->get(); //custom
                                 @endphp
                                 @foreach ($types as $type)
                                     <option value="{{ $type->id }}" {{ $type->id == old('type') ? 'selected' : '' }}>
@@ -120,7 +120,7 @@
                         <label class="form-label-wrapper">
                             <p class="form-label">Message</p>
                             <textarea id="message" type="text"
-                                class="form-control @error('name') is-invalid @enderror form-input" name="message"
+                                class="form-control @error('message') is-invalid @enderror form-input" name="message"
                                 value="{{ old('message') }}" placeholder="Enter your name" required style="height: 10em;" maxlenth="255"></textarea>
                         </label>
                     </div>

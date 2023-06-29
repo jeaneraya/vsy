@@ -17,13 +17,35 @@ class RemindersSeeder extends Seeder
     {
         Reminder::create([
             'description' => 'TOday',
-            'schedule' => Carbon::now()->addDay(2),
+            'schedule' => Carbon::now(),
             'template_id' => '0',
             'type' => '4',
             'frequency' => '1',
             'status' => '0',
             'created_by' => '1',
         ]);
+
+        Reminder::create([
+            'description' => 'TOday 1',
+            'schedule' => Carbon::now(),
+            'template_id' => '0',
+            'type' => '4',
+            'frequency' => '1',
+            'status' => '0',
+            'created_by' => '1',
+        ]);
+
+
+        Reminder::create([
+            'description' => 'TOday 2',
+            'schedule' => Carbon::now(),
+            'template_id' => '0',
+            'type' => '4',
+            'frequency' => '1',
+            'status' => '0',
+            'created_by' => '1',
+        ]);
+
 
         Reminder::create([
             'description' => 'Tomorrow',

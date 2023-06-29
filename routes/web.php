@@ -128,7 +128,7 @@ Route::view('/register1', 'register');
     Route::get('/birthdays', [CronController::class, 'todayBirthday']);
     Route::get('/firstCollection', [CronController::class, 'firstMonthlyCollection']);
     Route::get('/secondCollection', [CronController::class, 'secondMonthlyCollection']);
-    Route::get('/customeReminders', [CronController::class, 'customeReminders']);
+    Route::get('/customReminders', [CronController::class, 'customReminders']);
 });
 
 

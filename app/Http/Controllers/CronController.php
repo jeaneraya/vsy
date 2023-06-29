@@ -200,10 +200,12 @@ class CronController extends Controller
 
         try {
             foreach ($results as $result) {
+                $message = $result->message;
                 // send message
-                // echo $template;
+                echo $message;
             }
             return 'Success';
+            exit;
         } catch (Exception $e) {
             return "Error: " . $e->getMessage();
         }

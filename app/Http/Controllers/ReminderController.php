@@ -53,6 +53,7 @@ class ReminderController extends Controller
                 'frequency' => $request->input('frequency'),
                 'created_by' => Auth::user()->id,
                 'is_active' => $request->input('is_active'), // active
+                'message' => $request->input('message'), // active
             ]);
 
         } catch (Exception $e) {
