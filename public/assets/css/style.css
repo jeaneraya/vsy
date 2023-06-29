@@ -1865,6 +1865,10 @@
  .users-table.table-wrapper {
   overflow-x: hidden;
  }
+
+ .view-batch .users-table.table-wrapper {
+  min-height: auto;
+ }
  
  .table-wrapper table {
    min-width: 850px;

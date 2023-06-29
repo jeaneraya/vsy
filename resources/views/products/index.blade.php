@@ -74,14 +74,9 @@
                       <label for="" class="form-label">Unit:</label>
                       <select name="unit" id="unit" class="form-select" required>
                         <option value="" disabled selected></option>
-                        <option value="bottle">Bottle</option>
                         <option value="box">Box</option>
-                        <option value="carton/s">Carton/s</option>
-                        <option value="grams">Grams</option>
-                        <option value="kilos">Kilos</option>
-                        <option value="meter/s">meter/s</option>
-                        <option value="piece">Piece</option>
-                        <option value="sachet">Sachet</option>
+                        <option value="pack">Pack</option>
+                        <option value="pc">Piece</option>
                       </select>
                     </div>
                     <div class="col-6 mb-3">

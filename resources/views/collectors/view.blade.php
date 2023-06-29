@@ -35,7 +35,7 @@
             <span class="p-relative">
                 <button class="btn p-0" data-bs-toggle="dropdown" aria-expanded="false"><iconify-icon icon="gg:more-r"></iconify-icon></button>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item fs-6" href="{{ route('collectors.withdrawals', ['batch_id' => $batch_tran->num, 'name' => $collector_name]) }}">View</a></li>
+                    <li><a class="dropdown-item fs-6" href="{{ route('collectors.withdrawals', ['collector_id' => $batch_tran-> collector_id, 'batch_id' => $batch_tran->id, 'name' => $collector_name]) }}">View</a></li>
                     <li><a class="dropdown-item fs-6" href="#">Edit</a></li>
                     <li><a class="dropdown-item fs-6" href="#">Trash</a></li>
                 </ul>
