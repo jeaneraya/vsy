@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PayrollComputations;
 use App\Models\PayrollSchedule;
 use Carbon\Carbon;
 use Exception;
@@ -19,6 +20,11 @@ class PayrollScheduleController extends Controller
     public function index()
     {
         $payrollSchedule = PayrollSchedule::all();
+        foreach ($payrollSchedule as $key => $value) {
+            $payrollSchedule[$key]->total_net = PayrollComputations::where([
+                ['payroll_schedule_id', '=', $value->id]
+            ])->get()->sum('net_pay');
+        }
         return view('payroll_schedule', compact('payrollSchedule'));
     }
 

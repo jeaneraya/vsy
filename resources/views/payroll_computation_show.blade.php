@@ -128,7 +128,7 @@
                                             autocomplete="no_of_days_worked" maxlength="50" autofocus>
                                     </td>
 
-                                    <td><span id="span_days_worked" class="amounts for_gross">0.00</span></td>
+                                    <td>₱ <span id="span_days_worked" class="amounts for_gross">0.00</span></td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Bonuses</th>
@@ -136,7 +136,7 @@
                                             class="form-control input-numbers @error('bonuses') is-invalid @enderror form-input"
                                             name="bonuses" value="{{ $results->computations_bonus }}" required autocomplete="name"
                                             maxlength="50" autofocus></td>
-                                    <td><span id="span_bonuses" class="for_gross amounts ">0.00</span></td>
+                                    <td>₱ <span id="span_bonuses" class="for_gross amounts ">0.00</span></td>
                                 </tr>
                                 <tr>
                                     <th scope="row">No. of hours Overtime</th>
@@ -145,12 +145,12 @@
                                             name="no_of_hours_overtime" value="{{  $results->computations_hours_overtime }}" required
                                             autocomplete="no_of_hours_overtime" maxlength="50" autofocus></td>
 
-                                    <td><span id="hours_overtime" class="for_gross amounts">0.00</span></td>
+                                    <td>₱ <span id="hours_overtime" class="for_gross amounts">0.00</span></td>
                                 </tr>
                                 <tr>
                                     <th scope="row"></th>
                                     <td class="table-light"><span class="fw-bold">Gross Pay:</span></td>
-                                    <td class="table-light"><span id="gross_pay" class="amounts">0.00</span></td>
+                                    <td class="table-light">₱ <span id="gross_pay" class="amounts">0.00</span></td>
                                 </tr>
                                 <tr class="table-secondary">
                                     <th scope="row">Deductions</th>
@@ -164,7 +164,7 @@
                                             name="no_of_days_absent" value="{{ $results->computations_days_absent }}" required
                                             autocomplete="no_of_days_absent" maxlength="50" autofocus></td>
 
-                                    <td><span id="days_absent" class="amounts for_deductions">0.00</span></td>
+                                    <td>₱ <span id="days_absent" class="amounts for_deductions">0.00</span></td>
                                 </tr>
                                 <tr>
                                     <th scope="row">No. of hours late</th>
@@ -172,7 +172,7 @@
                                             class="form-control input-numbers @error('no_hours_late') is-invalid @enderror form-input"
                                             name="no_hours_late" value="{{ $results->computations_hours_late }}" required
                                             autocomplete="name" maxlength="50" autofocus></td>
-                                    <td><span id="hours_late" class="for_deductions amounts">0.00</span></td>
+                                    <td>₱ <span id="hours_late" class="for_deductions amounts">0.00</span></td>
                                 </tr>
 
                                 @php
@@ -210,7 +210,7 @@
                                                 {{ $deduction['is_fix'] == 1 ? 'readonly' : '' }}
                                                 maxlength="6" autofocus></td>
 
-                                        <td><span id="span_deductions-{{$deduction['name']}}" name="span_deductions-{{$deduction['name']}}" class="for_deductions amounts">{{ $deduction['amount'] }}</span></td>
+                                        <td>₱ <span id="span_deductions-{{$deduction['name']}}" name="span_deductions-{{$deduction['name']}}" class="for_deductions amounts">{{ number_format((float)$deduction['amount'], 2, '.', '') }}</span></td>
                                     </tr>
                                 @endforeach
 
@@ -218,14 +218,14 @@
                                         <th scope="row"></th>
                                         <td class="table-light"><span class="fw-bold">Total Deductions:</p>
                                         </td>
-                                        <td class="table-light"><span id="total_deductions" class="amounts">0.00</span>
+                                        <td class="table-light">₱ <span id="total_deductions" class="amounts">0.00</span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <th scope="row"></th>
                                         <td class="table-light"><span class="fw-bold">Net Pay:</p>
                                         </td>
-                                        <td class="table-light"><span id="net_pay" class="amounts">0.00</span></td>
+                                        <td class="table-light">₱ <span id="net_pay" class="amounts">0.00</span></td>
                                     </tr>
                             </tbody>
                         </table>
@@ -296,7 +296,7 @@
                 if (Number.isNaN(value) == true) {
                     value = 0;
                 }
-                $('#span_days_worked').text(value)
+                $('#span_days_worked').text(value.toFixed(2))
                 $('#input_amount_no_of_days_worked').val(value)
                 computeGross();
             }
@@ -310,7 +310,7 @@
                 if (Number.isNaN(value) == true) {
                     value = 0.00;
                 }
-                $('#span_bonuses').text(value)
+                $('#span_bonuses').text(value.toFixed(2))
                 $('#input_amount_bonuses').val(value)
                 computeGross();
             }
@@ -325,7 +325,7 @@
                 if (Number.isNaN(value) == true) {
                     value = 0.00;
                 }
-                $('#hours_overtime').text(value)
+                $('#hours_overtime').text(value.toFixed(2))
                 $('#input_amount_no_of_hours_overtime').val(value)
                 computeGross();
             }
@@ -335,7 +335,7 @@
                 $('.for_gross').each(function() {
                     sum += parseFloat($(this).text()); // Or this.innerHTML, this.innerText
                 });
-                $('#gross_pay').text(sum)
+                $('#gross_pay').text(sum.toFixed(2))
                 $('#input_gross').val(sum)
                 computeNetPay()
             }
@@ -351,7 +351,7 @@
                 if (Number.isNaN(value) == true) {
                     value = 0.00;
                 }
-                $('#days_absent').text(value)
+                $('#days_absent').text(value.toFixed(2))
                 $('#input_amount_no_of_hours_late').val(value)
                 computeDeductions();
             }
@@ -365,7 +365,7 @@
                 if (Number.isNaN(value) == true) {
                     value = 0.00;
                 }
-                $('#hours_late').text(value)
+                $('#hours_late').text(value.toFixed(2))
                 $('#input_amount_no_of_days_absent').val(value)
                 computeDeductions();
             }
@@ -377,7 +377,7 @@
                     value = 0.00;
                 }
                 let name = $(this).attr('data-name');
-                $(`#span_${name}`).text(value)
+                $(`#span_${name}`).text(value.toFixed(2))
                 $(`#span_${name}`).val(value)
                 computeDeductions();
             });
@@ -390,7 +390,7 @@
                 if (Number.isNaN(sum) == true) {
                     sum = 0.00;
                 }
-                $('#total_deductions').text(sum)
+                $('#total_deductions').text(sum.toFixed(2))
                 $('#input_amount_total_deductions').val(sum)
                 computeNetPay()
             }
@@ -404,7 +404,7 @@
                 if (Number.isNaN(net) == true) {
                     net = 0.00;
                 }
-                $('#net_pay').text(net)
+                $('#net_pay').text(net.toFixed(2))
                 $('#input_amount_net_pay').val(net)
             }
             // END NET PAY

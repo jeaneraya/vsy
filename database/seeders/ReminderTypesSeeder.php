@@ -17,38 +17,53 @@ class ReminderTypesSeeder extends Seeder
         ReminderTypes::truncate();
         ReminderTypes::create([
             'id' => '1',
-            'name' => '1st Collection',
-            'description' => '1st Collection'
+            'name' => 'Insurance',
+            'description' => 'Insurance',
+            'type' => '1' // custom
+
         ]);
 
         ReminderTypes::create([
             'id' => '2',
-            'name' => '15th Collection',
-            'description' => '15th Collection'
+            'name' => 'Registration',
+            'description' => 'Registration',
+            'type' => '1' // custom
         ]);
-
         ReminderTypes::create([
             'id' => '3',
-            'name' => '30th/31st Collection',
-            'description' => '30th/31st Collection',
+            'name' => 'Custome',
+            'description' => 'Custom',
+            'type' => '1' // custom
         ]);
 
         ReminderTypes::create([
             'id' => '4',
-            'name' => 'Birthday',
-            'description' => 'Birthday'
+            'name' => '1st Collection',
+            'description' => '1st Collection',
+            'type' => '0' // automated
         ]);
 
         ReminderTypes::create([
             'id' => '5',
-            'name' => 'Insurance',
-            'description' => 'Registration'
+            'name' => '15th Collection',
+            'description' => '15th Collection',
+            'type' => '0' // automated
         ]);
 
         ReminderTypes::create([
             'id' => '6',
-            'name' => 'Custom',
-            'description' => 'Custom'
+            'name' => 'End Of Month Collection',
+            'description' => 'End Of Month Collection',
+            'type' => '0' // automated
         ]);
+
+        ReminderTypes::create([
+            'id' => '7',
+            'name' => 'Birthday',
+            'description' => 'Birthday',
+            'type' => '0' // automated
+        ]);
+
+
     }
 }

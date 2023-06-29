@@ -6,13 +6,20 @@ use App\Models\Batchtransaction;
 use App\Models\Reminder;
 use App\Models\User;
 use Carbon\Carbon;
+use DateTime;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class CronController extends Controller
 {
+    const firstMonthlyCollection = 15;
+    const softReminder = 2;
+
     /**
      * cron/birthdays?code=random
+     * 0 7 * * *
+     * everyday at 7am
      *
      * @param Request $request
      * @return void
@@ -24,28 +31,71 @@ class CronController extends Controller
         ]);
 
         if ($validator->fails()) {
-            // return redirect()->back()
-            //     ->withErrors($validator)
-            //     ->withInput();
-
             return json_encode($validator);
         }
 
         $today = Carbon::now()->format('Y-m-d');
-        $users = User::where([
+        $results = User::where([
             ['birthday', '=', $today]
-        ])->get();
+        ])   ->leftjoin('users', 'users.id', '=', 'batchtransactions.collector_id')
+        ->get();
 
-        foreach ($users as $user) {
-            // insert template
-            $template = "Happy birthday $user->name";
+        try {
+            foreach ($results as $result) {
+                // insert template
+                $template = "Happy birthday!";
 
-            // send message
+                // send message
+            }
+            return 'Success';
+        } catch (Exception $e) {
+            return "Error: " . $e->getMessage();
         }
     }
 
     /**
      * cron/firstCollection?code=random
+     * 30 7 * * *
+     * everyday at 7:30am
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function firstCollection(Request $request)
+    {
+        $validator = Validator::make([...$request->all(), 'code' => $request->input('code')], [
+            'code' => ['required']
+        ]);
+
+        if ($validator->fails()) {
+            return json_encode($validator);
+        }
+
+        $today = Carbon::now()->format('Y-m-d');
+        $dueDate =  Carbon::now();
+        $results = Batchtransaction::where([
+            ['status', '=', 'active'],
+            ['first_collection', '=', $today]
+        ])
+        ->leftjoin('users', 'users.id', '=', 'batchtransactions.collector_id')
+        ->get();
+
+        try {
+            $template = $this->getCollectionCronMessage($dueDate);
+            foreach ($results as $result) {
+                // send message
+                echo $template;
+            }
+            return 'Success';
+        } catch (Exception $e) {
+            return "Error: " . $e->getMessage();
+        }
+    }
+
+    /**
+     * cron/firstCollection?code=random
+     * 0 8 15 * *
+     * every 15th of the month  at 8am
      *
      * @param Request $request
      * @return void
@@ -57,61 +107,78 @@ class CronController extends Controller
         ]);
 
         if ($validator->fails()) {
-            // return redirect()->back()
-            //     ->withErrors($validator)
-            //     ->withInput();
-
             return json_encode($validator);
         }
 
         $today = Carbon::now()->format('Y-m-d');
+        $dueDate =  Carbon::now();
         $results = Batchtransaction::where([
-            ['first_collection', '=', $today]
-        ])->get();
+            ['status', '=', 'active']
+        ])->leftjoin('users', 'users.id', '=', 'batchtransactions.collector_id')
+        ->get();
 
-        foreach ($results as $result) {
-            // insert template
-            $template = "Happy birthday $result->name";
-
-            // send message
+        try {
+            $template = $this->getCollectionCronMessage($dueDate);
+            foreach ($results as $result) {
+                // send message
+                echo $template;
+            }
+            return 'Success';
+        } catch (Exception $e) {
+            return "Error: " . $e->getMessage();
         }
     }
+
 
     /**
      * cron/secondCollection?code=random
      *
+     *
+     * 30 8 31 1,3,5,7,8,10,12 *
+     * At 08:30 on day-of-month 31 in January, March, May, July, August, October, and December.
+     *
+     * 30 8 28 2 *
+     * “At 08:30 on day-of-month 28 in February.”
+     *
+     * 30 8 30 4,6,9,11 *
+     * At 08:30 on day-of-month 30 in April, June, September, and November.
+     *
      * @param Request $request
      * @return void
      */
-    public function secondMonthyCollection(Request $request)
+    public function secondMonthlyCollection(Request $request)
     {
         $validator = Validator::make([...$request->all(), 'code' => $request->input('code')], [
             'code' => ['required']
         ]);
 
         if ($validator->fails()) {
-            // return redirect()->back()
-            //     ->withErrors($validator)
-            //     ->withInput();
-
             return json_encode($validator);
         }
 
         $today = Carbon::now()->format('Y-m-d');
-        $users = User::where([
-            ['birthday', '=', $today]
+        $dueDate = Carbon::now()->endOfMonth();
+        $results = User::where([
+            ['status', '=', 'active']
         ])->get();
 
-        foreach ($users as $user) {
-            // insert template
-            $template = "Happy birthday $user->name";
-
-            // send message
+        try {
+            $template = $this->getCollectionCronMessage($dueDate);
+            foreach ($results as $result) {
+                 // send message
+                 echo $template;
+            }
+            return 'Success';
+        } catch (Exception $e) {
+            return "Error: " . $e->getMessage();
         }
     }
 
     /**
      * cron/customReminders?code=random
+     *
+     * * 9 7 * * *
+     * everyday at 9am
      *
      * @param Request $request
      * @return void
@@ -127,15 +194,30 @@ class CronController extends Controller
         }
 
         $today = Carbon::now()->format('Y-m-d');
-        $users = Reminder::where([
+        $results = Reminder::where([
             ['schedule', '=', $today]
         ])->get();
 
-        foreach ($users as $user) {
-            // insert template
-            $template = "Happy birthday $user->name";
-
-            // send message
+        try {
+            foreach ($results as $result) {
+                // send message
+                // echo $template;
+            }
+            return 'Success';
+        } catch (Exception $e) {
+            return "Error: " . $e->getMessage();
         }
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param [type] $date
+     * @return void
+     */
+    private function getCollectionCronMessage(DateTime $date)
+    {
+        $date = $date->format('F d, Y (l)');
+        return "Reminding that your scheduled payment date is on $date. Please pay your obligations to avoid late payment charges. Thank you.";
     }
 }

@@ -61,9 +61,34 @@
                         </label>
                         <label class="form-label-wrapper col-12">
                             <div class="">
-                                <button type="submit" class="btn btn-primary mb-3">See Computations</button>
+                                <button type="submit" class="btn btn-primary mb-3" id='see-computations-btn' disabled>See Computations</button>
                             </div>
                         </label>
+
+
+                        <table class="table mt-2 text-center">
+                            <thead>
+                                <th>Total Net</th>
+                                <th>Claimed</th>
+                                <th>Unclaimed</th>
+                            </thead>
+                            <tbody>
+
+                                <tr>
+                                    <td>₱
+                                        {{ number_format((float) $results['withComputations']->sum('computations_net_pay'), 2, '.', '') }}
+                                    </td>
+                                    <td>₱
+                                        {{ number_format((float) $results['withComputations']->where('computations_is_claimed', '1')->sum('computations_net_pay'), 2, '.', '') }}
+                                    </td>
+                                    <td>₱
+                                        {{ number_format((float) $results['withComputations']->where('computations_is_claimed', '0')->sum('computations_net_pay'), 2, '.', '') }}
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+
                     </div>
                 </form>
 
@@ -86,70 +111,75 @@
                         </label>
                         <label class="form-label-wrapper col-12">
                             <div class="">
-                                <button disabled id="add-computations-btn" type="submit" class="btn btn-primary mb-3">Add Computations</button>
+                                <button disabled id="add-computations-btn" type="submit" class="btn btn-primary mb-3">Add
+                                    Computations</button>
                             </div>
                         </label>
                     </div>
                 </form>
+            </div>
 
 
+            <div class="users-table table-wrapper mt-2">
+                <table class="posts-table" id="example">
+                    <thead style="padding-left:1em">
+                        <tr class="users-table-info">
+                            <th>ID</th>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>Gross Pay</th>
+                            <th>Deductions</th>
+                            <th>Net Pay</th>
+                            <th>Claimed</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($results['withComputations'] as $withComputations)
+                            <td>{{ $withComputations->employee_id }}</td>
+                            <td>{{ $withComputations->employee_code }}</td>
+                            <td>{{ $withComputations->employee_full_name }}</td>
+                            <td>₱ {{ number_format((float) $withComputations->computations_gross, 2, '.', '') }}</td>
+                            <td>₱
+                                {{ number_format((float) $withComputations->computations_total_deductions, 2, '.', '') }}
+                            </td>
+                            <td>₱ {{ number_format((float) $withComputations->computations_net_pay, 2, '.', '') }}</td>
+                            <td>{{ App\Models\Constants::getPayrollClaimed()[$withComputations->computations_is_claimed] }}
+                            </td>
+                            <td class="text-center">
+                                <span class="p-relative">
+                                    <button class="btn p-0" data-bs-toggle="dropdown" aria-expande="false">
+                                        <iconify-icon icon="gg:more-r"></iconify-icon>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a href="{{ route('payroll_computations_employee', ['id' => $withComputations->computations_id, 'employee_id' => $withComputations->employee_id]) }}"
+                                                class="dropdown-item fs-6">View/Update</a>
+                                        </li>
+                                        <li>
+                                            <form method="POST"
+                                                action="{{ route('put_payroll_computation_claim', ['id' => $withComputations->computations_id]) }}">
+                                                @csrf @method('PUT')
+                                                <input hidden name='is_claimed'
+                                                    value="{{ $withComputations->computations_is_claimed == 1 ? 0 : 1 }}">
+                                                <input hidden name='schedule_id' value="{{ request()->get('id') }}">
+                                                <button type="submit" class="dropdown-item fs-6">
+                                                    {{ $withComputations->computations_is_claimed == 1 ? 'Unclaim' : 'Mark as Claimed' }}
+                                                </button>
+                                            </form>
 
 
-                <div class="users-table table-wrapper">
-                    <table class="posts-table" id="example">
-                        <thead style="padding-left:1em">
-                            <tr class="users-table-info">
-                                <th>ID</th>
-                                <th>Code</th>
-                                <th>Name</th>
-                                <th>Gross Pay</th>
-                                <th>Deductions</th>
-                                <th>Net Pay</th>
-                                <th>Claimed</th>
-                                <th>Actions</th>
+                                        </li>
+                                    </ul>
+                                </span>
+                            </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($results['withComputations'] as $withComputations)
-                                <td>{{ $withComputations->employee_id }}</td>
-                                <td>{{ $withComputations->employee_code }}</td>
-                                <td>{{ $withComputations->employee_full_name }}</td>
-                                <td>{{ $withComputations->computations_gross }}</td>
-                                <td>{{ $withComputations->computations_total_deductions }}</td>
-                                <td>{{ $withComputations->computations_net_pay }}</td>
-                                <td>{{ App\Models\Constants::getPayrollClaimed()[$withComputations->computations_is_claimed] }}</td>
-                                <td class="text-center">
-                                    <span class="p-relative">
-                                        <button class="btn p-0" data-bs-toggle="dropdown" aria-expande="false">
-                                            <iconify-icon icon="gg:more-r"></iconify-icon>
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <a href="{{ route('payroll_computations_employee', ['id' => $withComputations->computations_id, 'employee_id' => $withComputations->employee_id]) }}" class="dropdown-item fs-6">View/Update</a>
-                                            </li>
-                                            <li>
-                                                <form method="POST"
-                                                    action="{{ route('put_payroll_computation_claim', ['id' => $withComputations->computations_id]) }}">
-                                                    @csrf @method('PUT')
-                                                    <input hidden name='is_claimed' value="{{ $withComputations->computations_is_claimed == 1 ? 0 : 1 }}">
-                                                    <input hidden name='schedule_id' value="{{ request()->get('id') }}">
-                                                    <button type="submit" class="dropdown-item fs-6">
-                                                        {{$withComputations->computations_is_claimed == 1 ? 'Unclaim' : 'Mark as Claimed' }}
-                                                    </button>
-                                                </form>
-
-
-                                            </li>
-                                        </ul>
-                                    </span>
-                                </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
+    </div>
     </div>
 
 
@@ -173,6 +203,11 @@
             $('#employee_dropdown').change(function() {
                 let val = $(this).val();
                 $("#add-computations-btn").prop('disabled', false);
+            })
+
+            $('#id').change(function() {
+                let val = $(this).val();
+                $("#see-computations-btn").prop('disabled', false);
             })
 
         });

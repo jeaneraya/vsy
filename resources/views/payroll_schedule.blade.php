@@ -108,6 +108,8 @@
                             </form>
                         </div>
                     </div>
+
+
                     <div class="users-table table-wrapper">
                         <table class="posts-table" id="example">
                             <thead style="padding-left:1em">
@@ -115,21 +117,30 @@
                                     <th>ID</th>
                                     <th>Name</th>
                                     <th>Description</th>
-                                    <th>From</th>
-                                    <th>To</th>
+                                    <th>From (m-d-y)</th>
+                                    <th>To (m-d-y)</th>
+                                    <th>Total Net</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
+                            @php
+                            $scheduleStatus = [
+                                0 => '-',
+                                1 => 'Active',
+                                2 => 'Archived',
+                        ];
+                            @endphp
                             <tbody>
                                 @foreach ($payrollSchedule as $result)
                                     <tr>
                                         <td>{{ $result->id }}</td>
                                         <td>{{ $result->name }}</td>
                                         <td>{{ $result->description }}</td>
-                                        <td>{{ $result->from }}</td>
-                                        <td>{{ $result->to }}</td>
-                                        <td>{{ $result->status }}</td>
+                                        <td>{{ \Carbon\Carbon::createFromFormat('Y-m-d', $result->from)->format('m-d-Y') }}</td>
+                                        <td>{{ \Carbon\Carbon::createFromFormat('Y-m-d', $result->to)->format('m-d-Y') }}</td>
+                                        <td>₱ {{ number_format((float)$result->total_net, 2, '.', '') }} </td>
+                                        <td>{{ $scheduleStatus[$result->status] }}</td>
                                         </td>
                                         <td class="text-center">
                                             <span class="p-relative">
@@ -180,6 +191,7 @@
                     responsive: true,
                     scrollX: true,
                     lengthChange: false,
+                    order: [[0, 'desc']],
                 });
 
                 let hasError = {{ json_encode($errors->any()) }}

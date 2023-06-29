@@ -17,6 +17,7 @@ class CreateReminderTypesTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('description')->nullable;
+            $table->string('type')->default(0)->comment('0 - automated, 1 - custom');
             $table->timestamps();
         });
     }

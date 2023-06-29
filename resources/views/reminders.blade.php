@@ -126,6 +126,7 @@
                 responsive: true,
                 scrollX: true,
                 lengthChange: false,
+                order: [[0, 'desc']],
             });
         });
     </script>

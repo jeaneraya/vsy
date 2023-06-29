@@ -17,6 +17,7 @@ class Reminder extends Model
         'status',
         'created_by',
         'frequency',
-        'is_active'
+        'is_active',
+        'recipient'
     ];
 }

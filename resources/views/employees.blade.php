@@ -69,7 +69,7 @@
                                     <td>{{ $employee->fullname }}</td>
                                     <td>{{ $employee->address }}</td>
                                     <td>{{ $employee->position }}</td>
-                                    <td>{{ $employee->rate_per_day }}</td>
+                                    <td>₱ {{ number_format((float)$employee->rate_per_day, 2, '.', '') }}</td>
                                     <td>{{ App\Models\Constants::getHiringStatus()[$employee->hiring_status] }}</td>
                                     <td class="text-center">
                                         <span class="p-relative">
