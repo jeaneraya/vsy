@@ -2,19 +2,17 @@
 
 use App\Http\Controllers\AccountController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\userController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EmployeesController;
 use App\Http\Controllers\CollectorsController;
 use App\Http\Controllers\APListController;
+use App\Http\Controllers\CronController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\ExpensesController;
 use App\Http\Controllers\PayrollComputationsController;
 use App\Http\Controllers\PayrollScheduleController;
 use App\Http\Controllers\ReminderController;
-use App\Models\PayrollComputations;
-use App\Models\PayrollSchedule;
 
 /*
 |--------------------------------------------------------------------------
@@ -116,6 +114,12 @@ Route::get('/', function () {
 Route::view('/login1', 'login');
 Route::view('/register1', 'register');
 
+ Route::prefix('cron')->group(function () {
+    Route::get('/birthdays', [CronController::class, 'todayBirthday']);
+    Route::get('/firstCollection', [CronController::class, 'firstMonthlyCollection']);
+    Route::get('/secondCollection', [CronController::class, 'secondMonthlyCollection']);
+    Route::get('/customeReminders', [CronController::class, 'customeReminders']);
+});
 
 
 Auth::routes();
