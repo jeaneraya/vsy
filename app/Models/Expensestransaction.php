@@ -11,7 +11,6 @@ class Expensestransaction extends Model
     protected $table = 'expensestransactions';
     protected $fillable = [
         'batch_num',
-        'collector_id',
         'expenses_id',
         'amount',
     ];

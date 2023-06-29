@@ -87,7 +87,17 @@ Route::middleware(['auth'])->group(function () {
     Route::post('add-collector', [CollectorsController::class, 'addCollector'])->name('add-collector');
     Route::get('/collectors/{id}/{name}',[CollectorsController::class, 'viewCollector'])->name('collectors.show');
     Route::post('add-batch',[CollectorsController::class, 'saveBatch'])->name('add-batch');
-    Route::get('/collectors/batch/{batch_id}/{name}',[CollectorsController::class, 'viewWithdrawals'])->name('collectors.withdrawals');
+    Route::get('/collectors/{collector_id}/{batch_id}/{name}',[CollectorsController::class, 'viewWithdrawals'])->name('collectors.withdrawals');
+    Route::get('productcode-autocomplete',[CollectorsController::class, 'searchProductCode'])->name('productcode-autocomplete');
+    Route::get('expenses-autocomplete',[CollectorsController::class, 'searchExpensesCode'])->name('expenses-autocomplete');
+    Route::get('/get-product',[CollectorsController::class, 'getProductPrice'])->name('get-product');
+    Route::post('add-batch-product',[CollectorsController::class, 'saveBatchProduct'])->name('add-batch-product');
+    Route::post('add-batch-expenses',[CollectorsController::class, 'saveBatchExpenses'])->name('add-batch-expenses');
+    Route::get('add-payment',[CollectorsController::class, 'addPayment'])->name('add-payment');
+    Route::get('payment-data/{id}',[CollectorsController::class, 'getEditPaymentData'])->name('payment-data');
+    Route::get('edit-payment',[CollectorsController::class, 'editPayment'])->name('edit-payment');
+    Route::delete('delete-payment',[CollectorsController::class, 'deletePayment'])->name('delete-payment');
+
 
     Route::get('/ap_list',[APListController::class, 'index'])->name('ap_list');
     Route::post('add-aplist',[APListController::class, 'saveAPList'])->name('add-aplist');

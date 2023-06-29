@@ -16,7 +16,6 @@ class CreateExpensestransactionsTable extends Migration
         Schema::create('expensestransactions', function (Blueprint $table) {
             $table->id();
             $table->string('batch_num');
-            $table->integer('collector_id');
             $table->integer('expenses_id');
             $table->double('amount');
             $table->timestamps();

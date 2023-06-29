@@ -49,3 +49,21 @@ iconify-icon {
   float: right;
   margin-right: 1em;
 }
+
+ul#product-list-ul, ul#expenses-list-ul {
+  padding: 0;
+}
+
+ul#product-list-ul li, ul#expenses-list-ul li {
+  padding: 0.2em 0.4em;
+}
+
+ul#product-list-ul li:hover, ul#expenses-list-ul li:hover {
+  background-color: #000000;
+  color: #fff;
+  cursor: pointer;
+}
+
+.modal-dimmed {
+  opacity: 0.5; 
+}
