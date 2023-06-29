@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Batchtransaction;
 use App\Models\Reminder;
+use App\Models\RemindersLogger;
+use App\Models\ReminderTypes;
 use App\Models\User;
 use Carbon\Carbon;
 use DateTime;
@@ -13,6 +15,14 @@ use Illuminate\Support\Facades\Validator;
 
 class CronController extends Controller
 {
+
+    /**
+     * 1. @1AM everyday - get all crons that will run save to reminder_loggers
+     * 2. depending on type, set time when will the sending of notications/SMS will take place
+     * 3. when the sending of notifications and sms
+     *  - check reminder_loggers ---- as a main table
+     *  - tag as sent
+     */
     const firstMonthlyCollection = 15;
     const softReminder = 2;
 
@@ -46,6 +56,13 @@ class CronController extends Controller
                 $template = "Happy birthday!";
 
                 // send message
+
+                RemindersLogger::create([
+                    'reminder_id' => $result->id,
+                    'sent_datetime' => Carbon::now()->format('Y-m-d H:i:s'),
+                    'tyle' => $result->type
+                ]);
+
             }
             return 'Success';
         } catch (Exception $e) {
@@ -85,6 +102,11 @@ class CronController extends Controller
             foreach ($results as $result) {
                 // send message
                 echo $template;
+                RemindersLogger::create([
+                    'reminder_id' => $result->id,
+                    'sent_datetime' => Carbon::now()->format('Y-m-d H:i:s'),
+                    'tyle' => $result->type
+                ]);
             }
             return 'Success';
         } catch (Exception $e) {
@@ -122,6 +144,11 @@ class CronController extends Controller
             foreach ($results as $result) {
                 // send message
                 echo $template;
+                RemindersLogger::create([
+                    'reminder_id' => $result->id,
+                    'sent_datetime' => Carbon::now()->format('Y-m-d H:i:s'),
+                    'tyle' => $result->type
+                ]);
             }
             return 'Success';
         } catch (Exception $e) {
@@ -167,6 +194,11 @@ class CronController extends Controller
             foreach ($results as $result) {
                  // send message
                  echo $template;
+                 RemindersLogger::create([
+                    'reminder_id' => $result->id,
+                    'sent_datetime' => Carbon::now()->format('Y-m-d H:i:s'),
+                    'tyle' => $result->type
+                ]);
             }
             return 'Success';
         } catch (Exception $e) {
@@ -203,6 +235,12 @@ class CronController extends Controller
                 $message = $result->message;
                 // send message
                 echo $message;
+
+                RemindersLogger::create([
+                    'reminder_id' => $result->id,
+                    'sent_datetime' => Carbon::now()->format('Y-m-d H:i:s'),
+                    'tyle' => $result->type
+                ]);
             }
             return 'Success';
             exit;

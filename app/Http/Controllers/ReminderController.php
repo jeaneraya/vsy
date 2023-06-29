@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Reminder;
+use App\Models\RemindersLogger;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -73,9 +74,10 @@ class ReminderController extends Controller
     public function show(Request $requests, $id)
     {
         $reminders = Reminder::find($id);
+        $reminderLoggers = RemindersLogger::where([['reminder_id', '=', $id]])->get();
 
         if ($reminders) {
-            return view('reminder_update', ['reminder' => $reminders]);
+            return view('reminder_update', ['reminder' => $reminders, 'reminderLoggers' => $reminderLoggers]);
         }
         return redirect(route('reminders'))
         ->withErrors(['Reminder does not exist.'])

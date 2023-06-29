@@ -44,6 +44,8 @@
         </div>
 
         <div class="row stat-cards">
+
+
             <form class="sign-up-form form" method="POST" action="{{ route('update_reminder', ['id' => $reminder->id]) }}">
                 @csrf @method('PUT')
                 <div class="row">
@@ -125,6 +127,27 @@
                                 placeholder="Enter your name" required style="height: 10em;" maxlenth="255">{{ $reminder->message }}</textarea>
                         </label>
                     </div>
+
+                    <table class="table mt-2">
+                        <thead>
+                            <th># of Execution</th>
+                            <th>Date of Execution</th>
+                        </thead>
+                        <tbody>
+                            @php
+                                $counter = 1;
+                            @endphp
+                            @foreach ($reminderLoggers as $key => $logs)
+                                <tr>
+
+                                    <td>{{$counter++}}</td>
+                                    <td>{{$logs->sent_datetime}}</td>
+
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+
                 </div>
                 <button type="submit" class="form-btn primary-default-btn transparent-btn">
                     Submit
