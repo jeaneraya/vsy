@@ -126,16 +126,22 @@
                             <span class="icon menu-toggle--gray" aria-hidden="true"></span>
                         </button>
                         <div class="notification-wrapper dropstart">
+                            @php
+                            $notifications = App\Models\RemindersLogger::where([
+                                    ['sent_via', '=', '2'], // notifications
+                                    ['sent_to', '=', Auth::user()->id],
+                                    ['is_read', '=', 0]
+                                ])->orderBy('id', 'desc')
+                                ->get();
+                            @endphp
                             <button class="btn p-0 p-relative" data-bs-toggle="dropdown" aria-expande="false">
                                 <span class="">
                                     <iconify-icon icon="mi:notification" class="font-size:1.5em"></iconify-icon>
                                 </span>
-                                <span class="icon notification active" aria-hidden="true"></span>
+                                <span class="icon notification {{ $notifications->count() > 0 ? 'active' : ''}}" aria-hidden="true"></span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
-                                <li><a class="dropdown-item fs-6" href="#">View</a></li>
-                                <li><a class="dropdown-item fs-6" href="#">Edit</a></li>
-                                <li><a class="dropdown-item fs-6" href="#">Trash</a></li>
+                                <li><a class="dropdown-item fs-6" href="{{route('notifications_index')}}">{{ $notifications->count() . " new notifications."}}</a></li>
                             </ul>
                         </div>
                         <div class="nav-user-wrapper dropstart">

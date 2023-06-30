@@ -11,6 +11,12 @@ class RemindersLogger extends Model
     protected $fillable = [
         'reminder_id',
         'sent_datetime',
+        'description',
+        'sent_to',
+        'message',
+        'sent_via',
+        'schedule',
+        'is_read',
         'type'
     ];
 }

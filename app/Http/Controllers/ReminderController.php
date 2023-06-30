@@ -151,4 +151,37 @@ class ReminderController extends Controller
     {
         //
     }
+
+    public function notifications_index(Request $request) {
+        $results = RemindersLogger::where([
+            ['sent_via', '=', '2'], // notifications
+            ['sent_to', '=', Auth::user()->id]
+        ])->orderBy('id', 'desc')
+        ->get();
+
+        return view('notifications', ['results' => $results]);
+    }
+
+    public function update_is_read(Request $request) {
+
+        $validator = Validator::make($request->all(), [
+            'log_id' => ['required', 'exists:reminders_loggers,id'],
+            'is_read' => ['required'],
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $results = RemindersLogger::find($request->input('log_id'));
+        $results->is_read = $request->input('is_read');
+        $results->save();
+
+        $read = $results->is_read == 1 ? 'Read' : 'Unread';
+        return redirect()->back()
+            ->withSuccess("Marked as $read");
+
+    }
 }

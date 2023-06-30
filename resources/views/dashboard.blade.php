@@ -50,106 +50,39 @@
             </article>
           </div>
         </div>
+
+
         <div class="row">
           <div class="col-lg-12">
             <div class="users-table table-wrapper">
               <table class="posts-table">
                 <thead style="padding-left:1em">
                   <tr class="users-table-info">
-                    <th>#</th>
+                    <th>ID</th>
                     <th>Collector's Name</th>
-                    <th>Payment Schedule</th>
-                    <th>Amount</th>
-                    <th>Status</th>
-                    <th class="text-center">Action</th>
+                    <th>Due Date</th>
+                    <th>Lapse Days</th>
+                    <th>Balance</th>
+
                   </tr>
                 </thead>
                 <tbody>
+                    @php
+                        $counter = 0;
+                    @endphp
+                    @foreach ($results['payments'] as $key => $value)
+                    @php
+                    $counter++;
+                    $lapseDays = Carbon\Carbon::createFromFormat('Y-m-d', $value->payment_date)->diffInDays($results['nextDueCarbon']);
+                @endphp
                   <tr>
-                    <td>1</td>
-                    <td>SARAH DELOS SANTOS</td>
-                    <td>06-04-2023</td>
-                    <td>&#8369; 80,000.00</td>
-                    <td><span class="badge-pending">Pending</span></td>
-                    <td class="text-center">
-                        <span class="p-relative">
-                        <button class="btn p-0" data-bs-toggle="dropdown" aria-expande="false"><iconify-icon icon="gg:more-r"></iconify-icon></button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item fs-6" href="#">View</a></li>
-                            <li><a class="dropdown-item fs-6" href="#">Edit</a></li>
-                            <li><a class="dropdown-item fs-6" href="#">Trash</a></li>
-                        </ul>
-                        </span>
-                    </td>
+                    <td>{{ $counter }}</td>
+                    <td>{{ $value->name}}</td>
+                    <td>{{ $results['nextDueDate'] }}</td>
+                    <td>{{ $lapseDays }} days</td>
+                    <td>{{ $value->balance}}</td>
                   </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>SARAH DELOS SANTOS</td>
-                    <td>06-04-2023</td>
-                    <td>&#8369; 80,000.00</td>
-                    <td><span class="badge-pending">Pending</span></td>
-                    <td class="text-center">
-                        <span class="p-relative">
-                        <button class="btn p-0" data-bs-toggle="dropdown" aria-expande="false"><iconify-icon icon="gg:more-r"></iconify-icon></button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item fs-6" href="#">View</a></li>
-                            <li><a class="dropdown-item fs-6" href="#">Edit</a></li>
-                            <li><a class="dropdown-item fs-6" href="#">Trash</a></li>
-                        </ul>
-                        </span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>3</td>
-                    <td>SARAH DELOS SANTOS</td>
-                    <td>06-04-2023</td>
-                    <td>&#8369; 80,000.00</td>
-                    <td><span class="badge-active">Paid</span></td>
-                    <td class="text-center">
-                        <span class="p-relative">
-                        <button class="btn p-0" data-bs-toggle="dropdown" aria-expande="false"><iconify-icon icon="gg:more-r"></iconify-icon></button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item fs-6" href="#">View</a></li>
-                            <li><a class="dropdown-item fs-6" href="#">Edit</a></li>
-                            <li><a class="dropdown-item fs-6" href="#">Trash</a></li>
-                        </ul>
-                        </span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>4</td>
-                    <td>SARAH DELOS SANTOS</td>
-                    <td>06-04-2023</td>
-                    <td>&#8369; 80,000.00</td>
-                    <td><span class="badge-active">Paid</span></td>
-                    <td class="text-center">
-                        <span class="p-relative">
-                        <button class="btn p-0" data-bs-toggle="dropdown" aria-expande="false"><iconify-icon icon="gg:more-r"></iconify-icon></button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item fs-6" href="#">View</a></li>
-                            <li><a class="dropdown-item fs-6" href="#">Edit</a></li>
-                            <li><a class="dropdown-item fs-6" href="#">Trash</a></li>
-                        </ul>
-                        </span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>5</td>
-                    <td>SARAH DELOS SANTOS</td>
-                    <td>06-04-2023</td>
-                    <td>&#8369; 80,000.00</td>
-                    <td><span class="badge-pending">Pending</span></td>
-                    <td class="text-center">
-                        <span class="p-relative">
-                        <button class="btn p-0" data-bs-toggle="dropdown" aria-expande="false"><iconify-icon icon="gg:more-r"></iconify-icon></button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item fs-6" href="#">View</a></li>
-                            <li><a class="dropdown-item fs-6" href="#">Edit</a></li>
-                            <li><a class="dropdown-item fs-6" href="#">Trash</a></li>
-                        </ul>
-                        </span>
-                    </td>
-                  </tr>
+                  @endforeach
                 </tbody>
               </table>
             </div>

@@ -25,5 +25,9 @@ class PayrollComputations extends Model
         'status',
         'is_claimed',
         'date_claimed',
+        'sss',
+        'pagibig',
+        'philhealth',
+        'others'
     ];
 }

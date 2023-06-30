@@ -23,7 +23,10 @@ class CreatePayrollComputationsTable extends Migration
             $table->integer('hours_late')->default(0);
             $table->integer('days_absent')->default(0);
             $table->integer('days_present')->default(0);
-            $table->string('deductions_list')->nullable()->comment('json');
+            $table->float('sss')->default(0);
+            $table->float('pagibig')->default(0);
+            $table->float('philhealth')->default(0);
+            $table->float('others')->default(0);
 
             $table->double('bonus')->default(0);
             $table->double('total_deductions')->default(0);

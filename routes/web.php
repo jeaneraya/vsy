@@ -7,12 +7,14 @@ use App\Http\Controllers\EmployeesController;
 use App\Http\Controllers\CollectorsController;
 use App\Http\Controllers\APListController;
 use App\Http\Controllers\CronController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\ExpensesController;
 use App\Http\Controllers\PayrollComputationsController;
 use App\Http\Controllers\PayrollScheduleController;
 use App\Http\Controllers\ReminderController;
+use App\Http\Controllers\RemindersLoggerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,7 +30,7 @@ use App\Http\Controllers\ReminderController;
 
 Route::middleware(['auth'])->group(function () {
 
-    Route::view('/dashboard', 'dashboard')->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'indexxx'])->name('dashboard');
 
     Route::middleware(['isRoleSuperAdmin'])->group(function () {
         Route::get('/users', [AccountController::class, 'index'])->name('get_user_index');
@@ -64,12 +66,21 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/employee/{id}',[EmployeesController::class, 'show'])->name('show_employee');
     Route::put('/employee/{id}',[EmployeesController::class, 'put'])->name('update_employee');
 
+
+    // reminders log
+    Route::get('/reminder-logs',[RemindersLoggerController::class, 'view_reminders_log'])->name('view_reminders_log');
+
     // reminders
     Route::get('/reminders',[ReminderController::class, 'index'])->name('reminders');
     Route::get('/reminder/create',[ReminderController::class, 'view_add_reminder'])->name('view_add_reminder');
     Route::post('/reminder/create',[ReminderController::class, 'store'])->name('post_add_reminder');
     Route::get('/reminder/{id}',[ReminderController::class, 'show'])->name('show_reminder');
     Route::put('/reminder/{id}',[ReminderController::class, 'update'])->name('update_reminder');
+
+    // notifications
+    Route::get('/notifications',[ReminderController::class, 'notifications_index'])->name('notifications_index');
+    Route::put('/notifications',[ReminderController::class, 'update_is_read'])->name('update_is_read');
+
 
     // payroll computations
     Route::get('/payroll/schedule/computation',[PayrollComputationsController::class, 'index'])->name('payroll_computations');
@@ -125,10 +136,15 @@ Route::view('/login1', 'login');
 Route::view('/register1', 'register');
 
  Route::prefix('cron')->group(function () {
-    Route::get('/birthdays', [CronController::class, 'todayBirthday']);
-    Route::get('/firstCollection', [CronController::class, 'firstMonthlyCollection']);
-    Route::get('/secondCollection', [CronController::class, 'secondMonthlyCollection']);
-    Route::get('/customReminders', [CronController::class, 'customReminders']);
+    // Route::get('/birthdays', [CronController::class, 'todayBirthday']);
+    // Route::get('/firstCollection', [CronController::class, 'firstMonthlyCollection']);
+    // Route::get('/secondCollection', [CronController::class, 'secondMonthlyCollection']);
+    // Route::get('/customReminders', [CronController::class, 'customReminders']);
+
+
+
+    Route::get('/scheduler', [CronController::class, 'cronScheduler']);
+    Route::get('/runner', [CronController::class, 'cronRunner']);
 });
 
 

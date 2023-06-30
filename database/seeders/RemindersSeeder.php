@@ -16,8 +16,8 @@ class RemindersSeeder extends Seeder
     public function run()
     {
         Reminder::create([
-            'description' => 'TOday',
-            'schedule' => Carbon::now(),
+            'description' => 'TOday onetime',
+            'schedule' => Carbon::now()->format('Y-m-d'),
             'template_id' => '0',
             'type' => '4',
             'frequency' => '1',
@@ -27,8 +27,8 @@ class RemindersSeeder extends Seeder
         ]);
 
         Reminder::create([
-            'description' => 'TOday 1',
-            'schedule' => Carbon::now(),
+            'description' => 'TOday 1 onetime',
+            'schedule' => Carbon::now()->format('Y-m-d'),
             'template_id' => '0',
             'type' => '4',
             'frequency' => '1',
@@ -39,8 +39,8 @@ class RemindersSeeder extends Seeder
 
 
         Reminder::create([
-            'description' => 'TOday 2',
-            'schedule' => Carbon::now(),
+            'description' => 'TOday 2 onetime',
+            'schedule' => Carbon::now()->format('Y-m-d'),
             'template_id' => '0',
             'type' => '4',
             'frequency' => '1',
@@ -51,8 +51,8 @@ class RemindersSeeder extends Seeder
 
 
         Reminder::create([
-            'description' => 'Tomorrow',
-            'schedule' => Carbon::now()->addDay(2),
+            'description' => 'Tomorrow daily',
+            'schedule' => Carbon::now()->addDay(2)->format('Y-m-d'),
             'template_id' => '0',
             'type' => '3',
             'frequency' => '2',
@@ -62,8 +62,8 @@ class RemindersSeeder extends Seeder
         ]);
 
         Reminder::create([
-            'description' => 'Birthday',
-            'schedule' => Carbon::now()->addDay(2),
+            'description' => 'weekly',
+            'schedule' => Carbon::now()->subWeek(1),
             'template_id' => '0',
             'type' => '2',
             'frequency' => '3',
@@ -73,14 +73,26 @@ class RemindersSeeder extends Seeder
         ]);
 
         Reminder::create([
-            'description' => 'Due',
-            'schedule' => Carbon::now()->addDay(2),
+            'description' => 'Monthly',
+            'schedule' => Carbon::now()->subMonth(1),
             'template_id' => '0',
-            'type' => '5',
+            'type' => '3',
             'frequency' => '4',
             'status' => '3',
             'created_by' => '1',
             'message' => 'This is message 6'
+        ]);
+
+
+        Reminder::create([
+            'description' => 'yearly',
+            'schedule' => Carbon::now()->subYears(1),
+            'template_id' => '0',
+            'type' => '3',
+            'frequency' => '5',
+            'status' => '3',
+            'created_by' => '1',
+            'message' => 'This is message 7'
         ]);
 
     }

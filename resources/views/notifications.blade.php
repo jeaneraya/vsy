@@ -39,7 +39,7 @@
 
         <div class="row">
             <div class="col-4">
-                <h2 class="main-title">Reminders</h2>
+                <h2 class="main-title">Notifications</h2>
             </div>
             <div class="col-2"> <a type="button" class="btn btn-primary" href="{{ route('view_add_reminder') }}">Add Reminder</a></div>
             <div class="col-2"> <a type="button" class="btn btn-primary" href="{{ route('view_reminders_log') }}">Automated Logs</a></div>
@@ -50,6 +50,7 @@
                 1 => 'Active',
                 2 => 'Inactive'
             ];
+            $counter = $results->count();
         @endphp
     <div class="container users-page">
         <div class="col-lg-12">
@@ -60,48 +61,33 @@
                             <tr class="users-table-info">
                                 <th>ID</th>
                                 <th>Type</th>
-                                <th>Description</th>
-                                <th>Schedule</th>
-                                <th>Status</th>
-                                <th>Active</th>
-                                <th>Frequency</th>
-                                <th>Created by</th>
+                                <th>Sent on</th>
+                                <th>Message</th>
+                                <th>Read</th>
                                 <th>Action</th>
+
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($reminders as $reminder)
-                                <tr>
-                                    <td>{{ $reminder->id }}</td>
-                                    <td>{{ App\Models\Constants::getRemindersTypes()[$reminder->type] }}</td>
-                                    <td>{{ $reminder->description }}</td>
-                                    <td>{{ $reminder->schedule }}</td>
-                                    <td>{{ App\Models\Constants::getRemindersStatus()[$reminder->status]}}</td>
-                                    <td>{{ App\Models\Constants::reminderIsActiveStatus()[$reminder->is_active] }}</td>
-                                    <td>{{ App\Models\Constants::getReminderFrequencies()[$reminder->frequency] }}</td>
-                                    <td>{{ $reminder->created_by }}</td>
+                            @foreach ($results as $result)
 
-                                    </td>
-                                    <td class="text-center">
-                                        <span class="p-relative">
-                                            <button class="btn p-0" data-bs-toggle="dropdown" aria-expande="false">
-                                                <iconify-icon icon="gg:more-r"></iconify-icon>
-                                            </button>
-                                            <ul class="dropdown-menu">
-                                                <li><a class="dropdown-item fs-6"
-                                                        href="{{ route('show_reminder', ['id' => $reminder->id]) }}">View/Update</a>
-                                                </li>
-                                                <li>
-                                                    <form method="POST"
-                                                        action="{{ route('put_user_archive', ['userId' => $reminder->id]) }}">
-                                                        @csrf @method('PUT')
-                                                        <button type="submit" class="dropdown-item fs-6">Cancel</button>
-                                                    </form>
-                                                </li>
-                                            </ul>
-                                        </span>
-                                    </td>
+                                <tr>
+                                    <td>{{ $counter }}</td>
+                                    <td>{{ $result->description }}</td>
+                                    <td>{{ $result->sent_datetime }}</td>
+                                    <td>{{ $result->message }}</td>
+                                    <td>{{ $result->is_read == 1 ? 'YES' : 'NO' }}</td>
+                                    <td><form method="POST" action={{route('update_is_read')}}>
+                                        @csrf @method('PUT')
+                                            <input hidden value="{{$result->is_read == 1 ? 0 : 1}}" name="is_read">
+                                            <input hidden value="{{$result->id}}" name="log_id">
+                                            <button type="submit" class='btn btn-primary'> {{ $result->is_read == 1 ? 'Unread' : 'Mark as Read' }} </button>
+                                        </form>
+                                       </td>
                                 </tr>
+                                @php
+                            $counter--;
+                            @endphp
                             @endforeach
                         </tbody>
                     </table>

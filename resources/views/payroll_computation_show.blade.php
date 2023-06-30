@@ -179,22 +179,22 @@
                                     $deductionList = [
                                         'sss' => [
                                             'name' => 'SSS',
-                                            'amount' => 100,
-                                            'is_fix' => '1'
+                                            'amount' => $results->computations_sss,
+                                            'is_fix' => '0'
                                         ],
                                         'pagibig' => [
                                             'name' => 'Pag-ibig',
-                                            'amount' => 200,
-                                            'is_fix' => '1'
+                                            'amount' => $results->computations_pagibig,
+                                            'is_fix' => '0'
                                         ],
                                         'philhealth' => [
                                             'name' => 'Philhealth',
-                                            'amount' => 100,
-                                            'is_fix' => '1'
+                                            'amount' => $results->computations_philhealth,
+                                            'is_fix' => '0'
                                         ],
                                         'others' => [
                                             'name' => 'Others',
-                                            'amount' => 0,
+                                            'amount' => $results->computations_others,
                                             'is_fix' => '0'
                                         ],
                                     ];

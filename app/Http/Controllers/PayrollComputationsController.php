@@ -94,6 +94,7 @@ class PayrollComputationsController extends Controller
 
     public function create(Request $request, $id)
     {
+        // dd($request->all());
         $schedule_id = $id;
         $validator = Validator::make([...$request->all(), 'schedule_id' => $id], [
             'employee_id' => ['required', 'exists:employees,id'],
@@ -107,6 +108,10 @@ class PayrollComputationsController extends Controller
             'input_amount_total_deductions' => ['required'],
             'input_gross' => ['required'],
             'input_amount_net_pay' => ['required'],
+            "deductions-SSS" => ['required'],
+            "deductions-Pag-ibig" => ['required'],
+            "deductions-Philhealth" => ['required'],
+            "deductions-Others" => ['required'],
         ], [
             'employee_id:exists' => 'Employee is Invalid.',
             'schedule_id:exists' => 'Schedule is Invalid.'
@@ -124,7 +129,7 @@ class PayrollComputationsController extends Controller
                 ->withErrors(['Please Select valid Computation Schedule']);
         }
         $employee = Employee::find($request->input('employee_id'));
-        $payrollComputations = PayrollComputations::create([
+        $computations = $payrollComputations = PayrollComputations::create([
             'payroll_schedule_id' => $schedule_id,
             'employee_id' => $request->input('employee_id'),
             'rate_per_day' => $employee->rate_per_day,
@@ -132,7 +137,10 @@ class PayrollComputationsController extends Controller
             'hours_late' => $request->input('no_hours_late'),
             'days_absent' => $request->input('no_of_days_absent'),
             'days_present' => $request->input('no_of_days_worked'),
-            'deductions_list' => '',
+            'sss' => $request->input('deductions-SSS'),
+            'pagibig' => $request->input('deductions-Pag-ibig'),
+            'philhealth' => $request->input('deductions-Philhealth'),
+            'others' => $request->input('deductions-Others'),
             'bonus' => $request->input('bonuses'),
             'total_deductions' => $request->input('input_amount_total_deductions'),
             'gross_pay' => $request->input('input_gross'),
@@ -140,6 +148,7 @@ class PayrollComputationsController extends Controller
             'status' => 1,
             'is_claimed' => 0,
         ]);
+
         return redirect(route('payroll_computations', ['id' => $schedule_id]))
             ->withSuccess("Created!");
     }
@@ -206,6 +215,11 @@ class PayrollComputationsController extends Controller
                 'payroll_computations.days_absent as computations_days_absent',
                 'payroll_computations.hours_late as computations_hours_late',
 
+                'payroll_computations.sss as computations_sss',
+                'payroll_computations.pagibig as computations_pagibig',
+                'payroll_computations.philhealth as computations_philhealth',
+                'payroll_computations.others as computations_others',
+
                 'employees.id as employee_id',
                 'employees.employee_code as employee_code',
                 'employees.fullname as employee_full_name',
@@ -231,6 +245,7 @@ class PayrollComputationsController extends Controller
 
     function update_employee(Request $request, $id, $employee_id)
     {
+
         $validator = Validator::make(
             [...$request->all(), 'id' => $id, 'employee_id' => $employee_id],
             [
@@ -239,10 +254,10 @@ class PayrollComputationsController extends Controller
                 "no_of_hours_overtime" => ['required'],
                 "no_of_days_absent" => ['required'],
                 "no_hours_late" => ['required'],
-                // "deductions-SSS" => ['required'],
-                // "deductions-Pag-ibig" => ['required'],
-                // "deductions-Philhealth" => ['required'],
-                // "deductions-Others" => ['required'],
+                "deductions-SSS" => ['required'],
+                "deductions-Pag-ibig" => ['required'],
+                "deductions-Philhealth" => ['required'],
+                "deductions-Others" => ['required'],
                 "employee_id" => ['required', 'exists:payroll_computations,employee_id'],
                 "schedule_id" => ['required'],
                 "input_amount_no_of_days_worked" => ['required'],
@@ -251,11 +266,9 @@ class PayrollComputationsController extends Controller
                 "input_gross" => ['required'],
                 "input_amount_no_of_days_absent" => ['required'],
                 "input_amount_no_of_hours_late" => ['required'],
-                // "input_deduction_list_csv" => ['required'],
                 "input_amount_total_deductions" => ['required'],
                 "input_amount_net_pay" => ['required'],
                 "id" => ['required', 'exists:payroll_computations,id']
-                // "id" => ['required']
             ],
             [
                 'employee_id:exists' => 'Employee is Invalid.',
@@ -276,7 +289,10 @@ class PayrollComputationsController extends Controller
         $computations->hours_late = $request->input('input_amount_no_of_hours_late');
         $computations->days_absent = $request->input('input_amount_no_of_days_absent');
         $computations->days_present = $request->input('input_amount_no_of_days_worked');
-        $computations->deductions_list = '';
+        $computations->sss = $request->input('deductions-SSS');
+        $computations->pagibig = $request->input('deductions-Pag-ibig');
+        $computations->philhealth = $request->input('deductions-Philhealth');
+        $computations->others = $request->input('deductions-Others');
         $computations->bonus = $request->input('input_amount_bonuses');
         $computations->total_deductions = $request->input('input_amount_total_deductions');
         $computations->gross_pay = $request->input('input_gross');

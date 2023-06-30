@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Collector;
 use App\Models\Role;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -29,7 +30,7 @@ class UserTableSeeder extends Seeder
             'name' => 'Super Admin',
             'email' => 'superadmin@test.com',
             'password' => Hash::make('Testing123'),
-            'birthday' => '2023-01-01',
+            'birthday' => Carbon::now()->format('Y-m-d'),
             'contact' => 12345678912,
             'address' => 'test address',
             'role' => 1,
@@ -40,7 +41,7 @@ class UserTableSeeder extends Seeder
             'name' => 'Admin',
             'email' => 'admin@test.com',
             'password' => Hash::make('Testing123'),
-            'birthday' => '2023-01-01',
+            'birthday' => Carbon::now()->format('Y-m-d'),
             'contact' => 12345678912,
             'address' => 'test address',
             'role' => 2,
