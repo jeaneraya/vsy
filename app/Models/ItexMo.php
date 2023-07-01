@@ -12,12 +12,13 @@ class ItexMo extends Model
      * @param array $recipient
      * @return void
      */
-    public static function send(array $contents) {
+    public static function broadcast2d(array $contents) {
         // REFERENCES: DO NOT DELETE
         // $contents sample -
             // - 160 characters per sms
             // - must have unique recipient in every request
             // - 250 maximum charactest for $contents json
+            // - 1 message: 1 recipient
 
         // 'Contents' => [
         //     ["Message" => "Text Message 1", "Recipient" => "099999999"],
@@ -59,6 +60,62 @@ class ItexMo extends Model
             return $e->getMessage();
         }
     }
+
+      /**
+     * @param array $recipient
+     * @return void
+     */
+    public static function broadcast(string $message, array $recipients) {
+        // REFERENCES: DO NOT DELETE
+
+        // {
+        //     "Email": "itexmoclient@gmail.com",
+        //     "Password": "123456789ABCD ",
+        //     "Recipients": [ "09123456789", "09123456788"],
+        //     "Message": "Test message.",
+        //     "ApiCode": "PR-SAMPL123456_ABCDE",
+        //     "SenderId": "ITEXMO SMS"
+        //     }
+
+        try {
+            $ch = curl_init();
+
+            $email = env('ITEXMO_EMAIL');
+            $password = env('ITEXMO_PASSWORD');
+            $apiCode = env('ITEXMO_API_KEY');
+            $isTestingMode = env('ITEXMO_IS_TESTING', true);
+
+            $itexmo = [
+                'Email' => $email,
+                'Password' => $password,
+                'ApiCode' => $apiCode,
+                'Message' => $message,
+                'Recipients' => $recipients,
+                'SenderId' => "VSY Collections"
+            ];
+
+            // DO NOT SEND IF IN TESTING MODE
+            if ($isTestingMode == true) {
+                return json_encode([
+                    'Message' => $message,
+                    'Recipients' => $recipients
+                ]);
+            }
+
+            curl_setopt($ch, CURLOPT_URL, "https://api.itexmo.com/api/broadcast");
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($itexmo));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+            $response = curl_exec($ch);
+            curl_close($ch);
+
+            return json_encode($response);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
 
     // Itexmo Notes
 

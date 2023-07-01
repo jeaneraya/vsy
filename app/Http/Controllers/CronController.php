@@ -350,15 +350,16 @@ class CronController extends Controller
         }
 
         try {
-
-            dd(json_encode($testContents));
-            $itextmo = ItexMo::send($testContents);
-            echo '<pre>';
-            var_dump($itextmo);
-            exit;
-
             $today = Carbon::now()->format('Y-m-d');
-            $cronForRunning = RemindersLogger::where([['schedule', '=', $today], ['sent_datetime', '=', null]])->get();
+            $cronForRunning = RemindersLogger::where([['schedule', '=', $today], ['sent_datetime', '=', null]])
+                ->leftJoin('users', 'users.id', '=', 'reminders_loggers.sent_to')
+                ->select('reminders_loggers.*', 'users.contact as mobile')
+                ->get();
+
+            foreach ($cronForRunning as $key => $value) {
+                $itexmo = ItexMo::broadcast($value->message, [$value->mobile]);
+                echo "$itexmo <br>";
+            }
 
             $table = "<table class='table'>
                         <thead class='thead-light'>
