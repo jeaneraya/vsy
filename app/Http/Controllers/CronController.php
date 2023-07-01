@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Batchtransaction;
+use App\Models\ItexMo;
 use App\Models\Reminder;
 use App\Models\RemindersLogger;
 use App\Models\User;
@@ -58,7 +59,6 @@ class CronController extends Controller
             // return "Error: " . $e->getMessage();
             dd($e->getMessage());
         }
-
     }
 
     /**
@@ -77,9 +77,9 @@ class CronController extends Controller
             ['batchtransactions.status', '=', 'active'],
             ['batchtransactions.first_collection', '=', $today]
         ])->leftjoin('users', 'users.id', '=', 'batchtransactions.collector_id')
-        ->select('batchtransactions.collector_id','users.contact')
-        ->groupBy('batchtransactions.collector_id','users.contact')
-        ->get();
+            ->select('batchtransactions.collector_id', 'users.contact')
+            ->groupBy('batchtransactions.collector_id', 'users.contact')
+            ->get();
 
         try {
             $template = $this->getCollectionCronMessage($dueDate);
@@ -90,7 +90,7 @@ class CronController extends Controller
                     'description' => 'First Collection',
                     'sent_to' => $result->collector_id,
                     'message' => $template,
-                    'sent_via' => 1,// sms
+                    'sent_via' => 1, // sms
                     'schedule' => $today
                 ]);
             }
@@ -116,9 +116,9 @@ class CronController extends Controller
         $results = Batchtransaction::where([
             ['batchtransactions.status', '=', 'active'],
         ])->leftjoin('users', 'users.id', '=', 'batchtransactions.collector_id')
-        ->select('batchtransactions.collector_id','users.contact')
-        ->groupBy('batchtransactions.collector_id','users.contact')
-        ->get();
+            ->select('batchtransactions.collector_id', 'users.contact')
+            ->groupBy('batchtransactions.collector_id', 'users.contact')
+            ->get();
 
 
         try {
@@ -165,9 +165,9 @@ class CronController extends Controller
         $results = Batchtransaction::where([
             ['batchtransactions.status', '=', 'active'],
         ])->leftjoin('users', 'users.id', '=', 'batchtransactions.collector_id')
-        ->select('batchtransactions.collector_id','users.contact')
-        ->groupBy('batchtransactions.collector_id','users.contact')
-        ->get();
+            ->select('batchtransactions.collector_id', 'users.contact')
+            ->groupBy('batchtransactions.collector_id', 'users.contact')
+            ->get();
 
         try {
             $template = $this->getCollectionCronMessage($dueDate);
@@ -227,25 +227,31 @@ class CronController extends Controller
                 }
 
                 // weekly
-                else if ($result->frequency == 3
-                    && $schedule->format('Y-m-d') < $today) {
-                        // todo: get Day
+                else if (
+                    $result->frequency == 3
+                    && $schedule->format('Y-m-d') < $today
+                ) {
+                    // todo: get Day
                     $description .= 'Weekly';
                     $isScheduled = true;
                 }
 
                 // monthly
-                else if ($result->frequency == 4
-                        && $schedule->format('Y-m-d') < $today
-                        && $schedule->format('d') == $now->format('d')) {
+                else if (
+                    $result->frequency == 4
+                    && $schedule->format('Y-m-d') < $today
+                    && $schedule->format('d') == $now->format('d')
+                ) {
                     $description .= 'Monthly';
                     $isScheduled = true;
                 }
 
                 // yearly
-                else if ($result->frequency == 5
+                else if (
+                    $result->frequency == 5
                     && $schedule->format('Y-m-d') < $today
-                    && $schedule->format('m-d') == $now->format('m-d')) {
+                    && $schedule->format('m-d') == $now->format('m-d')
+                ) {
                     $description .= 'Yearly';
                     $isScheduled = true;
                 }
@@ -291,7 +297,8 @@ class CronController extends Controller
         return "Reminding that your scheduled payment date is on $date. Please pay your obligations to avoid late payment charges. Thank you.";
     }
 
-    public function cronScheduler(Request $request) {
+    public function cronScheduler(Request $request)
+    {
 
         $validator = Validator::make([...$request->all(), 'code' => $request->input('code')], [
             'code' => ['required']
@@ -310,7 +317,7 @@ class CronController extends Controller
             // // 1st collection
             $this->scheduleFirstCollection();
 
-            if (in_array($dateToday->format('d'), [13,15])) {
+            if (in_array($dateToday->format('d'), [13, 15])) {
                 // 1st monthly collection (13, 15)
                 $this->scheduleFirstMonthlyCollection();
             }
@@ -322,7 +329,6 @@ class CronController extends Controller
             }
             // custom
             $this->scheduleCustomReminders();
-
         } catch (Exception $e) {
             // return json_encode($e->getMessage());
             dd($e->getMessage());
@@ -332,7 +338,8 @@ class CronController extends Controller
     }
 
 
-    public function cronRunner(Request $request) {
+    public function cronRunner(Request $request)
+    {
 
         $validator = Validator::make([...$request->all(), 'code' => $request->input('code')], [
             'code' => ['required']
@@ -341,10 +348,19 @@ class CronController extends Controller
         if ($validator->fails()) {
             return json_encode($validator);
         }
-        $today = Carbon::now()->format('Y-m-d');
-        $cronForRunning = RemindersLogger::where([['schedule', '=', $today], ['sent_datetime', '=', null]])->get();
 
-        $table = "<table class='table'>
+        try {
+
+            dd(json_encode($testContents));
+            $itextmo = ItexMo::send($testContents);
+            echo '<pre>';
+            var_dump($itextmo);
+            exit;
+
+            $today = Carbon::now()->format('Y-m-d');
+            $cronForRunning = RemindersLogger::where([['schedule', '=', $today], ['sent_datetime', '=', null]])->get();
+
+            $table = "<table class='table'>
                         <thead class='thead-light'>
                             <tr class='table-secondary'>
                                 <th scope='row'>ID</th>
@@ -352,6 +368,7 @@ class CronController extends Controller
                                 <th>Sent to</th>
                                 <th>Message</th>
                                 <th>Schedule</th>
+                                <th>Send By</th>
                             </tr>
                         </thead>
 
@@ -369,13 +386,16 @@ class CronController extends Controller
                 <th>$value->sent_to</th>
                 <th>$value->message</th>
                 <th>$value->schedule</th>
+                <th>$value->send_via</th>
             </tr>";
-
             }
 
 
-        $table .= `  </tbody></table>`;
+            $table .= `  </tbody></table>`;
 
-        echo $table;
+            echo $table;
+        } catch (Exception $e) {
+            dd($e->getMessage());
+        }
     }
 }

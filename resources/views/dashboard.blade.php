@@ -80,7 +80,7 @@
                     <td>{{ $value->name}}</td>
                     <td>{{ $results['nextDueDate'] }}</td>
                     <td>{{ $lapseDays }} days</td>
-                    <td>{{ $value->balance}}</td>
+                    <td>₱ {{   number_format((float)$value->balance, 2, '.', '')}}</td>
                   </tr>
                   @endforeach
                 </tbody>
