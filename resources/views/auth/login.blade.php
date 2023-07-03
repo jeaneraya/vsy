@@ -60,7 +60,7 @@
                         placeholder="Enter your password" name="password" required autocomplete="current-password">
                 </label>
 
-                @if (Route::has('password.request'))
+                {{-- @if (Route::has('password.request'))
                     <a class="link-info forget-link" href="{{ route('password.request') }}">
                         {{ __('Forgot Your Password?') }}
                     </a>
@@ -71,7 +71,7 @@
                     <input class="form-check-input form-checkbox" type="checkbox" name="remember" id="remember"
                         {{ old('remember') ? 'checked' : '' }}>
                     <span class="form-checkbox-label">Remember me next time</span>
-                </label>
+                </label> --}}
 
                 <button type="submit" class="form-btn primary-default-btn transparent-btn">
                     Sign in

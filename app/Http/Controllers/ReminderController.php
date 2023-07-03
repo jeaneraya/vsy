@@ -184,4 +184,29 @@ class ReminderController extends Controller
             ->withSuccess("Marked as $read");
 
     }
+
+
+    public function is_active(Request $request, $id) {
+
+        $validator = Validator::make([...$request->all(), 'id' => $id], [
+            'id' => ['required', 'exists:reminders,id'],
+            'is_active' => ['required']
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $results = Reminder::find($id);
+        $results->is_active = $request->input('is_active');
+        $results->save();
+
+        $read = $results->is_active == 1 ? 'Active' : 'Inactive';
+        return redirect()->back()
+            ->withSuccess("Marked as $read!");
+
+    }
+
 }

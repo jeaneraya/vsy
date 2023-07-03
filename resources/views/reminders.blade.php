@@ -93,9 +93,10 @@
                                                 </li>
                                                 <li>
                                                     <form method="POST"
-                                                        action="{{ route('put_user_archive', ['userId' => $reminder->id]) }}">
+                                                        action="{{ route('put_reminder_is_active', ['id' => $reminder->id]) }}">
+                                                        <input hidden name='is_active' value="{{$reminder->is_active == 1 ? 2 : 1}}">
                                                         @csrf @method('PUT')
-                                                        <button type="submit" class="dropdown-item fs-6">Cancel</button>
+                                                        <button type="submit" class="dropdown-item fs-6">{{$reminder->is_active == 1 ? 'Mark as Inactive' : 'Mark As Active'}}</button>
                                                     </form>
                                                 </li>
                                             </ul>

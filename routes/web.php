@@ -76,6 +76,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/reminder/create',[ReminderController::class, 'store'])->name('post_add_reminder');
     Route::get('/reminder/{id}',[ReminderController::class, 'show'])->name('show_reminder');
     Route::put('/reminder/{id}',[ReminderController::class, 'update'])->name('update_reminder');
+    Route::put('/reminder/{id}/is_active',[ReminderController::class, 'is_active'])->name('put_reminder_is_active');
+
+
 
     // notifications
     Route::get('/notifications',[ReminderController::class, 'notifications_index'])->name('notifications_index');
