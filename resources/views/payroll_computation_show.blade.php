@@ -40,7 +40,7 @@
             @endif
         </div>
 
-        <div class="container users-page">
+        <div class="container users-page" id="forPrinting">
             <div class="col-lg-12">
                 <div class='form mt-2'>
 
@@ -99,14 +99,16 @@
                             <tr>
 
                                 <th>Pay Rate</th>
-                                <td><span id="pay_rate">{{ $results->computations_rate_per_day }}</span></td>
+                                <td>₱ <span id="pay_rate">{{  number_format((float) $results->computations_rate_per_day, 2, '.', '')  }}</span></td>
                                 <th>End Date</th>
                                 <td>{{ $results->schedule_to }}</td>
                             </tr>
                         </tbody>
                     </table>
 
-                    <form action="{{route('payroll_computations_employee_put', ['id' => $results->computations_id, 'employee_id' => $results->employee_id])}}" method="POST">
+                    <form
+                        action="{{ route('payroll_computations_employee_put', ['id' => $results->computations_id, 'employee_id' => $results->employee_id]) }}"
+                        method="POST">
                         @csrf @method('PUT')
                         <table class="table">
                             <thead class="thead-light">
@@ -124,8 +126,10 @@
                                     <td>
                                         <input id="no_of_days_worked" type="text"
                                             class="form-control input-numbers @error('no_of_days_worked') is-invalid @enderror form-input"
-                                            name="no_of_days_worked" value="{{ $results->computations_days_present }}" required
-                                            autocomplete="no_of_days_worked" maxlength="50" autofocus>
+                                            name="no_of_days_worked" value="{{ $results->computations_days_present }}"
+                                            required maxlength="50" autofocus>
+
+                                        <span hidden class="show-on-print" id="print-no-of-days-worked"></span>
                                     </td>
 
                                     <td>₱ <span id="span_days_worked" class="amounts for_gross">0.00</span></td>
@@ -138,12 +142,12 @@
                                             maxlength="50" autofocus></td>
                                     <td>₱ <span id="span_bonuses" class="for_gross amounts ">0.00</span></td>
                                 </tr>
-                                <tr>
+                                <tr hidden>
                                     <th scope="row">No. of hours Overtime</th>
                                     <td><input id="no_of_hours_overtime" type="text"
                                             class="form-control input-numbers @error('no_of_hours_overtime') is-invalid @enderror form-input"
-                                            name="no_of_hours_overtime" value="{{  $results->computations_hours_overtime }}" required
-                                            autocomplete="no_of_hours_overtime" maxlength="50" autofocus></td>
+                                            name="no_of_hours_overtime" value="0"
+                                            required autocomplete="no_of_hours_overtime" maxlength="50"></td>
 
                                     <td>₱ <span id="hours_overtime" class="for_gross amounts">0.00</span></td>
                                 </tr>
@@ -161,17 +165,22 @@
                                     <th scope="row">No. of Days Absent</th>
                                     <td><input id="no_of_days_absent" type="text"
                                             class="form-control input-numbers @error('no_of_days_absent') is-invalid @enderror form-input"
-                                            name="no_of_days_absent" value="{{ $results->computations_days_absent }}" required
-                                            autocomplete="no_of_days_absent" maxlength="50" autofocus></td>
+                                            name="no_of_days_absent" value="{{ $results->computations_days_absent }}"
+                                            required autocomplete="no_of_days_absent" maxlength="50" autofocus>
+
+                                            <span hidden class="show-on-print" id="print-no-of-days-absent"></span>
+
+                                        </td>
+
 
                                     <td>₱ <span id="days_absent" class="amounts for_deductions">0.00</span></td>
                                 </tr>
-                                <tr>
+                                <tr hidden>
                                     <th scope="row">No. of hours late</th>
                                     <td><input id="no_hours_late" type="text"
                                             class="form-control input-numbers @error('no_hours_late') is-invalid @enderror form-input"
-                                            name="no_hours_late" value="{{ $results->computations_hours_late }}" required
-                                            autocomplete="name" maxlength="50" autofocus></td>
+                                            name="no_hours_late" value="0" required
+                                            autocomplete="name" maxlength="50" ></td>
                                     <td>₱ <span id="hours_late" class="for_deductions amounts">0.00</span></td>
                                 </tr>
 
@@ -180,22 +189,22 @@
                                         'sss' => [
                                             'name' => 'SSS',
                                             'amount' => $results->computations_sss,
-                                            'is_fix' => '0'
+                                            'is_fix' => '0',
                                         ],
                                         'pagibig' => [
                                             'name' => 'Pag-ibig',
                                             'amount' => $results->computations_pagibig,
-                                            'is_fix' => '0'
+                                            'is_fix' => '0',
                                         ],
                                         'philhealth' => [
                                             'name' => 'Philhealth',
                                             'amount' => $results->computations_philhealth,
-                                            'is_fix' => '0'
+                                            'is_fix' => '0',
                                         ],
                                         'others' => [
                                             'name' => 'Others',
                                             'amount' => $results->computations_others,
-                                            'is_fix' => '0'
+                                            'is_fix' => '0',
                                         ],
                                     ];
                                 @endphp
@@ -203,30 +212,35 @@
                                 @foreach ($deductionList as $key => $deduction)
                                     <tr>
                                         <th scope="row">Deductions: {{ $deduction['name'] }}</th>
-                                        <td><input id="deductions-{{$deduction['name']}}" type="text"
-                                                class="form-control input-numbers @error("") is-invalid @enderror form-input input_deductions"
-                                                data-name="deductions-{{$deduction['name']}}"
-                                                name="deductions-{{$deduction['name']}}" value="{{ $deduction['amount'] }}" required autocomplete="deductions-{{$deduction['name']}}"
-                                                {{ $deduction['is_fix'] == 1 ? 'readonly' : '' }}
-                                                maxlength="6" autofocus></td>
+                                        <td><input id="deductions-{{ $deduction['name'] }}" type="text"
+                                                class="form-control input-numbers @error('') is-invalid @enderror form-input input_deductions"
+                                                data-name="deductions-{{ $deduction['name'] }}"
+                                                name="deductions-{{ $deduction['name'] }}"
+                                                value="{{ $deduction['amount'] }}" required
+                                                autocomplete="deductions-{{ $deduction['name'] }}"
+                                                {{ $deduction['is_fix'] == 1 ? 'readonly' : '' }} maxlength="6"
+                                                autofocus></td>
 
-                                        <td>₱ <span id="span_deductions-{{$deduction['name']}}" name="span_deductions-{{$deduction['name']}}" class="for_deductions amounts">{{ number_format((float)$deduction['amount'], 2, '.', '') }}</span></td>
+                                        <td>₱ <span id="span_deductions-{{ $deduction['name'] }}"
+                                                name="span_deductions-{{ $deduction['name'] }}"
+                                                class="for_deductions amounts">{{ number_format((float) $deduction['amount'], 2, '.', '') }}</span>
+                                        </td>
                                     </tr>
                                 @endforeach
 
-                                    <tr>
-                                        <th scope="row"></th>
-                                        <td class="table-light"><span class="fw-bold">Total Deductions:</p>
-                                        </td>
-                                        <td class="table-light">₱ <span id="total_deductions" class="amounts">0.00</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row"></th>
-                                        <td class="table-light"><span class="fw-bold">Net Pay:</p>
-                                        </td>
-                                        <td class="table-light">₱ <span id="net_pay" class="amounts">0.00</span></td>
-                                    </tr>
+                                <tr>
+                                    <th scope="row"></th>
+                                    <td class="table-light"><span class="fw-bold">Total Deductions:</p>
+                                    </td>
+                                    <td class="table-light">₱ <span id="total_deductions" class="amounts">0.00</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"></th>
+                                    <td class="table-light"><span class="fw-bold">Net Pay:</p>
+                                    </td>
+                                    <td class="table-light">₱ <span id="net_pay" class="amounts">0.00</span></td>
+                                </tr>
                             </tbody>
                         </table>
                         {{-- hidden --}}
@@ -247,7 +261,11 @@
                         <input type="hidden" name="input_amount_net_pay" id="input_amount_net_pay">
 
                         <div class="col-auto">
-                            <button type="submit" class="btn btn-primary mb-3">Submit</button>
+                            <button type="button" class="btn btn-primary mb-3 hide-on-print"
+                                onClick="print()">
+                                Print
+                            </button>
+                            <button type="submit" class="btn btn-primary mb-3 hide-on-print">Submit</button>
                         </div>
                     </form>
                 </div>
@@ -283,7 +301,7 @@
             computeBonuses($('#bonuses'));
             computeNoOfHoursOvertime($('#no_of_hours_overtime'));
             computeDaysOfAbsent($('#no_of_days_absent'));
-            computeNoHoursLate($('#no_hours_late'));
+            // computeNoHoursLate($('#no_hours_late'));
             computeDeductions();
 
             // GROSS
@@ -347,7 +365,8 @@
             });
 
             function computeDaysOfAbsent(el) {
-                let value = parseFloat($(el).val());
+                let value = parseFloat($(el).val()) * parseFloat($('#pay_rate').text());
+
                 if (Number.isNaN(value) == true) {
                     value = 0.00;
                 }
@@ -415,5 +434,62 @@
                 computeNetPay();
             }
         });
+
+
+        function print() {
+
+            let css1 = "{{ asset('assets/css/custom.css') }}"
+            let css2 = "{{ asset('assets/css/style.css') }}"
+            let jquery = "{{ asset('assets/js/jquery-3.7.0.min.js') }}"
+            var divContents = document.getElementById("forPrinting").innerHTML;
+            var a = window.open("", "_blank","toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=4000,height=4000");
+
+            a.document.write('<html>');
+            a.document.write(
+                `<head><link rel='stylesheet' href='${css1}' >  <link rel='stylesheet' href='${css2}'> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"> </head>`
+            )
+            a.document.write('<body>');
+            a.document.write(divContents);
+            a.document.write(`<script src='${jquery}' />`)
+            a.document.write(`</body></html>`);
+            a.document.close();
+            $(a).on('load', function() {
+
+                let daysWorkedComputation = a.document.getElementById('no_of_days_worked').value ;
+                let daysAbsentComputation = a.document.getElementById('no_of_days_absent').value ;
+
+
+                a.document.getElementById('print-no-of-days-worked').innerText = `${daysWorkedComputation} days x ₱ ${document.getElementById('pay_rate').innerText}` ;
+                a.document.getElementById('print-no-of-days-absent').innerText = `${daysAbsentComputation} days x ₱ ${document.getElementById('pay_rate').innerText}` ;
+
+                var showOnPrint = a.document.getElementsByClassName("show-on-print"); //showOnPrint is an array
+                for (var i = 0; i < showOnPrint.length; i++) {
+                    showOnPrint[i].style.visibility = "visible"; // or
+                    showOnPrint[i].style.display = "block"; // depending on what you're doing
+                    showOnPrint[i].removeAttribute("hidden");
+                }
+
+
+                var divsToHide = a.document.getElementsByClassName("form-input"); //divsToHide is an array
+                for (var i = 0; i < divsToHide.length; i++) {
+                    divsToHide[i].style.visibility = "hidden"; // or
+                    divsToHide[i].style.display = "none"; // depending on what you're doing
+                }
+
+                var buttonsToHide = a.document.getElementsByClassName("hide-on-print"); //buttonsToHide is an array
+                for (var i = 0; i < buttonsToHide.length; i++) {
+                    buttonsToHide[i].style.visibility = "hidden"; // or
+                    buttonsToHide[i].style.display = "none"; // depending on what you're doing
+                }
+
+                a.focus();
+                a.print();
+            });
+
+            $(a).onafterprint = function(){
+                a.close()
+            };
+
+        }
     </script>
 @endsection

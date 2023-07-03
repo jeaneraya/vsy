@@ -137,12 +137,12 @@
                                             maxlength="50" autofocus></td>
                                     <td>₱ <span id="span_bonuses" class="for_gross amounts ">0.00</span></td>
                                 </tr>
-                                <tr>
+                                <tr hidden>
                                     <th scope="row">No. of hours Overtime</th>
                                     <td><input id="no_of_hours_overtime" type="text"
                                             class="form-control input-numbers @error('no_of_hours_overtime') is-invalid @enderror form-input"
-                                            name="no_of_hours_overtime" value="{{ old('no_of_hours_overtime') }}" required
-                                            autocomplete="no_of_hours_overtime" maxlength="50" autofocus></td>
+                                            name="no_of_hours_overtime" value="0"
+                                            autocomplete="no_of_hours_overtime" maxlength="50"></td>
 
                                     <td>₱ <span id="hours_overtime" class="for_gross amounts">0.00</span></td>
                                 </tr>
@@ -165,12 +165,12 @@
 
                                     <td>₱ <span id="days_absent" class="amounts for_deductions">0.00</span></td>
                                 </tr>
-                                <tr>
+                                <tr hidden>
                                     <th scope="row">No. of hours late</th>
                                     <td><input id="no_hours_late" type="text"
                                             class="form-control input-numbers @error('no_hours_late') is-invalid @enderror form-input"
-                                            name="no_hours_late" value="{{ old('no_hours_late') }}" required
-                                            autocomplete="name" maxlength="50" autofocus></td>
+                                            name="no_hours_late" value="0" required
+                                            autocomplete="name" maxlength="50"></td>
                                     <td>₱ <span id="hours_late" class="for_deductions amounts">0.00</span></td>
                                 </tr>
 
@@ -239,7 +239,7 @@
                         <input type="hidden" name="input_gross" id="input_gross">
 
                         <input type="hidden" name="input_amount_no_of_days_absent" id="input_amount_no_of_days_absent">
-                        <input type="hidden" name="input_amount_no_of_hours_late" id="input_amount_no_of_hours_late">
+                        <input type="hidden" name="input_amount_no_of_hours_late" id="input_amount_no_of_hours_late" value="0">
                         <input type="hidden" name="input_deduction_list_csv" id="input_deduction_list_csv">
 
                         <input type="hidden" name="input_amount_total_deductions" id="input_amount_total_deductions">
@@ -324,12 +324,12 @@
 
             // DEDUCTIONS
             $('#no_of_days_absent').keyup(function() {
-                let value = parseFloat($(this).val());
+                let value = parseFloat($(this).val()) * parseFloat($('#pay_rate').text());
                 if (Number.isNaN(value) == true) {
                     value = 0;
                 }
                 $('#days_absent').text(value.toFixed(2))
-                $('#input_amount_no_of_hours_late').val(value)
+                $('#input_amount_no_of_days_absent').val(value)
                 computeDeductions();
             });
 
@@ -339,7 +339,8 @@
                     value = 0;
                 }
                 $('#hours_late').text(value.toFixed(2))
-                $('#input_amount_no_of_days_absent').val(value)
+                $('#input_amount_no_of_hours_late').val(value)
+
                 computeDeductions();
             });
 
