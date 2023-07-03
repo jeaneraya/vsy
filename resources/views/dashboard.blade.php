@@ -11,7 +11,7 @@
                 <iconify-icon icon="fluent:money-16-filled"></iconify-icon>
               </div>
               <div class="stat-cards-info">
-                <p class="stat-cards-info__num">&#8369; 500,000.00</p>
+                <p class="stat-cards-info__num">&#8369;xxx</p>
                 <p class="stat-cards-info__title">Total Collections</p>
               </div>
             </article>
@@ -22,7 +22,7 @@
                 <iconify-icon icon="fluent-mdl2:product-list"></iconify-icon>
               </div>
               <div class="stat-cards-info">
-                <p class="stat-cards-info__num">1200</p>
+                <p class="stat-cards-info__num">xxx</p>
                 <p class="stat-cards-info__title">Total Products</p>
               </div>
             </article>
@@ -33,7 +33,7 @@
                 <iconify-icon icon="fa:group"></iconify-icon>
               </div>
               <div class="stat-cards-info">
-                <p class="stat-cards-info__num">850</p>
+                <p class="stat-cards-info__num">{{ count($results['collectors'])}}</p>
                 <p class="stat-cards-info__title">Total Collectors</p>
               </div>
             </article>
@@ -44,7 +44,7 @@
                 <iconify-icon icon="mingcute:group-fill"></iconify-icon>
               </div>
               <div class="stat-cards-info">
-                <p class="stat-cards-info__num">100</p>
+                <p class="stat-cards-info__num">{{ count($results['employees'])}}</p>
                 <p class="stat-cards-info__title">Total Employees</p>
               </div>
             </article>
