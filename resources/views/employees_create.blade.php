@@ -98,7 +98,7 @@
                             <p class="form-label">Date hired</p>
                             <input id="" type="date"
                                 class="form-control @error('date_hired') is-invalid @enderror  form-input" name="date_hired"
-                                value="{{ old('date_hired') }}" required>
+                                value="{{ old('date_hired') }}">
                         </label>
                     </div>
 
@@ -134,7 +134,7 @@
                             <p class="form-label">Interest</p>
                             <input id="address" type="address"
                                 class="form-control @error('interest') is-invalid @enderror  form-input" name="interest"
-                                value="{{ old('interest') ?? 0 }}" required min="0">
+                                value="{{ old('interest') ?? 0 }}"  min="0">
                         </label>
                     </div>
 
@@ -143,7 +143,7 @@
                             <p class="form-label">CTC Number</p>
                             <input id="ctc_number" type="text"
                                 class="form-control @error('address') is-invalid @enderror  form-input" name="ctc_number"
-                                value="{{ old('ctc_number') }}" required>
+                                value="{{ old('ctc_number') }}" >
                         </label>
                     </div>
 
@@ -152,7 +152,7 @@
                             <p class="form-label">Place Issued</p>
                             <input id="" type="text"
                                 class="form-control @error('place_issued') is-invalid @enderror  form-input" name="place_issued"
-                                value="{{ old('place_issued') }}" required>
+                                value="{{ old('place_issued') }}" >
                         </label>
                     </div>
 
@@ -161,7 +161,7 @@
                             <p class="form-label">Date Issued</p>
                             <input id="birthday" type="date"
                                 class="form-control @error('birthday') is-invalid @enderror  form-input" name="date_issued"
-                                value="{{ old('birthday') }}" required>
+                                value="{{ old('birthday') }}" >
                         </label>
                     </div>
 
@@ -169,7 +169,7 @@
                         <label class="form-label-wrapper">
                             <p class="form-label">Status</p>
                             <select name="status" id="status" type="text"
-                                class="form-control @error('role') is-invalid @enderror form-input autofocus">
+                                class="form-control @error('status') is-invalid @enderror form-input autofocus">
                                 <option value="0" disabled selected>
                                     -</option>
                                 @foreach (App\Models\Constants::getEmployeeStatus() as $key =>  $status)

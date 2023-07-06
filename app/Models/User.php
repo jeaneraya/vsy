@@ -62,6 +62,11 @@ class User extends Authenticatable
         return $this->role == 3;
     }
 
+    public function isAreaManager() {
+        return $this->role == 4;
+    }
+
+
     public function collectors(): BelongsTo
     {
         return $this->belongsTo(Collector::class, 'id', 'user_id');

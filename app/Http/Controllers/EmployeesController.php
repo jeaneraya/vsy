@@ -43,10 +43,10 @@ class EmployeesController extends Controller
             'position' => ['required'],
             'rate_per_day' => ['required'],
             'overtime_pay' => ['required'],
-            'interest' => ['required'],
-            'ctc_number' => ['required'],
-            'place_issued' => ['required'],
-            'date_issued' => ['required'],
+            'interest' => ['integer', 'nullable'],
+            'ctc_number' => ['integer', 'nullable'],
+            'place_issued' => ['string', 'nullable'],
+            'date_issued' => ['date',  'nullable'],
             'hiring_status' => ['required'],
             'status' => ['required']
         ]);
@@ -133,20 +133,20 @@ class EmployeesController extends Controller
             'birthday' => ['required'],
             'address' => ['required'],
             'contact' => ['required'],
-            'date_hired' => ['required'],
+            'date_hired' => ['date'],
             'position' => ['required'],
             'rate_per_day' => ['required'],
             'overtime_pay' => ['required'],
-            'interest' => ['required'],
-            'ctc_number' => ['required'],
-            'place_issued' => ['required'],
-            'date_issued' => ['required'],
+            'interest' => ['integer', 'nullable'],
+            'ctc_number' => ['integer', 'nullable'],
+            'place_issued' => ['string', 'nullable'],
+            'date_issued' => ['date',  'nullable'],
             'hiring_status' => ['required'],
             'status' => ['required']
         ]);
 
         if ($validator->fails()) {
-            return redirect(route("get_user_create"))
+            return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
         }

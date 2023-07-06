@@ -27,7 +27,7 @@ class CreateEmployeesTable extends Migration
             $table->double('rate_per_day',8,2)->default(0);
             $table->double('overtime_pay',8,2)->default(0);
             $table->double('interest',8,2)->default(0);
-            $table->string('ctc_number')->nullable;
+            $table->string('ctc_number')->nullable();
             $table->string('place_issued')->nullable();
             $table->string('date_issued')->nullable();
             $table->string('status')->comment('0 - n/a, 1 - contractual, 2 - Floating, 3 - OJT, 4 - Regular, 5 - Temporary');

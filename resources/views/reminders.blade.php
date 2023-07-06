@@ -63,6 +63,7 @@
                                 <th>Description</th>
                                 <th>Schedule</th>
                                 <th>Status</th>
+                                <th>Last sent</th>
                                 <th>Active</th>
                                 <th>Frequency</th>
                                 <th>Created by</th>
@@ -77,9 +78,10 @@
                                     <td>{{ $reminder->description }}</td>
                                     <td>{{ $reminder->schedule }}</td>
                                     <td>{{ App\Models\Constants::getRemindersStatus()[$reminder->status]}}</td>
+                                    <td>{{ is_null($reminder->sent_on) ? 'N/A' : \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $reminder->sent_on)->format('Y-m-d'); }}</td>
                                     <td>{{ App\Models\Constants::reminderIsActiveStatus()[$reminder->is_active] }}</td>
                                     <td>{{ App\Models\Constants::getReminderFrequencies()[$reminder->frequency] }}</td>
-                                    <td>{{ $reminder->created_by }}</td>
+                                    <td>{{ $reminder->created_name }}</td>
 
                                     </td>
                                     <td class="text-center">
@@ -129,6 +131,7 @@
                 scrollX: true,
                 lengthChange: false,
                 order: [[0, 'desc']],
+                "pageLength": 20
             });
         });
     </script>

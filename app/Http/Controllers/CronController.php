@@ -317,13 +317,13 @@ class CronController extends Controller
             // // 1st collection
             $this->scheduleFirstCollection();
 
-            if (in_array($dateToday->format('d'), [13, 15])) {
-                // 1st monthly collection (13, 15)
+            if (in_array($dateToday->format('d'), [13, 15, 17])) {
+                // 1st monthly collection (13, 15, 17)
                 $this->scheduleFirstMonthlyCollection();
             }
 
             $lastDayOfMonth = $dateToday->endOfMonth()->format('d');
-            if (in_array($dateToday->format('d'), [$lastDayOfMonth, $lastDayOfMonth - 2])) {
+            if (in_array($dateToday->format('d'), [2, $lastDayOfMonth, $lastDayOfMonth - 2])) {
                 // 2nd monthly collection
                 $this->scheduleSecondMonthlyCollection();
             }
@@ -355,8 +355,15 @@ class CronController extends Controller
                 ->leftJoin('users', 'users.id', '=', 'reminders_loggers.sent_to')
                 ->select('reminders_loggers.*', 'users.contact as mobile')
                 ->get();
-
+            $now = Carbon::now();
             foreach ($cronForRunning as $key => $value) {
+                if (is_null($value->reminder_id) == false) {
+                    $reminder = Reminder::find($value->reminder_id);
+                    $reminder->sent_on = $now;
+                    $reminder->status = 1;
+                    $reminder->save();
+                }
+
                 $itexmo = ItexMo::broadcast($value->message, [$value->mobile]);
                 echo "$itexmo <br>";
             }

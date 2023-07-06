@@ -43,7 +43,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/user/create', [AccountController::class, 'create'])->name('post_user_create');
 
         Route::get('/user/{userId}', [AccountController::class, 'get'])->name('get_user');
-
+        Route::put('/user/{userId}/info', [AccountController::class, 'update_details'])->name('update_details');
     });
 
     Route::middleware(['isRoleAdmin'])->group(function () {

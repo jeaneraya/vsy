@@ -63,7 +63,7 @@
                                 <tr>
                                     <td>{{ $result->id }}</td>
                                     <td>{{ $result->sent_datetime }}</td>
-                                    <td>{{ $result->sent_to == 0 ? 'System' : $result->sent_to }}</td>
+                                    <td>{{ $result->sent_to == 0 ? 'System' : $result->sent_to_name }}</td>
                                     <td>{{ $result->description }}</td>
                                     <td>{{ $result->sent_via == 1 ? 'SMS' : 'Notification' }}</td>
                                     <td>{{ $result->schedule }}</td>
@@ -92,6 +92,8 @@
                 responsive: true,
                 scrollX: true,
                 lengthChange: false,
+                order: [['0', 'desc']],
+                pageLength: 20
             });
         });
     </script>

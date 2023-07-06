@@ -36,6 +36,7 @@ class AccountController extends Controller
             ['for_registration', '=', 1]
         ])->get(); // yes
 
+
         return view('admin/create_user', ['users' => $users, 'roles' => $roles]);
     }
 
@@ -47,23 +48,26 @@ class AccountController extends Controller
      */
     protected function create(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'birthday' => ['required', 'string'],
-            'address' => ['required', 'string'],
-            'contact' => ['required', 'string'],
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+                'password' => ['required', 'string', 'min:8', 'confirmed'],
+                'birthday' => ['required', 'string'],
+                'address' => ['required', 'string'],
+                'contact' => ['required', 'string'],
                 // collectors
-            'code' => [
-            'required_if:role,3',
+                // 'code' => [
+                // 'required_if:role,3',
+                // ],
+                // 'cashbond' => [
+                //     'required_if:role,3',
+                // ],
+                // 'ctcnum' => [
+                //     'required_if:role,3',
+                // ]]
             ],
-            'cashbond' => [
-                'required_if:role,3',
-            ],
-            'ctcnum' => [
-                'required_if:role,3',
-            ]],
             $messages = [
                 'required_if' => 'The :attribute field is required.',
             ]
@@ -87,7 +91,7 @@ class AccountController extends Controller
         ]);
 
 
-        if ($request->input('role') == 3) {
+        if ($request->input('role') == 3 || $request->input('role') == 4) {
             Collector::create([
                 'user_id' => $user->id,
                 'code' => $request->input('code'),
@@ -96,6 +100,7 @@ class AccountController extends Controller
                 'status' => 1, // active
             ]);
         }
+
         return redirect(route("get_user_create"))->withSuccess('Account Created');
     }
 
@@ -124,6 +129,7 @@ class AccountController extends Controller
         );
 
         if ($validator->fails()) {
+
             return redirect(route("get_user_index"))
                 ->withErrors($validator)
                 ->withInput();
@@ -133,10 +139,10 @@ class AccountController extends Controller
         $user->approval_status = $request->input('approval_status');
         $user->save();
 
-        if ($request->input('role') == 3) { // collector and approved
+        if ($request->input('role') == 3 && $request->input('role') == 4) { // collector and approved
 
             $collector = Collector::where([
-                ['user_id','=', $request->input('id')]
+                ['user_id', '=', $request->input('id')]
             ])->first();
 
             if ($collector) {
@@ -173,6 +179,82 @@ class AccountController extends Controller
         $userId->save();
 
         return redirect(route("get_user_index"))
+            ->with(['success' => 'Update Successful'])
+            ->withInput();
+    }
+
+    protected function update_details(Request $request, $userId)
+    {
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'email', 'max:255', "unique:users,email,$userId,id"],
+                'birthday' => ['required', 'string'],
+                'address' => ['required', 'string'],
+                'contact' => ['required', 'string'],
+                'role' => ['required', 'integer'],
+                'approval_status' => ['required', 'integer'],
+
+                // collectors
+                // 'code' => [
+                // 'required_if:role,3',
+                // ],
+                // 'cashbond' => [
+                //     'required_if:role,3',
+                // ],
+                // 'ctcnum' => [
+                //     'required_if:role,3',
+                // ]]
+                // 'collector_status' => ['required', 'integer'],
+            ],
+            $messages = [
+                'required_if' => 'The :attribute field is required.',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $user = User::find($userId);
+        $user->approval_status = $request->input('approval_status');
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->birthday = $request->input('birthday');
+        $user->address = $request->input('address');
+        $user->contact = $request->input('contact');
+        $user->role = $request->input('role');
+        $user->approval_status = $request->input('approval_status');
+        $user->save();
+
+        $collector = Collector::where([
+            ['user_id', '=', $userId]
+        ])->first();
+        if ($collector) {
+            $collector->code = $request->input('code');
+            $collector->cashbond = $request->input('cashbond');
+            $collector->ctc_no = $request->input('ctcnum');
+            $collector->status = $request->input('collector_status');
+        } else if (
+            is_null($request->input('code')) == false
+            || is_null($request->input('cashbond')) == false
+            || is_null($request->input('ctcnum')) == false
+        ) {
+
+
+            Collector::create([
+                'user_id' => $userId,
+                'code' => $request->input('code'),
+                'cashbond' => $request->input('cashbond'),
+                'ctc_no' => $request->input('ctcnum'),
+                'status' => $request->input('collector_status'),
+            ]);
+        }
+
+        return redirect()->back()
             ->with(['success' => 'Update Successful'])
             ->withInput();
     }

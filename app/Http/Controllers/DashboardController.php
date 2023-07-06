@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
-    //
 
     public function indexxx(Request $request){
         $results['payments'] = DB::table('payments')

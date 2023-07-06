@@ -56,7 +56,7 @@ class RemindersSeeder extends Seeder
             'template_id' => '0',
             'type' => '3',
             'frequency' => '2',
-            'status' => '1',
+            'status' => '0',
             'created_by' => '1',
             'message' => 'This is message 4'
         ]);
@@ -67,7 +67,7 @@ class RemindersSeeder extends Seeder
             'template_id' => '0',
             'type' => '2',
             'frequency' => '3',
-            'status' => '2',
+            'status' => '0',
             'created_by' => '1',
             'message' => 'This is message 5'
         ]);
@@ -78,7 +78,7 @@ class RemindersSeeder extends Seeder
             'template_id' => '0',
             'type' => '3',
             'frequency' => '4',
-            'status' => '3',
+            'status' => '0',
             'created_by' => '1',
             'message' => 'This is message 6'
         ]);
@@ -90,7 +90,7 @@ class RemindersSeeder extends Seeder
             'template_id' => '0',
             'type' => '3',
             'frequency' => '5',
-            'status' => '3',
+            'status' => '0',
             'created_by' => '1',
             'message' => 'This is message 7'
         ]);

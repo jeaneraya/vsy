@@ -7,7 +7,7 @@
         }
     </style>
     <div class="container">
-        <h2 class="main-title">View Employee (ID: {{ $employees->id }} | {{ $employees->fullname }})</h2>
+        <h2 class="main-title">View Employee</h2>
         <div>
             @if (Session::has('info'))
                 <div class="alert alert-primary" role="alert">
@@ -46,10 +46,12 @@
         <div class="row stat-cards">
             <form class="sign-up-form form" method="POST"
                 action="{{ route('update_employee', ['id' => $employees->id]) }}">
-
-
                 @csrf
                 @method('PUT')
+                <h3>Name: {{ $employees->fullname }} <br>
+                ID: {{ $employees->id }}</h3>
+                <hr>
+
                 <div class="row">
                     <div class="col-6">
                         <label class="form-label-wrapper">
@@ -146,7 +148,7 @@
                             <p class="form-label">CTC Number</p>
                             <input id="ctc_number" type="text"
                                 class="form-control @error('address') is-invalid @enderror  form-input" name="ctc_number"
-                                value="{{ $employees->ctc_number }}" required>
+                                value="{{ $employees->ctc_number }}">
                         </label>
                     </div>
 
@@ -155,7 +157,7 @@
                             <p class="form-label">Place Issued</p>
                             <input id="" type="text"
                                 class="form-control @error('place_issued') is-invalid @enderror  form-input"
-                                name="place_issued" value="{{ $employees->place_issued }}" required>
+                                name="place_issued" value="{{ $employees->place_issued }}" >
                         </label>
                     </div>
 
@@ -164,7 +166,7 @@
                             <p class="form-label">Date Issued</p>
                             <input id="birthday" type="date"
                                 class="form-control @error('birthday') is-invalid @enderror  form-input"
-                                name="date_issued" value="{{ $employees->birthday }}" required>
+                                name="date_issued" value="{{ $employees->birthday }}" >
                         </label>
                     </div>
                     <div class="col-6">
@@ -238,9 +240,9 @@
                 if (val == 3) { // collector
                     $('.collector-div').show()
 
-                    $("#code").prop('required', true);
-                    $("#ctcnum").prop('required', true);
-                    $("#cashbond").prop('required', true);
+                    // $("#code").prop('required', true);
+                    // $("#ctcnum").prop('required', true);
+                    // $("#cashbond").prop('required', true);
 
                     $("#code").prop('disabled', false);
                     $("#cashbond").prop('disabled', false);

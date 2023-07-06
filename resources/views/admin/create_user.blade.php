@@ -209,7 +209,7 @@
                 if (val == 4) { // area manager
                     $('.collector-div').show()
 
-                    $("#code").prop('required', true);
+                    // $("#code").prop('required', true);
                     // $("#ctcnum").prop('required', true);
                     // $("#cashbond").prop('required', true);
 

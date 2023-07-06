@@ -19,7 +19,9 @@ class ReminderController extends Controller
      */
     public function index()
     {
-        $reminders = Reminder::all();
+        $reminders = Reminder::leftJoin('users', 'reminders.created_by', '=', 'users.id')
+            ->select('reminders.*', 'users.name as created_name')
+            ->get();
         return view('reminders', compact('reminders'));
     }
 
