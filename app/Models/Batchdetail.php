@@ -11,6 +11,7 @@ class Batchdetail extends Model
     protected $table = 'batchdetails';
     protected $fillable = [
         'batch_num',
+        'ref_no',
         'product_id',
         'qty',
         'total_amount',

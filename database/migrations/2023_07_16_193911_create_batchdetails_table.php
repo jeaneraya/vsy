@@ -16,6 +16,7 @@ class CreateBatchdetailsTable extends Migration
         Schema::create('batchdetails', function (Blueprint $table) {
             $table->id();
             $table->integer('batch_num');
+            $table->string('ref_no')->nullable();
             $table->integer('product_id');
             $table->integer('qty');
             $table->double('total_amount');

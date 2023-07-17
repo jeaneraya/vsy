@@ -24,17 +24,16 @@
                   @foreach ($expenses as $key => $expense)
                   <tr>
                     <td>{{ $key + 1 }}</td>
-                    <td>{{ $expense->code }}</td>
-                    <td>{{ $expense->description }}</td>
-                    <td>{{ $expense->addon_interest }}</td>
-                    <td>{{ $expense->status }}</td>
+                    <td class="expense_id" hidden>{{$expense->id}}</td>
+                    <td class="code">{{ $expense->code }}</td>
+                    <td class="description">{{ $expense->description }}</td>
+                    <td class="addon_interest">{{ $expense->addon_interest }}</td>
                     <td class="text-center">
                         <span class="p-relative">
                         <button class="btn p-0" data-bs-toggle="dropdown" aria-expande="false"><iconify-icon icon="gg:more-r"></iconify-icon></button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item fs-6" href="#">View</a></li>
-                            <li><a class="dropdown-item fs-6" href="#">Edit</a></li>
-                            <li><a class="dropdown-item fs-6" href="#">Trash</a></li>
+                            <li><a class="dropdown-item fs-6 edit-expenses" data-bs-toggle="modal" data-bs-target="#editExpenses" data-id="'.$expense->id.'">Edit</a></li>
+                            <li><a class="dropdown-item fs-6" href="delete-expense/{{$expense->id}}" onclick="return confirm('Are you sure you want to delete this data?')">Trash</a></li>
                         </ul>
                         </span>
                     </td>
@@ -83,5 +82,53 @@
         </div>
       </div>
       <!-- END OF ADD EXPENSES MODAL -->
+
+      <!-- EDIT EXPENSES MODAL -->
+      <div class="modal fade" id="editExpenses" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Expenses</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('edit-expenses') }}" method="POST">
+                @csrf
+            <div class="modal-body">
+
+                  <div class="row">
+                    <div class="col-6 mb-3">
+                      <label for="code" class="form-label">Code:</label>
+                      <input type="hidden" id="e_expense_id" name="e_expense_id">
+                      <input type="text" class="form-control border border-secondary-subtle" id="e_code" name="e_code" required>
+                    </div>
+                    <div class="col-6 mb-3">
+                      <label for="" class="form-label">Addon Interest:</label>
+                      <input type="number" class="form-control border border-secondary-subtle" step="any" min="0" id="e_addon_interest" name="e_addon_interest">
+                    </div>
+                    <div class="col-12 mb-3">
+                      <label for="" class="form-label">Description:</label>
+                      <textarea class="form-control" name="e_description" id="e_description" cols="30" rows="3" required></textarea>
+                    </div>
+                  </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <input type="submit" value="Update Data" class="btn btn-primary">
+            </div>
+        </form>
+          </div>
+        </div>
+      </div>
+      <!-- END OF EDIT EXPENSES MODAL -->
+      
+      <script>
+        $(document).on('click', '.edit-expenses', function() {
+          var _this = $(this).parents('tr');
+          $('#e_expense_id').val(_this.find('.expense_id').text());
+          $('#e_code').val(_this.find('.code').text());
+          $('#e_addon_interest').val(_this.find('.addon_interest').text());
+          $('#e_description').val(_this.find('.description').text());
+        })
+      </script>
 
 @endsection

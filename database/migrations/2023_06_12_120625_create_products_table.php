@@ -19,7 +19,7 @@ class CreateProductsTable extends Migration
             $table->string('description');
             $table->string('unit');
             $table->double('price',8,2);
-            $table->string('status')->default('active');
+            $table->string('status')->default('1');
             $table->timestamps();
         });
     }

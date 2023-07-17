@@ -67,3 +67,17 @@ ul#product-list-ul li:hover, ul#expenses-list-ul li:hover {
 .modal-dimmed {
   opacity: 0.5; 
 }
+
+.dropdown-item:hover {
+  cursor: pointer;
+}
+
+.product-code-container {
+  position: relative;
+}
+
+.product-code-container #product-list {
+  position: absolute;
+  width: 93%;
+  z-index: 1;
+}

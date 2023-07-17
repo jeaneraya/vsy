@@ -12,6 +12,7 @@ class Expensestransaction extends Model
     protected $fillable = [
         'batch_num',
         'expenses_id',
+        'remarks',
         'amount',
     ];
 }
