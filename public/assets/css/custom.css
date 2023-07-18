@@ -98,3 +98,17 @@ ul#product-list-ul li:hover, ul#expenses-list-ul li:hover {
   background-color: #f0f2fa;
   z-index: 2;
 }
+
+.dropdown-item:hover {
+  cursor: pointer;
+}
+
+.product-code-container {
+  position: relative;
+}
+
+.product-code-container #product-list {
+  position: absolute;
+  width: 93%;
+  z-index: 1;
+}

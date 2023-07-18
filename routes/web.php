@@ -99,10 +99,19 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/payroll/schedule/add',[PayrollScheduleController::class, 'store'])->name('store_payroll_schedule');
     Route::get('/payroll/schedule',[PayrollScheduleController::class, 'index'])->name('payroll_schedule');
 
+    //Collectors
     Route::get('/collectors',[CollectorsController::class, 'index'])->name('collectors');
+    Route::get('collectors/in-active', [CollectorsController::class, 'collectorsInactive'])->name('collectors-inactive');
+    Route::get('collectors/all', [CollectorsController::class, 'collectorsAll'])->name('collectors-all');
     Route::post('add-collector', [CollectorsController::class, 'addCollector'])->name('add-collector');
+    Route::post('edit-collector', [CollectorsController::class, 'editCollector'])->name('edit-collector');
+    Route::get('delete-collector/{id}', [CollectorsController::class, 'deleteCollector'])->name('delete-collector');
     Route::get('/collectors/{id}/{name}',[CollectorsController::class, 'viewCollector'])->name('collectors.show');
+    Route::get('/collectors/{id}/{name}/in-active',[CollectorsController::class, 'viewCollectorInactive'])->name('collectors.show-inactive');
+    Route::get('/collectors/{id}/{name}/all',[CollectorsController::class, 'viewCollectorAll'])->name('collectors.show-all');
     Route::post('add-batch',[CollectorsController::class, 'saveBatch'])->name('add-batch');
+    Route::post('edit-batch', [CollectorsController::class, 'editBatch'])->name('edit-batch');
+    Route::get('delete-batch/{collector_id}/{batch_id}/{name}', [CollectorsController::class, 'deleteBatch'])->name('delete-batch');
     Route::get('/collectors/{collector_id}/{batch_id}/{name}',[CollectorsController::class, 'viewWithdrawals'])->name('collectors.withdrawals');
     Route::get('productcode-autocomplete',[CollectorsController::class, 'searchProductCode'])->name('productcode-autocomplete');
     Route::get('expenses-autocomplete',[CollectorsController::class, 'searchExpensesCode'])->name('expenses-autocomplete');
@@ -117,21 +126,38 @@ Route::middleware(['auth'])->group(function () {
     Route::get('payment-data/{id}',[CollectorsController::class, 'getEditPaymentData'])->name('payment-data');
     Route::get('edit-payment',[CollectorsController::class, 'editPayment'])->name('edit-payment');
     Route::delete('delete-payment',[CollectorsController::class, 'deletePayment'])->name('delete-payment');
-
+    Route::get('stock-delivery/{user_id}/{name}',[CollectorsController::class, 'stockDelivery'])->name('stock-delivery');
+    Route::post('add-stock-delivery',[CollectorsController::class, 'addStockDelivery'])->name('add-stock-delivery');
+    Route::post('add-stock-payment',[CollectorsController::class, 'addStockPayment'])->name('add-stock-payment');
+    Route::get('print-stock-delivery/{user_id}/{name}',[CollectorsController::class, 'printStockDelivery'])->name('print-stock-delivery');
+    Route::get('print-expenses-summary/{collector_id}/{batch_id}/{name}',[CollectorsController::class, 'viewWithdrawals'])->name('print-expenses-summary');
+    Route::get('credit-computation/{collector_id}/{batch_id}/{name}',[CollectorsController::class, 'viewWithdrawals'])->name('credit-computation');
+    Route::get('trust-receipt/{collector_id}/{batch_id}/{name}',[CollectorsController::class, 'viewWithdrawals'])->name('trust-receipt');
 
     Route::get('/ap_list',[APListController::class, 'index'])->name('ap_list');
+    Route::get('/ap_list/aplist-inactive', [APListController::class, 'aplistInactive'])->name('aplist-inactive');
+    Route::get('/ap_list/aplist-all', [APListController::class, 'aplistAll'])->name('aplist-all');
     Route::post('add-aplist',[APListController::class, 'saveAPList'])->name('add-aplist');
+    Route::post('edit-aplist',[APListController::class, 'editAPList'])->name('edit-aplist');
+    Route::get('delete-aplist/{id}',[APListController::class, 'deleteAPList'])->name('delete-aplist');
 
+    // Suppliers
     Route::get('/suppliers',[SupplierController::class, 'index'])->name('suppliers');
     Route::post('add-supplier', [SupplierController::class,'saveSupplier'])->name('add-supplier');
+    Route::post('edit-supplier', [SupplierController::class, 'editSupplier'])->name('edit-supplier');
+    Route::get('delete/{id}', [SupplierController::class, 'deleteSupplier'])->name('delete-supplier');
 
     Route::get('/products',[StockController::class, 'index'])->name('products');
+    Route::get('/products/all',[StockController::class, 'showAll'])->name('show-all');
+    Route::get('/products/inactive',[StockController::class, 'showInactive'])->name('show-inactive');
     Route::post('add-product', [StockController::class, 'saveProduct'])->name('add-product');
+    Route::post('edit-product', [StockController::class, 'editProduct'])->name('edit-product');
+    Route::get('delete-product/{id}', [StockController::class, 'deleteProduct'])->name('delete-product');
 
     Route::get('/expenses',[ExpensesController::class, 'index'])->name('expenses');
     Route::post('add-expenses',[ExpensesController::class, 'saveExpenses'])->name('add-expenses');
-
-
+    Route::post('edit-expenses', [ExpensesController::class, 'editExpenses'])->name('edit-expenses');
+    Route::get('delete-expense/{id}', [ExpensesController::class, 'deleteExpense'])->name('delete-expense');
 
 });
 

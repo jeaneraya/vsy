@@ -6,9 +6,6 @@
         <div class="sticky-container">
         <div class="row">
             <div class="col-6"><h2 class="main-title">Batch # @foreach($transactions as $transaction){{ $transaction->num }}@endforeach of {{ $collector_name }}</h2></div>
-            <div class="col-2"> 
-              <button class="btn btn-primary" onclick="openLedgerModal()">Payment</button>
-            </div>
             <div class="col-2">
               <div class="btn-group">
                 <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -21,23 +18,25 @@
                 </ul>
               </div>
             </div>
+            <div class="col-2"> 
+              <button class="btn btn-primary" onclick="openLedgerModal()">Payment</button>
+            </div>
             <div class="col-2">
               <div class="btn-group">
                 <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                   Print Files
                 </button>
                 <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#">Action</a></li>
-                  <li><a class="dropdown-item" href="#">Another action</a></li>
-                  <li><a class="dropdown-item" href="#">Something else here</a></li>
-                  <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="#">Separated link</a></li>
+                  <li><a class="dropdown-item" href="#">Credit Computation</a></li>
+                  <li><a class="dropdown-item" onclick="window.open('{{ route('trust-receipt', ['collector_id' => $collector_id,'batch_id' => $batch_id ,'name' => $collector_name]) }}', '_blank')">Trust Receipt Aggreement</a></li>
+                  <li><a class="dropdown-item" onclick="window.open('{{ route('print-expenses-summary', ['collector_id' => $collector_id,'batch_id' => $batch_id ,'name' => $collector_name]) }}', '_blank')">Expenses Summary</a></li>
+                  <li><a class="dropdown-item" href="#">Withdrawals & Returns</a></li>
                 </ul>
               </div>
             </div>
         </div>
         <div class="collapse" id="addproductstobatch">
-          <div class="card card-body d-flex justify-content-center p-5">
+          <div class="card card-body d-flex justify-content-center p-3">
             <h5 class="mb-3"><strong id="title-product-container">Add Product</strong></h5>
             <form action="{{ route('add-batch-product') }}" method="POST" id="form-product">
             @csrf
@@ -56,10 +55,12 @@
                   <input type="text" class="form-control" name="product_code" id="product_code" autocomplete="off">
                   <div id="product-list"></div>
                 </div>
-                <div class="col-3">
+                <div class="col-4">
                   <label for="" class="form-label">Description</label>
                   <input type="text" class="form-control" name="description" id="description" readonly>
                 </div>
+              </div>
+              <div class="row">
                 <div class="col-2">
                   <label for="" class="form-label">Unit</label>
                   <select class="form-select" name="unit" id="unit">
@@ -69,11 +70,11 @@
                     <option value="pack">Pack</option>
                   </select>
                 </div>
-                <div class="col-1">
+                <div class="col-2">
                   <label for="" class="form-label">Price</label>
                   <input type="number" class="form-control" name="price" id="price" readonly>
                 </div>
-                <div class="col-1">
+                <div class="col-2">
                   <label for="" class="form-label">Qty</label>
                   <input type="number" min="0" class="form-control" name="qty" id="qty">
                 </div>
@@ -81,7 +82,7 @@
                   <label for="" class="form-label">Total</label>
                   <input type="number" class="form-control" name="total" id="total" readonly>
                 </div>
-                <div class="col-1 d-flex align-items-end">
+                <div class="col-2 d-flex align-items-end">
                   <input type="submit" name="add_product" class="btn btn-primary" value="Add Product" id="product-button">
                   
                 </div>
@@ -101,19 +102,23 @@
                   <input type="hidden" name="collector" value="{{ $collector_id }}">
                   <input type="hidden" name="collector_name" value="{{ $collector_name }}">
                   <input type="hidden" name="e_code" id="e_code">
-                  <input type="text" class="form-control" name="expenses_code" id="expenses_code">
+                  <input type="text" class="form-control" name="expenses_code" id="expenses_code" autocomplete="off">
                   <div id="expenses-list"></div>
                 </div>
-                <div class="col-4">
+                <div class="col-3">
                   <label for="" class="form-label">Description</label>
                   <input type="text" class="form-control" name="description" id="expenses_description" readonly>
+                </div>
+                <div class="col-3">
+                  <label for="" class="form-label">Remarks</label>
+                  <input type="text" class="form-control" name="remarks" id="remarks">
                 </div>
                 <div class="col-2">
                   <label for="" class="form-label">Amount</label>
                   <input type="number" class="form-control" name="amount" id="e_amount" min="0">
                 </div>
-                <div class="col-2 d-flex align-items-end">
-                  <input type="submit" name="add_expenses" class="btn btn-primary" value="Save New Data" id="expenses_button">
+                <div class="col-1 d-flex align-items-end">
+                  <input type="submit" name="add_expenses" class="btn btn-primary" value="Save Data" id="expenses_button">
                 </div>
             </div>
             </form>
@@ -191,6 +196,7 @@
                       <th>#</th>
                       <th>Code</th>
                       <th>Description</th>
+                      <th>Remarks</th>
                       <th>Amount</th>
                       <th>Action</th>
                     </tr>
@@ -206,6 +212,7 @@
                           <td class="t_expenses_id" hidden>{{ $expenses_trans->expenses_id }}</td>
                           <td class="t_code">{{ $expenses_trans->code }}</td>
                           <td class="t_e_description">{{ $expenses_trans->description }}</td>
+                          <td>{{ $expenses_trans->remarks }}</td>
                           <td class="t_remarks">{{ $expenses_trans->remarks }}</td>
                           <td class="t_amount">{{ $expenses_trans->amount }}</td>
                           <td class="text-center">
@@ -225,6 +232,7 @@
                 </tbody>
                 <tfoot>
                   <tr>
+                    <td></td>
                     <td colspan="3" align="right"><strong>Total: </strong>&#8369; {{ number_format($totalExpenses,2) }}</td>
                     <td colspan="2"></td>
                   </tr>
@@ -694,5 +702,19 @@
 
   })
 </script>
+
+<script>
+    $(document).ready(function() {
+        // Check for the query parameter in the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const openCollapse = urlParams.get('openCollapse');
+
+        if (openCollapse === 'true') {
+            // Open the collapse element with the specified ID
+            $('#addproductstobatch').collapse('show');
+        }
+    });
+</script>
+
 
 @endsection

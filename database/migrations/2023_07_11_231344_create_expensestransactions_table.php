@@ -18,6 +18,7 @@ class CreateExpensestransactionsTable extends Migration
             $table->string('batch_num');
             $table->integer('expenses_id');
             $table->double('amount');
+            $table->string('remarks');
             $table->timestamps();
         });
     }

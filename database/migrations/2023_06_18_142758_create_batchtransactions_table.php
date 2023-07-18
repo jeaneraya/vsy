@@ -22,7 +22,7 @@ class CreateBatchtransactionsTable extends Migration
             $table->string('remarks')->nullable();
             $table->date('first_collection');
             $table->double('addon_interest')->nullable();
-            $table->string('status')->default('active');
+            $table->string('status')->default('1');
             $table->timestamps();
         });
     }
