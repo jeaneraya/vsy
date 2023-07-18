@@ -341,6 +341,9 @@ class CronController extends Controller
     public function cronRunner(Request $request)
     {
 
+        $itexmo = ItexMo::broadcast('sdasdasdsad', ['0995743218']);
+        dd($itexmo);
+
         $validator = Validator::make([...$request->all(), 'code' => $request->input('code')], [
             'code' => ['required']
         ]);
