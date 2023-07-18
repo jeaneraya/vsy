@@ -15,9 +15,10 @@ class DashboardController extends Controller
 
     public function indexxx(Request $request){
         $results['payments'] = DB::table('payments')
-        ->whereRaw('payments.id in (select max(id) from payments group by (collector_id)) ') //AND status="active"
+        ->whereRaw('payments.id in (select min(id) from payments where payment_status = "unpaid" group by (collector_id))')
         ->leftJoin('users', 'users.id' , '=', 'payments.collector_id')
-        ->get();
+        ->get()
+        ->sortBy('payment_sched');
 
         $today = Carbon::now();
         $results['nextDueCarbon'] = $today->format('m') >= 15 ? Carbon::now()->endOfMonth() : Carbon::now()->setDay(15);

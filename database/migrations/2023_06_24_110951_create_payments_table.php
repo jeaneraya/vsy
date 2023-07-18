@@ -18,7 +18,7 @@ class CreatePaymentsTable extends Migration
             $table->integer('batch_id');
             $table->integer('collector_id');
             $table->date('payment_sched')->nullable();
-            $table->date('payment_date');
+            $table->date('payment_date')->nullable();
             $table->string('payment_status')->comment('paid, unpaid')->default('unpaid');
             $table->integer('days');
             $table->double('amount')->nullable();

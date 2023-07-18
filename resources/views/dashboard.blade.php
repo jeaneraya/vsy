@@ -64,11 +64,9 @@
                             <tr class="users-table-info">
                                 <th>ID</th>
                                 <th>Collector's Name</th>
-                                <th>Last Payment Date</th>
                                 <th>Due Date</th>
                                 <th>Lapse Days</th>
                                 <th>Balance</th>
-
                             </tr>
                         </thead>
                         <tbody>
@@ -79,12 +77,11 @@
                             @foreach ($results['payments'] as $key => $value)
                                 @php
                                     $counter++;
-                                    $lapseDays = Carbon\Carbon::createFromFormat('Y-m-d', $value->payment_date)->diffInDays($today);
+                                    $lapseDays = Carbon\Carbon::createFromFormat('Y-m-d', $value->payment_sched)->diffInDays($today);
                                 @endphp
                                 <tr>
                                     <td>{{ $counter }}</td>
                                     <td>{{ $value->name }}</td>
-                                    <td>{{ $value->payment_date  }}</td>
                                     <td>{{ $results['nextDueDate'] }}</td>
                                     <td class="with-lapse">{{ $lapseDays }} days</td>
                                     <td>₱ {{ number_format((float) $value->balance, 2, '.', '') }}</td>
