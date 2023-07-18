@@ -79,4 +79,58 @@
       </div>
       <!-- END OF ADD AP_LIST MODAL -->
 
+      <!-- EDIT AP_LIST MODAL -->
+      <div class="modal fade" id="editAPList" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Edit AP List</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('edit-aplist') }}" method="POST">
+                @csrf
+            <div class="modal-body">
+
+                  <div class="row">
+                    <div class="col-7 mb-3">
+                      <label for="name" class="form-label">Name:</label>
+                      <input type="hidden" id="e_id" name="e_id">
+                      <input type="text" class="form-control border border-secondary-subtle" id="e_name" name="e_name" required>
+                    </div>
+                    <div class="col-5 mb-3">
+                      <label for="name" class="form-label">Status:</label>
+                      <select name="e_status" id="e_status" class="form-select">
+                        <option value="1">Active</option>
+                        <option value="0">In-active</option>
+                      </select>
+                    </div>
+                    <div class="col-12 mb-3">
+                      <label for="" class="form-label">Remarks:</label>
+                      <textarea class="form-control" name="e_remarks" id="e_remarks" cols="30" rows="3" required></textarea>
+                    </div>
+                  </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <input type="submit" value="Update AP List" class="btn btn-primary">
+            </div>
+        </form>
+          </div>
+        </div>
+      </div>
+      <!-- END OF EDIT AP_LIST MODAL -->
+                    
+
+      <script>
+        $(document).on('click','.edit-aplist', function() {
+          var _this = $(this).parents('tr');
+          $('#e_id').val(_this.find('.ap_id').text());
+          $('#e_name').val(_this.find('.ap_name').text());
+          $('#e_remarks').val(_this.find('.ap_remarks').text());
+          var status = parseInt(_this.find('.ap_status').text());
+        $('#e_status').val(status);
+        })
+      </script>
+      
+
 @endsection

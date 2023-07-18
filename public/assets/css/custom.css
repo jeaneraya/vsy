@@ -67,3 +67,34 @@ ul#product-list-ul li:hover, ul#expenses-list-ul li:hover {
 .modal-dimmed {
   opacity: 0.5; 
 }
+
+.dropdown-item:hover {
+  cursor: pointer;
+}
+
+.product-code-container {
+  position: relative;
+}
+
+.product-code-container #product-list {
+  position: absolute;
+  width: 93%;
+  z-index: 1;
+}
+
+.view-batch .users-table.table-wrapper.expenses,  .view-batch .users-table.table-wrapper.products{
+  min-height: 200px;
+ }
+
+ nav.main-nav--bg {
+  position: sticky;
+  top: 0;
+  height: 12vh;
+}
+
+.container-fluid.view-batch, .stock-delivery-header {
+  position: sticky;
+  top: 15vh;
+  background-color: #f0f2fa;
+  z-index: 2;
+}

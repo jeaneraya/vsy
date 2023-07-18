@@ -108,7 +108,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('expenses-autocomplete',[CollectorsController::class, 'searchExpensesCode'])->name('expenses-autocomplete');
     Route::get('/get-product',[CollectorsController::class, 'getProductPrice'])->name('get-product');
     Route::post('add-batch-product',[CollectorsController::class, 'saveBatchProduct'])->name('add-batch-product');
+    Route::post('edit-batch-product',[CollectorsController::class, 'updateBatchProduct'])->name('edit-batch-product');
+    Route::get('delete-batch-product/{collector_id}/{batch_id}/{name}/{bd_id}',[CollectorsController::class, 'deleteBatchProduct'])->name('delete-batch-product');
     Route::post('add-batch-expenses',[CollectorsController::class, 'saveBatchExpenses'])->name('add-batch-expenses');
+    Route::post('edit-batch-expenses',[CollectorsController::class, 'updateBatchExpenses'])->name('edit-batch-expenses');
+    Route::get('delete-batch-expenses/{collector_id}/{batch_id}/{name}/{et_id}',[CollectorsController::class, 'deleteBatchExpenses'])->name('delete-batch-expenses');
     Route::get('add-payment',[CollectorsController::class, 'addPayment'])->name('add-payment');
     Route::get('payment-data/{id}',[CollectorsController::class, 'getEditPaymentData'])->name('payment-data');
     Route::get('edit-payment',[CollectorsController::class, 'editPayment'])->name('edit-payment');

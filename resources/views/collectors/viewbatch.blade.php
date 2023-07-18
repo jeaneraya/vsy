@@ -2,7 +2,8 @@
 
 @section ("contents")
 
-<div class="container view-batch">
+<div class="container-fluid view-batch">
+        <div class="sticky-container">
         <div class="row">
             <div class="col-6"><h2 class="main-title">Batch # @foreach($transactions as $transaction){{ $transaction->num }}@endforeach of {{ $collector_name }}</h2></div>
             <div class="col-2"> 
@@ -37,11 +38,16 @@
         </div>
         <div class="collapse" id="addproductstobatch">
           <div class="card card-body d-flex justify-content-center p-5">
-            <h5 class="mb-3"><strong>Add Product</strong></h5>
-            <form action="{{ route('add-batch-product') }}" method="POST">
+            <h5 class="mb-3"><strong id="title-product-container">Add Product</strong></h5>
+            <form action="{{ route('add-batch-product') }}" method="POST" id="form-product">
             @csrf
               <div class="row">
-                <div class="col-2">
+                <div class="col-3">
+                  <label for="" class="form-label">Ref. Number</label>
+                  <input type="text" class="form-control" name="ref_no" id="ref_no" autocomplete="off">
+                  <input type="hidden" class="form-control" name="bdid" id="bdid" autocomplete="off">
+                </div>
+                <div class="col-3 product-code-container">
                   <label for="" class="form-label">Product Code</label>
                   <input type="hidden" name="batch" value="{{ $batch_id }}">
                   <input type="hidden" name="collector" value="{{ $collector_id }}">
@@ -76,7 +82,8 @@
                   <input type="number" class="form-control" name="total" id="total" readonly>
                 </div>
                 <div class="col-1 d-flex align-items-end">
-                  <input type="submit" name="add_product" class="btn btn-primary" value="Add Product">
+                  <input type="submit" name="add_product" class="btn btn-primary" value="Add Product" id="product-button">
+                  
                 </div>
             </div>
             </form>
@@ -84,8 +91,8 @@
         </div>
         <div class="collapse" id="addexpensestobatch">
           <div class="card card-body d-flex justify-content-center p-5">
-            <h5 class="mb-3"><strong>Add Expenses</strong></h5>
-            <form action="{{ route('add-batch-expenses') }}" method="POST">
+            <h5 class="mb-3"><strong id="expenses-title-container">Add Expenses</strong></h5>
+            <form action="{{ route('add-batch-expenses') }}" method="POST" id="expenses_form">
             @csrf
               <div class="row">
                 <div class="col-2">
@@ -93,7 +100,7 @@
                   <input type="hidden" name="batch" value="{{ $batch_id }}">
                   <input type="hidden" name="collector" value="{{ $collector_id }}">
                   <input type="hidden" name="collector_name" value="{{ $collector_name }}">
-                  <input type="hidden" name="code" id="code">
+                  <input type="hidden" name="e_code" id="e_code">
                   <input type="text" class="form-control" name="expenses_code" id="expenses_code">
                   <div id="expenses-list"></div>
                 </div>
@@ -103,21 +110,24 @@
                 </div>
                 <div class="col-2">
                   <label for="" class="form-label">Amount</label>
-                  <input type="number" class="form-control" name="amount" min="0">
+                  <input type="number" class="form-control" name="amount" id="e_amount" min="0">
                 </div>
                 <div class="col-2 d-flex align-items-end">
-                  <input type="submit" name="add_expenses" class="btn btn-primary" value="Save New Data">
+                  <input type="submit" name="add_expenses" class="btn btn-primary" value="Save New Data" id="expenses_button">
                 </div>
             </div>
             </form>
             </div>
         </div>
         <hr>
+        </div>
+    </div>
+        <div class="container view-batch">
         <div class="row">
           <div class="col-lg-12">
             <h5><strong>Products</strong></h5>
             </div>
-            <div class="users-table table-wrapper">
+            <div class="users-table table-wrapper products">
               <table class="posts-table">
                 <thead style="padding-left:1em">
                   <tr class="users-table-info">
@@ -138,18 +148,20 @@
                 @foreach($batch_withdrawals as $key => $withdrawal)
                     <tr>
                         <td>{{ $key + 1 }}</td>
-                        <td>{{ $withdrawal->product_code }}</td>
-                        <td>{{ $withdrawal->description }}</td>
-                        <td>{{ $withdrawal->qty }}</td>
-                        <td>{{ $withdrawal->unit }}</td>
-                        <td>{{ $withdrawal->price }}</td>
-                        <td>{{ $withdrawal->total_amount }}</td>
+                        <td class="t_bd_id" hidden> {{ $withdrawal->batchdetails_ID }}</td>
+                        <td class="t_ref_no" hidden>{{ $withdrawal->ref_no }}</td>
+                        <td class="t_product_code">{{ $withdrawal->product_code }}</td>
+                        <td class="t_description">{{ $withdrawal->description }}</td>
+                        <td class="t_qty">{{ $withdrawal->qty }}</td>
+                        <td class="t_unit">{{ $withdrawal->unit }}</td>
+                        <td class="t_price">{{ $withdrawal->price }}</td>
+                        <td class="t_total_amount">{{ $withdrawal->total_amount }}</td>
                         <td class="text-center">
                           <span class="p-relative">
                               <button class="btn p-0" data-bs-toggle="dropdown" aria-expanded="false"><iconify-icon icon="gg:more-r"></iconify-icon></button>
                               <ul class="dropdown-menu">
-                                  <li><a class="dropdown-item fs-6" href="#">Edit</a></li>
-                                  <li><a class="dropdown-item fs-6" href="#">Delete</a></li>
+                                  <li><a class="dropdown-item fs-6 edit-batch-product">Edit</a></li>
+                                  <li><a class="dropdown-item fs-6" href="{{ route('delete-batch-product', ['collector_id' => $collector_id, 'batch_id' => $batch_id, 'name' => $collector_name, 'bd_id' => $withdrawal->batchdetails_ID] ) }}" onclick="return confirm('Are you sure you want to delete this item?')">Delete</a></li>
                               </ul>
                           </span>
                       </td>
@@ -172,7 +184,7 @@
             <div class="col-lg-12">
               <h5><strong>Expenses</strong></h5>
               </div>
-              <div class="users-table table-wrapper">
+              <div class="users-table table-wrapper expenses">
                 <table class="posts-table">
                   <thead style="padding-left:1em">
                     <tr class="users-table-info">
@@ -190,15 +202,18 @@
                   @foreach($expenses_transactions as $key => $expenses_trans)
                       <tr>
                           <td>{{ $key + 1 }}</td>
-                          <td>{{ $expenses_trans->code }}</td>
-                          <td>{{ $expenses_trans->description }}</td>
-                          <td>{{ $expenses_trans->amount }}</td>
+                          <td class="t_et_id" hidden>{{ $expenses_trans->et_ID }}</td>
+                          <td class="t_expenses_id" hidden>{{ $expenses_trans->expenses_id }}</td>
+                          <td class="t_code">{{ $expenses_trans->code }}</td>
+                          <td class="t_e_description">{{ $expenses_trans->description }}</td>
+                          <td class="t_remarks">{{ $expenses_trans->remarks }}</td>
+                          <td class="t_amount">{{ $expenses_trans->amount }}</td>
                           <td class="text-center">
                             <span class="p-relative">
                                 <button class="btn p-0" data-bs-toggle="dropdown" aria-expanded="false"><iconify-icon icon="gg:more-r"></iconify-icon></button>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item fs-6" href="#">Edit</a></li>
-                                    <li><a class="dropdown-item fs-6" href="#">Delete</a></li>
+                                    <li><a class="dropdown-item fs-6 edit-batch-expenses">Edit</a></li>
+                                    <li><a class="dropdown-item fs-6" href="{{ route('delete-batch-expenses', ['collector_id' => $collector_id, 'batch_id' => $batch_id, 'name' => $collector_name, 'et_id' => $expenses_trans->et_ID] ) }}" onclick="return confirm('Are you sure you want to delete this item?')">Delete</a></li>
                                 </ul>
                             </span>
                         </td>
@@ -413,6 +428,13 @@
       <!-- END OF EDIT PAYMENT MODAL -->
 
       <script>
+        document.addEventListener("DOMContentLoaded", function() {
+          // Scroll to the bottom of the page
+          window.scrollTo(0, document.body.scrollHeight);
+        });
+      </script>
+
+      <script>
         function openLedgerModal() {
           $('#payment_ledger').modal('show');
         }
@@ -553,7 +575,7 @@
         var selectedExpensetId = $(this).data('expensesid');
         var selectedExpenseCode = $(this).data('expensescode');
 
-        $('#code').val(selectedExpensetId);
+        $('#e_code').val(selectedExpensetId);
         $('#expenses_code').val(selectedExpenseCode);
         $('#expenses_description').val(selectedExpense);
         $('#expenses-list').fadeOut();
@@ -607,6 +629,70 @@
     var total = isNaN(qty) || isNaN(price) ? 0 : qty * price;
     document.getElementById("total").value = total;
   }
+</script>
+
+<script>
+    $(document).ready(function() {
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        const openCollapseProducts = urlParams.get('openCollapseProducts');
+
+        if (openCollapseProducts === 'true') {
+            $('#addproductstobatch').collapse('show');
+        } 
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        const openCollapseExpenses = urlParams.get('openCollapseExpenses');
+
+        if (openCollapseExpenses === 'true') {
+            $('#addexpensestobatch').collapse('show');
+        } 
+    });
+</script>
+
+<script>
+  $(document).on('click', '.edit-batch-product', function() {
+    $('#form-product').attr('action', "{{ route('edit-batch-product') }}");
+    $('#addproductstobatch').collapse('show');
+
+    var _this = $(this).parents('tr');
+    $('#bdid').val(_this.find('.t_bd_id').text());
+    $('#ref_no').val(_this.find('.t_ref_no').text());
+    $('#product_code').val(_this.find('.t_product_code').text());
+    $('#description').val(_this.find('.t_description').text());
+    $('#unit').val(_this.find('.t_unit').text());
+    $('#price').val(_this.find('.t_price').text());
+    $('#qty').val(_this.find('.t_qty').text());
+    $('#total').val(_this.find('.t_total_amount').text());
+
+    $('#title-product-container').text('Edit Product');
+    $('#product-button').val('Update Data');
+  })
+</script>
+
+<script>
+  $(document).on('click','.edit-batch-expenses', function() {
+    $('#expenses_form').attr('action', "{{ route('edit-batch-expenses') }}");
+    $('#addexpensestobatch').collapse('show');
+
+    var _this = $(this).parents('tr');
+    $('#et_id').val(_this.find('.t_et_id').text());
+    $('#e_code').val(_this.find('.t_expenses_id').text());
+    $('#expenses_code').val(_this.find('.t_code').text());
+    $('#expenses_description').val(_this.find('.t_e_description').text());
+    $('#remarks').val(_this.find('.t_remarks').text());
+    $('#e_amount').val(_this.find('.t_amount').text());
+
+    $('#expenses_button').val('Update Data');
+    $('#expenses-title-container').text('Edit Expenses');
+
+
+  })
 </script>
 
 @endsection

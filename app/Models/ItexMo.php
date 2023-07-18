@@ -39,7 +39,7 @@ class ItexMo extends Model
                 'Password' => $password,
                 'ApiCode' => $apiCode,
                 'Contents' => $contents,
-                'SenderId' => "VSY Collections"
+                'SenderId' => "VSY"
             ];
 
             // DO NOT SEND IF IN TESTING MODE
@@ -100,6 +100,7 @@ class ItexMo extends Model
                 // 'SenderId' => "VSY"
                 'SenderId' => "VSY Ent"
                 // 'SenderId' => "VSY Apt"
+                // 'SenderId' => "VSY"
             ];
 
             // DO NOT SEND IF IN TESTING MODE

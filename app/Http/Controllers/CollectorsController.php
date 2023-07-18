@@ -106,7 +106,7 @@ class CollectorsController extends Controller
         $expenses_transactions = DB::table('batchtransactions')
             ->join('expensestransactions', 'batchtransactions.id', '=', 'expensestransactions.batch_num')
             ->join('expenses', 'expensestransactions.expenses_id', '=', 'expenses.id')
-            ->select('batchtransactions.*', 'expensestransactions.*', 'expenses.*')
+            ->select('batchtransactions.*', 'expensestransactions.*','expensestransactions.ID as et_ID', 'expenses.*')
             ->where('batchtransactions.id', $batch_id)
             ->get();
 
@@ -201,20 +201,69 @@ class CollectorsController extends Controller
         $collector_id = $request->input('collector');
         $batch_id = $request->input('batch'); 
         $name = $request->input('collector_name'); 
-        return redirect(route('collectors.withdrawals', ['collector_id'=>$collector_id,'batch_id' => $batch_id, 'name' => $name]))->with('message', 'New Product Added Successfully!');
+        return redirect(route('collectors.withdrawals', ['collector_id'=>$collector_id,'batch_id' => $batch_id, 'name' => $name]) . '?openCollapseProducts=true');
     }  
     
+    public function updateBatchProduct(Request $request) {
+        $update_batch_details = [
+            'ref_no'        =>  $request->ref_no,
+            'product_id'    =>  $request->product_id,
+            'qty'           =>  $request->qty,
+            'total_amount'  =>  $request->total
+        ];
+
+        // dd($update_batch_details);
+
+        DB::table('batchdetails')->where('id', $request->bdid)->update($update_batch_details);
+        $collector_id = $request->collector;
+        $batch_id = $request->batch;
+        $name = $request->collector_name;
+
+        return redirect(route('collectors.withdrawals', ['collector_id'=>$collector_id,'batch_id' => $batch_id, 'name' => $name]));
+
+    }
+
+    public function deleteBatchProduct($collector_id,$batch_id,$name,$bd_id) {
+        DB::table('batchdetails')->where('id', $bd_id)->delete();
+
+        return redirect(route('collectors.withdrawals', ['collector_id'=>$collector_id,'batch_id' => $batch_id, 'name' => $name]));
+        
+    }
+
     public function saveBatchExpenses(Request $request) {
         $expensestransactions = new Expensestransaction();
         $expensestransactions->batch_num = $request->input('batch');
-        $expensestransactions->expenses_id = $request->input('code');
+        $expensestransactions->expenses_id = $request->input('e_code');
         $expensestransactions->amount = $request->input('amount');
         $expensestransactions->save();
 
         $collector_id = $request->input('collector');
         $batch_id = $request->input('batch'); 
         $name = $request->input('collector_name'); 
-        return redirect(route('collectors.withdrawals', ['collector_id'=>$collector_id,'batch_id' => $batch_id, 'name' => $name]))->with('message', 'New Product Added Successfully!');
+        return redirect(route('collectors.withdrawals', ['collector_id'=>$collector_id,'batch_id' => $batch_id, 'name' => $name]) . '?openCollapseExpenses=true');
+    }
+
+    public function updateBatchExpenses(Request $request) {
+        $update_batch_expenses = [
+            'expenses_id'   =>  $request->e_code,
+            'amount'        =>  $request->amount,
+            'remarks'       =>  $request->remarks
+        ];
+
+        DB::table('expensestransactions')->where('id', $request->et_id)->update($update_batch_expenses);
+
+        $collector_id = $request->collector;
+        $batch_id = $request->batch;
+        $name = $request->collector_name;
+
+        return redirect(route('collectors.withdrawals', ['collector_id'=>$collector_id,'batch_id' => $batch_id, 'name' => $name])); 
+    }
+
+    public function deleteBatchExpenses($collector_id,$batch_id,$name,$et_id) {
+        DB::table('expensestransactions')->where('id',$et_id)->delete();
+
+        return redirect(route('collectors.withdrawals', ['collector_id'=>$collector_id,'batch_id' => $batch_id, 'name' => $name]));
+
     }
 
     public function addPayment(Request $request) {
