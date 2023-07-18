@@ -78,7 +78,7 @@ class ItexMo extends Model
         //     }
 
         try {
-            $ch = curl_init();
+
 
             $email = env('ITEXMO_EMAIL');
             $password = env('ITEXMO_PASSWORD');
@@ -101,11 +101,13 @@ class ItexMo extends Model
                     'Recipients' => $recipients
                 ]);
             }
-
+            $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, "https://api.itexmo.com/api/broadcast");
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($itexmo));
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 
             $response = curl_exec($ch);
             curl_close($ch);
