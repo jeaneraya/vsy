@@ -23,7 +23,7 @@ class RemindersSeeder extends Seeder
             'frequency' => '1',
             'status' => '0',
             'created_by' => '1',
-            'message' => 'This is message 1'
+            'message' => 'This is test message from seeder 1'
         ]);
 
         Reminder::create([
@@ -34,7 +34,7 @@ class RemindersSeeder extends Seeder
             'frequency' => '1',
             'status' => '0',
             'created_by' => '1',
-            'message' => 'This is message 2'
+            'message' => 'This is test message from seeder 2'
         ]);
 
 
@@ -46,7 +46,7 @@ class RemindersSeeder extends Seeder
             'frequency' => '1',
             'created_by' => '1',
             'status' => '0',
-            'message' => 'This is message 3'
+            'message' => 'This is test message from seeder 3'
         ]);
 
 
@@ -58,7 +58,7 @@ class RemindersSeeder extends Seeder
             'frequency' => '2',
             'status' => '0',
             'created_by' => '1',
-            'message' => 'This is message 4'
+            'message' => 'This is test message from seeder 4'
         ]);
 
         Reminder::create([
@@ -69,7 +69,7 @@ class RemindersSeeder extends Seeder
             'frequency' => '3',
             'status' => '0',
             'created_by' => '1',
-            'message' => 'This is message 5'
+            'message' => 'This is test message from seeder 5'
         ]);
 
         Reminder::create([
@@ -80,7 +80,7 @@ class RemindersSeeder extends Seeder
             'frequency' => '4',
             'status' => '0',
             'created_by' => '1',
-            'message' => 'This is message 6'
+            'message' => 'This is test message from seeder 6'
         ]);
 
 
@@ -92,7 +92,7 @@ class RemindersSeeder extends Seeder
             'frequency' => '5',
             'status' => '0',
             'created_by' => '1',
-            'message' => 'This is message 7'
+            'message' => 'This is test message from seeder 7'
         ]);
 
     }

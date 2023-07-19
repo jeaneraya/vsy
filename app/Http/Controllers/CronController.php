@@ -39,7 +39,7 @@ class CronController extends Controller
             foreach ($results as $result) {
 
                 // insert template
-                $template = "Happy birthday $result->id!";
+                $template = "Mula sa iyong VSY family, isang Masayang Kaarawan sa iyo, $result->name! Sana'y mapuno ng pagmamahal at tuwa ang iyong espesyal na araw";
                 // send message
                 $logger = RemindersLogger::create([
                     'type' => 7, // birthday
@@ -294,7 +294,7 @@ class CronController extends Controller
     private function getCollectionCronMessage(DateTime $date)
     {
         $date = $date->format('F d, Y (l)');
-        return "Reminding that your scheduled payment date is on $date. Please pay your obligations to avoid late payment charges. Thank you.";
+        return "Reminding that your scheduled payment date is on $date. To avoid late payment charges, please pay on the said date. Thank you.";
     }
 
     public function cronScheduler(Request $request)
@@ -356,6 +356,21 @@ class CronController extends Controller
                 ->select('reminders_loggers.*', 'users.contact as mobile')
                 ->get();
             $now = Carbon::now();
+
+            $table = "<table class='table'>
+            <thead class='thead-light'>
+                <tr class='table-secondary'>
+                    <th scope='row'>ID</th>
+                    <th>Description</th>
+                    <th>Sent to</th>
+                    <th>Message</th>
+                    <th>Schedule</th>
+                    <th>Send By</th>
+                </tr>
+            </thead>
+
+            <tbody>";
+
             foreach ($cronForRunning as $key => $value) {
                 if (is_null($value->reminder_id) == false) {
                     $reminder = Reminder::find($value->reminder_id);
@@ -365,26 +380,8 @@ class CronController extends Controller
                 }
 
                 $itexmo = ItexMo::broadcast($value->message, [$value->mobile]);
-                echo "$itexmo <br>";
-            }
+                // echo "$itexmo <br>";
 
-            $table = "<table class='table'>
-                        <thead class='thead-light'>
-                            <tr class='table-secondary'>
-                                <th scope='row'>ID</th>
-                                <th>Description</th>
-                                <th>Sent to</th>
-                                <th>Message</th>
-                                <th>Schedule</th>
-                                <th>Send By</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>";
-
-            foreach ($cronForRunning as $key => $value) {
-                // echo '<br>';
-                // echo "$value->id | $value->description | $value->sent_to | $value->message | $value->schedule";
                 $value->sent_datetime = Carbon::now()->format('Y-m-d H:i:s');
                 $value->save();
 
@@ -397,8 +394,6 @@ class CronController extends Controller
                 <th>$value->send_via</th>
             </tr>";
             }
-
-
             $table .= `  </tbody></table>`;
 
             echo $table;

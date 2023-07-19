@@ -31,7 +31,7 @@ class UserTableSeeder extends Seeder
             'email' => 'superadmin@test.com',
             'password' => Hash::make('Testing123'),
             'birthday' => Carbon::now()->format('Y-m-d'),
-            'contact' => 12345678912,
+            'contact' => '09762111571',
             'address' => 'test address',
             'role' => 1,
             'approval_status' => '1'
@@ -42,7 +42,7 @@ class UserTableSeeder extends Seeder
             'email' => 'admin@test.com',
             'password' => Hash::make('Testing123'),
             'birthday' => Carbon::now()->format('Y-m-d'),
-            'contact' => 12345678912,
+            'contact' => '09762111571',
             'address' => 'test address',
             'role' => 2,
             'approval_status' => '1'
@@ -53,7 +53,7 @@ class UserTableSeeder extends Seeder
             'email' => 'collector@test.com',
             'password' => Hash::make('Testing123'),
             'birthday' => '2023-01-01',
-            'contact' => 12345678912,
+            'contact' => '09762111571',
             'address' => 'test address',
             'role' => 3,
             'approval_status' => '0'
@@ -64,7 +64,7 @@ class UserTableSeeder extends Seeder
             'email' => 'areaManager@test.com',
             'password' => Hash::make('Testing123'),
             'birthday' => '2023-01-01',
-            'contact' => 12345678912,
+            'contact' => '09762111571',
             'address' => 'test address',
             'role' => 4,
             'approval_status' => '0'
