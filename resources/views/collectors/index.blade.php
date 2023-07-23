@@ -36,10 +36,10 @@
           ];
         @endphp
 
-        <div class="row">
+        <div class="row container">
           <div class="col-lg-12">
             <div class="users-table table-wrapper">
-              <table class="posts-table">
+              <table class="table table-striped posts-table" id="collectors-table">
                 <thead style="padding-left:1em">
                   <tr class="users-table-info">
                     <th>#</th>
@@ -54,19 +54,13 @@
                 </thead>
                 <tbody>
                   @foreach($collectors as $key => $collector)
-                      <tr>
+                      <tr class="align-middle">
                           <td>{{ $key + 1 }}</td>
-                          <td class="collector_id" hidden>{{ $collector->id }}</td>
-                          <td class="collector_role" hidden>{{ $collector->role }}</td>
-                          <td class="collector_bday" hidden>{{ $collector->birthday }}</td>
                           <td class="collector_code">{{ $collector->code }}</td>
                           <td>{{ ($collector->role == 4) ? "Area Manager" : "Collector" }}</td>
                           <td class="collector_name">{{ $collector->name }}</td>
                           <td class="collector_contact">{{ $collector->contact }}</td>
                           <td class="collector_address">{{ $collector->address }}</td>
-                          <td class="collector_status" hidden>{{ $collector->status }}</td>
-                          <td class="collector_cashbond" hidden>{{ $collector->cashbond }}</td>
-                          <td class="collector_ctcno" hidden>{{ $collector->ctc_no }}</td>
                           <td>{!! $statusBadgeLib[$collector->status] !!}</td>
                           <td class="text-center">
                               <span class="p-relative">
@@ -74,7 +68,7 @@
                                   <ul class="dropdown-menu">
                                       <li><a class="dropdown-item fs-6" href="{{ route('collectors.show', ['id' => $collector->user_id, 'name' => $collector->name]) }}">View Batch</a></li>
                                       <li>{!! ($collector->role == 4) ? '<a class="dropdown-item fs-6" href="' . route('stock-delivery', ['user_id' => $collector->user_id, 'name' => $collector->name]) . '">View SD & PS</a>' : '' !!}</li>
-                                      <li><a class="dropdown-item fs-6 edit-collector" data-bs-toggle="modal" data-bs-target="#editcollector" data-id="'.$collector->id.'">Edit</a></li>
+                                      <li><a class="dropdown-item fs-6 edit-collector" data-bs-toggle="modal" data-bs-target="#editcollector" data-id="{{ $collector->id }}" data-role="{{ $collector->role }}" data-birthday="{{ $collector->birthday }}" data-status="{{ $collector->status }}" data-cashbond="{{ $collector->cashbond }}" data-ctc-no="{{ $collector->ctc_no }}">Edit</a></li>
                                       <li><a class="dropdown-item fs-6" href="{{ route('delete-collector', ['id' => $collector->id]) }}" onclick ="return confirm('Are you sure you want to delete this collector?')">Trash</a></li>
                                   </ul>
                               </span>
@@ -83,6 +77,11 @@
                   @endforeach
               </tbody>
               </table>
+              <script>
+                $(document).ready(function() {
+                  $('#collectors-table').DataTable();
+                });
+              </script>
             </div>
           </div>
         </div>
@@ -221,17 +220,23 @@
       <script>
         $(document).on('click','.edit-collector', function() {
           var _this = $(this).parents('tr');
-          $('#e_id').val(_this.find('.collector_id').text());
+          var collector_id = $(this).data('id');
+          var role = $(this).data('role');
+          var birthday = $(this).data('birthday');
+          var status = $(this).data('status');
+          var cashbond = $(this).data('cashbond');
+          var ctc_no = $(this).data('ctc-no');
+
+          $('#e_id').val(collector_id);
           $('#e_code').val(_this.find('.collector_code').text());
-          $('#e_role').val(_this.find('.collector_role').text());
+          $('#e_role').val(role.toString());
           $('#e_name').val(_this.find('.collector_name').text());
           $('#e_mobile').val(_this.find('.collector_contact').text());
           $('#e_address').val(_this.find('.collector_address').text());
-          $('#e_bday').val(_this.find('.collector_bday').text());
-          var status = parseInt(_this.find('.collector_status').text());
-          $('#e_status').val(status);
-          $('#e_cashbond').val(_this.find('.collector_cashbond').text());
-          $('#e_ctcnum').val(_this.find('.collector_ctcno').text());
+          $('#e_bday').val(birthday);
+          $('#e_status').val(status.toString());
+          $('#e_cashbond').val(cashbond);
+          $('#e_ctcnum').val(ctc_no);
         });
       </script>
 

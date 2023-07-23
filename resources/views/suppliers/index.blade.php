@@ -7,10 +7,10 @@
             <div class="col-4"><h2 class="main-title">Suppliers</h2></div>
             <div class="col-2"><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addsupplier">Add Suppliers</button></div>
         </div>
-        <div class="row">
-          <div class="col-lg-12">
+        <div class="row container">
+          <div class="col-12">
             <div class="users-table table-wrapper">
-              <table class="posts-table">
+              <table class="table table-striped posts-table align-middle" id="suppliers-table" style="width:100%">
                 <thead style="padding-left:1em">
                   <tr class="users-table-info">
                     <th>#</th>
@@ -25,7 +25,6 @@
                   @foreach ($suppliers as $key => $supplier)
                   <tr>
                     <td>{{ $key + 1 }}</td>
-                    <td class="id" hidden>{{ $supplier->id }}</td>
                     <td class="supplier_name">{{ $supplier->supplier_name }}</td>
                     <td class="supplier_address">{{ $supplier->supplier_address }}</td>
                     <td class="contact_person">{{ $supplier->contact_person }}</td>
@@ -34,7 +33,7 @@
                         <span class="p-relative">
                         <button class="btn p-0" data-bs-toggle="dropdown" aria-expande="false"><iconify-icon icon="gg:more-r"></iconify-icon></button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item fs-6 edit-supplier-data" data-bs-toggle="modal" data-bs-target="#editsupplier" data-id = "'.$supplier->id.'">Edit</a></li>
+                            <li><a class="dropdown-item fs-6 edit-supplier-data" data-bs-toggle="modal" data-bs-target="#editsupplier" data-id = "{{ $supplier->id }}">Edit</a></li>
                             <li><a class="dropdown-item fs-6" href="delete/{{ $supplier->id }}" onclick="return confirm('Are you sure you want to delete this Supplier?')">Trash</a></li>
                         </ul>
                         </span>
@@ -43,6 +42,11 @@
                   @endforeach
                 </tbody>
               </table>
+              <script>
+                $(document).ready(function() {
+                  $('#suppliers-table').DataTable();
+                });
+              </script>
             </div>
           </div>
         </div>
@@ -134,7 +138,8 @@
       <script>
         $(document).on('click', '.edit-supplier-data', function(){
             var _this = $(this).parents('tr');
-            $('#supplier_id').val(_this.find('.id').text());
+            var supplier_id = $(this).data('id');
+            $('#supplier_id').val(supplier_id);
             $('#e-supplier_name').val(_this.find('.supplier_name').text());
             $('#e-supplier_address').val(_this.find('.supplier_address').text());
             $('#e-contact_person').val(_this.find('.contact_person').text());

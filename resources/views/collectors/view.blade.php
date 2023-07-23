@@ -23,10 +23,10 @@
               </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row container">
           <div class="col-lg-12">
             <div class="users-table table-wrapper">
-              <table class="posts-table">
+              <table class="table table-striped posts-table align-middle" id="batches-table">
                 <thead style="padding-left:1em">
                   <tr class="users-table-info">
                     <th>Batch #</th>
@@ -45,23 +45,17 @@
                   @endphp
                 @foreach($batch_trans as $key => $batch_tran)
                     <tr>
-                        <td>{{ $key + 1 }}</td>
-                        <td class="batch_id" hidden>{{ $batch_tran->id  }}</td>
-                        <td class="period_from">{{ $batch_tran->period_from }}</td>
-                        <td class="period_to">{{ $batch_tran->period_to }}</td>
-                        <td class="status" hidden>{{ $batch_tran->status }}</td>
-                        <td class="first_collection" hidden>{{ $batch_tran->first_collection }}</td>
-                        <td class="remarks" hidden>{{ $batch_tran->remarks }}</td>
-                        <td class="addon_interest" hidden>{{ $batch_tran->addon_interest }}</td>
-                        <td class="batch_num" hidden>{{ $batch_tran->num }}</td>
-                        <td >{!! $status[$batch_tran->status] !!}</td>
+                        <td class="batch_num">{{ $batch_tran->num }}</td>
+                        <td class="t_period_from">{{ $batch_tran->period_from }}</td>
+                        <td class="t_period_to">{{ $batch_tran->period_to }}</td>
+                        <td class="t_status">{!! $status[$batch_tran->status] !!}</td>
                         <td class="text-center">
                             <span class="p-relative">
                                 <button class="btn p-0" data-bs-toggle="dropdown" aria-expanded="false"><iconify-icon icon="gg:more-r"></iconify-icon></button>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item fs-6" href="{{ route('collectors.withdrawals', ['collector_id' => $batch_tran-> collector_id, 'batch_id' => $batch_tran->id, 'name' => $collector_name]) }}">View</a></li>
-                                    <li><a class="dropdown-item fs-6 edit-batch" data-bs-toggle="modal" data-bs-target="#editBatch" data-id="'.$batch_tran->id.'">Edit</a></li>
-                                    <li><a class="dropdown-item fs-6" href="{{ route('delete-batch', ['collector_id' => $batch_tran-> collector_id, 'batch_id' => $batch_tran->id ,'name' => $collector_name]) }}">Trash</a></li>
+                                    <li><a class="dropdown-item fs-6 edit-batch" data-bs-toggle="modal" data-bs-target="#editBatch" data-id="{{ $batch_tran->id  }}" data-status="{{ $batch_tran->status  }}" data-period-from="{{ $batch_tran->period_from  }}" data-firstcollection = "{{ $batch_tran->first_collection }}" data-remarks = "{{ $batch_tran->remarks }}" data-addon-interest = "{{ $batch_tran->addon_interest }}">Edit</a></li>
+                                    <li><a class="dropdown-item fs-6" href="{{ route('delete-batch', ['collector_id' => $batch_tran-> collector_id, 'batch_id' => $batch_tran->id ,'name' => $collector_name]) }}" onclick="return confirm('Are you sure you want to delete this batch?')">Trash</a></li>
                                 </ul>
                             </span>
                         </td>
@@ -69,6 +63,11 @@
                 @endforeach
               </tbody>
               </table>
+              <script>
+                $(document).ready(function() {
+                  $('#batches-table').DataTable();
+                });
+              </script>
             </div>
           </div>
         </div>
@@ -147,7 +146,7 @@
                       <input type="text" class="form-control" id="e_batch_num" name="e_batch_num"  readonly>
                     </div>
                     <div class="col-6 mb-3">
-                      <label for="c" class="form-label">Status:</label>
+                      <label class="form-label">Status:</label>
                       <select name="e_status" id="e_status" class="form-select">
                         <option value="1">Active</option>
                         <option value="0">In-active</option>
@@ -157,7 +156,7 @@
                 <div class="row">
                 <div class="col-6 mb-3">
                     <label for="" class="form-label">Period From:</label>
-                    <input type="date" class="form-control" id="e_period_from" name="e_period_from" required>
+                    <input type="date" class="form-control" id="e_period_from" name="e_period_from">
                 </div>
                 <div class="col-6 mb-3">
                     <label for="" class="form-label">Period To:</label>
@@ -192,15 +191,22 @@
       <script>
         $(document).on('click', '.edit-batch', function() {
           var _this = $(this).parents('tr');
-          $('#e_batch_id').val(_this.find('.batch_id').text());
+          var status = $(this).data('status');
+          var periodFrom = $(this).data('period-from');
+          var firstcollection = $(this).data('firstcollection');
+          var remarks = $(this).data('remarks');
+          var addonInterest = $(this).data('addon-interest');
+          var id = $(this).data('id');
+
+          $('#e_batch_id').val(id);
           $('#e_batch_num').val(_this.find('.batch_num').text());
-          var status = parseInt(_this.find('.status').text());
-          $('#e_status').val(status);
-          $('#e_period_from').val(_this.find('.period_from').text());
-          $('#e_period_to').val(_this.find('.period_to').text());
-          $('#e_addon_interest').val(_this.find('.addon_interest').text());
-          $('#e_first_collection').val(_this.find('.first_collection').text());
-          $('#e_remarks').val(_this.find('.remarks').text());
+          
+          $('#e_status').val(status.toString());
+          $('#e_period_from').val(periodFrom);
+          $('#e_period_to').val(_this.find('.t_period_to').text());
+          $('#e_addon_interest').val(addonInterest);
+          $('#e_first_collection').val(firstcollection);
+          $('#e_remarks').val(remarks);
         })
       </script>
 

@@ -16,5 +16,7 @@ class Batchdetail extends Model
         'qty',
         'total_amount',
         'return_qty',
+        'date_delivered',
+        'date_returned'
     ];
 }

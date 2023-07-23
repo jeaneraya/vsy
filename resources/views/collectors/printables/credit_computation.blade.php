@@ -36,6 +36,7 @@
 
 <div class="container">
     <div class="row pb-2" style="border-bottom: 1px solid #cbcbcb">
+    <h4 style="border-bottom:1px solid #cbcbcb" class="text-center py-2">Credit Computation Report</h4>
         <div class="col-6">
             @foreach($users_infos as $am_info)
             <div class="row mt-1">
@@ -61,7 +62,7 @@
             @foreach($transactions as $transaction)
             <div class="row">
                 <div class="col-5">Period Covered:</div>
-                <div class="col-7"> {{ $transaction->period_from }} {{ $transaction->period_to }}</div>
+                <div class="col-7"> {{ date('m-d-Y', strtotime($transaction->period_from)) }} to {{ date('m-d-Y', strtotime($transaction->period_to)) }}</div>
             </div>
             <div class="row">
                 <div class="col-5">Batch #:</div>
@@ -73,38 +74,112 @@
     <div class="row">
         <table class="table table-striped" style="font-size: 12px;">
             <thead style="padding-left:1em">
+              <tr>
+                <th colspan="7">Withdrawals Summary</th>
+              </tr>
               <tr class="users-table-info">
-                <th>Date</th>
-                <th>Code</th>
+                <th>Delivered</th>
+                <th>Returned</th>
+                <th>Sold</th>
+                <th>Unit</th>
                 <th>Description</th>
-                <th>Remarks</th>
+                <th>Price</th>
                 <th>Amount</th>
               </tr>
             </thead>
             <tbody>
                 @php
-                $total_amount = 0;
+                $total_out = 0;
+                $total_return = 0;
+                $total_qty = 0;
+                $total_sold = 0;
+                $grand_total = 0;
+                $total_amount_sold = 0;
+                $sold_qty = 0;
                 @endphp
-              @foreach($expenses_transactions as $etrans)
+              @foreach($batch_withdrawals as $bw)
               @php
-                $total_amount += $etrans->amount;
+                $total_out += $bw->qty;
+                $total_return += $bw->return_qty;
+                $total_qty += $bw->qty - $bw->return_qty;
+                $sold_qty = $bw->qty - $bw->return_qty;
+                $total_sold = $sold_qty * $bw->price;
+                $total_amount_sold += $total_sold;
               @endphp
                   <tr>
-                      <td>{{ $etrans->period_from}}</td>
-                      <td>{{ $etrans->code }}</td>
-                      <td>{{ $etrans->description }}</td>
-                      <td>{{ $etrans->remarks }}</td>
-                      <td>{{ $etrans->amount }}</td>
+                      <td>{{ $bw->qty }}</td>
+                      <td>{{ $bw->return_qty }}</td>
+                      <td>{{ $bw->qty - $bw->return_qty }}</td>
+                      <td>{{ $bw->unit }}</td>
+                      <td>{{ $bw->description }}</td>
+                      <td>&#8369; {{ number_format($bw->price,2) }}</td>
+                      <td>&#8369; {{ number_format($total_sold,2) }}</td>
                   </tr>
               @endforeach
           </tbody>
           <tfoot>
             <tr>
-                <td colspan="4"></td>
-                <td><strong>TOTAL: &#8369; {{ number_format($total_amount,2) }}</strong></td>
+                <td><strong>{{ $total_out }}</strong></td>
+                <td><strong>{{ $total_return }}</strong></td>
+                <td><strong>{{ $total_qty }}</strong></td>
+                <td colspan="2"></td>
+                <td><strong>Total:</strong></td>
+                <td><strong>&#8369; {{ number_format($total_amount_sold,2) }}</strong></td>
             </tr>
           </tfoot>
           </table>
+    </div>
+    <div class="row">
+        <table class="table table-striped" style="font-size: 12px;">
+            <thead style="padding-left:1em">
+              <tr>
+                <th colspan="2">Expenses Summary</th>
+              </tr>
+              <tr class="users-table-info">
+                <th>Description</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+                @php
+                $total_expenses = 0;
+                $expenses_with_interest = 0;
+                @endphp
+              @foreach($expenses_transactions as $et)
+              @php
+                $total_expenses += $et->amount;
+              @endphp
+                  <tr>
+                      <td>{{ $et->description }}</td>
+                      <td>&#8369; {{ number_format($et->amount,2) }}</td>
+                  </tr>
+              @endforeach
+          </tbody>
+          <tfoot>
+            <tr>
+                <td></td>
+                <td><strong>&#8369; {{ number_format($total_expenses,2) }}</strong></td>
+            </tr>
+          </tfoot>
+          </table>
+    </div>
+    <div class="row p-0">
+        <table>
+            <tbody>
+                <tr>
+                    <td style="text-align:right; padding-right:5em"><strong>Add: 5.8% for 5 mos. until the account is fully paid</strong></td>
+                    <td>&#8369; {{ $total_expenses*(29/100) }}</td>
+                </tr>
+                <tr>
+                    <td style="text-align:right; padding-right:5em"><strong>Total Expenses:</strong></td>
+                    <td>&#8369; {{ $total_expenses*(29/100) + $total_expenses }}</td>
+                </tr>
+                <tr>
+                    <td style="text-align:right; padding-right:5em"><strong>Grand Total:</strong></td>
+                    <td>&#8369; {{ $total_expenses*(29/100) + $total_expenses + $total_sold }}</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
     <div class="row mt-3">
         <div class="col-12">

@@ -16,11 +16,13 @@ class CreateBatchdetailsTable extends Migration
         Schema::create('batchdetails', function (Blueprint $table) {
             $table->id();
             $table->integer('batch_num');
+            $table->date('date_delivered')->nullable();
             $table->string('ref_no')->nullable();
             $table->integer('product_id');
             $table->integer('qty');
             $table->double('total_amount');
             $table->integer('return_qty')->nullable();
+            $table->date('date_returned')->nullable();
             $table->timestamps();
         });
     }

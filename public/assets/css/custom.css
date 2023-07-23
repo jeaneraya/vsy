@@ -90,13 +90,15 @@ ul#product-list-ul li:hover, ul#expenses-list-ul li:hover {
   position: sticky;
   top: 0;
   height: 12vh;
+  z-index: 3;
 }
 
 .container-fluid.view-batch, .stock-delivery-header {
   position: sticky;
-  top: 15vh;
+  top: 12vh;
   background-color: #f0f2fa;
-  z-index: 2;
+  z-index: 4;
+  padding-top: 3vh;
 }
 
 .dropdown-item:hover {
@@ -111,4 +113,13 @@ ul#product-list-ul li:hover, ul#expenses-list-ul li:hover {
   position: absolute;
   width: 93%;
   z-index: 1;
+}
+
+.scroll-to-bottom-container {
+  position: fixed;
+  right: 1vw;
+  z-index: 10;
+  bottom: 2vh;
+  background-color: #8f8f8f36;
+  padding: 0.2em 0.5em;
 }

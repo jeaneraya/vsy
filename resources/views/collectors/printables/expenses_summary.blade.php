@@ -62,7 +62,7 @@
             @foreach($transactions as $transaction)
             <div class="row">
                 <div class="col-5">Period Covered:</div>
-                <div class="col-7"> {{ $transaction->period_from }} {{ $transaction->period_to }}</div>
+                <div class="col-7"> {{ date('m-d-Y', strtotime($transaction->period_from)) }} to {{ date('m-d-Y', strtotime($transaction->period_to)) }}</div>
             </div>
             <div class="row">
                 <div class="col-5">Batch #:</div>

@@ -98,7 +98,7 @@ class ItexMo extends Model
                 'Message' => $message,
                 'Recipients' => $recipients,
                 // 'SenderId' => "VSY"
-                'SenderId' => "VSY Ent"
+                'SenderId' => "VSY"
                 // 'SenderId' => "VSY Apt"
                 // 'SenderId' => "VSY"
             ];
@@ -115,6 +115,8 @@ class ItexMo extends Model
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($itexmo));
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 
             $response = curl_exec($ch);
             curl_close($ch);

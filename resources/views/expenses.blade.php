@@ -7,10 +7,10 @@
             <div class="col-4"><h2 class="main-title">Expenses</h2></div>
             <div class="col-2"><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addexpenses">Add Expenses</button></div>
         </div>
-        <div class="row">
+        <div class="row container">
           <div class="col-lg-12">
             <div class="users-table table-wrapper">
-              <table class="posts-table">
+              <table class="table table-striped posts-table align-middle" id="main-expenses-table">
                 <thead style="padding-left:1em">
                   <tr class="users-table-info">
                     <th>#</th>
@@ -24,7 +24,6 @@
                   @foreach ($expenses as $key => $expense)
                   <tr>
                     <td>{{ $key + 1 }}</td>
-                    <td class="expense_id" hidden>{{$expense->id}}</td>
                     <td class="code">{{ $expense->code }}</td>
                     <td class="description">{{ $expense->description }}</td>
                     <td class="addon_interest">{{ $expense->addon_interest }}</td>
@@ -32,7 +31,7 @@
                         <span class="p-relative">
                         <button class="btn p-0" data-bs-toggle="dropdown" aria-expande="false"><iconify-icon icon="gg:more-r"></iconify-icon></button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item fs-6 edit-expenses" data-bs-toggle="modal" data-bs-target="#editExpenses" data-id="'.$expense->id.'">Edit</a></li>
+                            <li><a class="dropdown-item fs-6 edit-expenses" data-bs-toggle="modal" data-bs-target="#editExpenses" data-id="{{$expense->id}}">Edit</a></li>
                             <li><a class="dropdown-item fs-6" href="delete-expense/{{$expense->id}}" onclick="return confirm('Are you sure you want to delete this data?')">Trash</a></li>
                         </ul>
                         </span>
@@ -41,6 +40,11 @@
                   @endforeach
                 </tbody>
               </table>
+              <script>
+                $(document).ready(function() {
+                  $('#main-expenses-table').DataTable();
+                });
+              </script>
             </div>
           </div>
         </div>
@@ -124,7 +128,9 @@
       <script>
         $(document).on('click', '.edit-expenses', function() {
           var _this = $(this).parents('tr');
-          $('#e_expense_id').val(_this.find('.expense_id').text());
+          var expenses_id = $(this).data('id');
+
+          $('#e_expense_id').val(expenses_id);
           $('#e_code').val(_this.find('.code').text());
           $('#e_addon_interest').val(_this.find('.addon_interest').text());
           $('#e_description').val(_this.find('.description').text());

@@ -21,10 +21,10 @@
               </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row container">
           <div class="col-lg-12">
             <div class="users-table table-wrapper">
-              <table class="posts-table">
+              <table class="table table-striped posts-table align-middle" id="main-products-table">
                 <thead style="padding-left:1em">
                   <tr class="users-table-info">
                     <th>#</th>
@@ -46,19 +46,16 @@
                   @endphp
                   @foreach($products as $key => $product)
                     <td>{{ $key + 1 }}</td>
-                    <td class="product_id" hidden>{{ $product->id }}</td>
                     <td class="product_code">{{ $product->product_code }}</td>
                     <td class="description">{{ $product->description }}</td>
                     <td class="unit">{{ $product->unit }}</td>
-                    <td class="price" hidden>{{ $product->price }}</td>
-                    <td class="status" hidden>{{$product->status }}</td>
                     <td>&#8369; {{ number_format($product->price,2) }}</td>
                     <td>{!! $status[$product->status] !!}</td>
                     <td class="text-center">
                         <span class="p-relative">
                         <button class="btn p-0" data-bs-toggle="dropdown" aria-expande="false"><iconify-icon icon="gg:more-r"></iconify-icon></button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item fs-6 edit-product-data" data-bs-toggle="modal" data-bs-target="#editProduct" data-id="'.$product->id.'">Edit</a></li>
+                            <li><a class="dropdown-item fs-6 edit-product-data" data-bs-toggle="modal" data-bs-target="#editProduct" data-id="{{ $product->id }}" data-price = "{{ $product->price }}" data-status="{{$product->status }}">Edit</a></li>
                             <li><a class="dropdown-item fs-6" href="{{ route('delete-product', ['id' => $product->id]) }}" onclick="return confirm('Are you sure you want to delete this product?')">Trash</a></li>
                         </ul>
                         </span>
@@ -67,6 +64,11 @@
                   @endforeach
                 </tbody>
               </table>
+              <script>
+                $(document).ready(function() {
+                  $('#main-products-table').DataTable();
+                });
+              </script>
             </div>
           </div>
         </div>
@@ -176,14 +178,16 @@
       <script>
     $(document).on('click','.edit-product-data', function() {
         var _this = $(this).parents('tr');
-        $('#e_product_id').val(_this.find('.product_id').text());
+        var product_id = $(this).data('id');
+        var price = $(this).data('price');
+        var status = $(this).data('status');
+
+        $('#e_product_id').val(product_id);
         $('#e_product_code').val(_this.find('.product_code').text());
         $('#e_d').val(_this.find('.description').text());
         $('#e_unit').val(_this.find('.unit').text()); 
-        var price = parseFloat(_this.find('.price').text());
         $('#e_price').val(price);
-        var status = parseInt(_this.find('.status').text());
-        $('#e_status').val(status);
+        $('#e_status').val(status.toString());
     });
 </script>
 

@@ -36,19 +36,15 @@
 
 <div class="container">
     <div class="row pb-2" style="border-bottom: 1px solid #cbcbcb">
-        <div class="col-6">
+        <div class="col-4" style="font-size:14px">
             <h5 class="pb-2" style="border-bottom: 1px solid #cbcbcb"><strong>Personal Information</strong></h5>
             @foreach($am_infos as $am_info)
-            <div class="row mt-1">
-                <div class="col-3">Code:</div>
-                <div class="col-9"><strong>{{ $am_info->code }}</strong></div>
+            <div class="row">
+                <div class="col-3">Fullame:</div>
+                <div class="col-8"><strong>{{ $am_info->name }}</strong></div>
             </div>
             <div class="row">
-                <div class="col-3">Name:</div>
-                <div class="col-9"><strong>{{ $am_info->name }}</strong></div>
-            </div>
-            <div class="row">
-                <div class="col-3">Contact #:</div>
+                <div class="col-3">Mobile:</div>
                 <div class="col-9"><strong>{{ $am_info->contact }}</strong></div>
             </div>
             <div class="row">
@@ -59,46 +55,56 @@
                 <div class="col-3">Birthdate:</div>
                 <div class="col-9"><strong>{{ date('m-d-Y', strtotime($am_info->birthday)) }}</strong></div>
             </div>
-            @endforeach
         </div>
-        <div class="col-6">
+        <div class="col-4" style="font-size:14px">
             @php
             $total_payments = 0;
-            $credit_limit = 0;
             $prev_bal = 0;
             $total_bal = 0;
             $latest_del = 0;
+            $total_del = 0;
             @endphp
             @foreach($stock_deliveries as $stock_delivery)
             @php
             $total_payments += $stock_delivery->amount_paid;
-            $credit_limit = $stock_delivery->credit_limit;
             $total_bal = $stock_delivery->balance;
-            $latest_del = $stock_delivery->total_delivery;
+            $total_del += $stock_delivery->total_delivery;
             @endphp
             @endforeach
             <h5 class="pb-2" style="border-bottom: 1px solid #cbcbcb"><strong>General Transaction</strong></h5>
             <div class="row mt-1">
-                <div class="col-4">Credit Limit:</div>
-                <div class="col-8">&#8369; {{ number_format($credit_limit,2) }}</div>
+                <div class="col-6">Credit Limit:</div>
+                <div class="col-6">&#8369; {{ number_format($creditLimit,2) }}</div>
             </div>
             <div class="row">
-                <div class="col-5">Total Payments:</div>
-                <div class="col-7">&#8369; {{ number_format($total_payments,2) }}</div>
+                <div class="col-6">Total Delivery:</div>
+                <div class="col-6">&#8369; {{ number_format($total_del,2) }}</div>
             </div>
             <div class="row">
-                <div class="col-5">Previous Balance:</div>
-                <div class="col-7">&#8369; {{ number_format($previousBalance,2) }}</div>
+                <div class="col-6">Total Payments:</div>
+                <div class="col-6">&#8369; {{ number_format($total_payments,2) }}</div>
             </div>
             <div class="row">
-                <div class="col-5">Latest Delivery:</div>
-                <div class="col-7">&#8369; {{ number_format($latest_del,2) }}</div>
-            </div>
-            <div class="row">
-                <div class="col-5">Total Balance:</div>
-                <div class="col-7">&#8369; {{ number_format($total_bal,2) }}</div>
+                <div class="col-6">Prev. Balance:</div>
+                <div class="col-6">&#8369; {{ number_format($previousBalance,2) }}</div>
             </div>
         </div>
+        <div class="col-4" style="font-size:14px">
+            <h5 class="pb-2" style="border-bottom: 1px solid #cbcbcb"><strong>General Transaction</strong></h5>
+            <div class="row mt-1">
+                <div class="col-6">Latest Delivery:</div>
+                <div class="col-6">&#8369; {{ number_format($latestDelivery,2) }}</div>
+            </div>
+            <div class="row">
+                <div class="col-6">Latest Payments:</div>
+                <div class="col-6">&#8369; {{ number_format($latestPayments,2) }}</div>
+            </div>
+            <div class="row">
+                <div class="col-6">Total Balance:</div>
+                <div class="col-6">&#8369; {{ number_format($total_bal,2) }}</div>
+            </div>
+        </div>
+        @endforeach
     </div>
     <div class="row">
         <table class="table table-striped" style="font-size: 12px;">

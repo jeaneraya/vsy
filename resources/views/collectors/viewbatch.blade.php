@@ -6,7 +6,7 @@
         <div class="sticky-container">
         <div class="row">
             <div class="col-6"><h2 class="main-title">Batch # @foreach($transactions as $transaction){{ $transaction->num }}@endforeach of {{ $collector_name }}</h2></div>
-            <div class="col-2">
+            <div class="col-6">
               <div class="btn-group">
                 <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                   Add Items
@@ -17,20 +17,16 @@
                   <li><a class="dropdown-item" role="button" data-bs-toggle="collapse" href="#addexpensestobatch">Add Expenses</a></li>
                 </ul>
               </div>
-            </div>
-            <div class="col-2"> 
               <button class="btn btn-primary" onclick="openLedgerModal()">Payment</button>
-            </div>
-            <div class="col-2">
               <div class="btn-group">
                 <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                   Print Files
                 </button>
                 <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#">Credit Computation</a></li>
+                  <li><a class="dropdown-item" onclick="window.open('{{ route('credit-computation', ['collector_id' => $collector_id,'batch_id' => $batch_id ,'name' => $collector_name]) }}', '_blank')">Credit Computation</a></li>
                   <li><a class="dropdown-item" onclick="window.open('{{ route('trust-receipt', ['collector_id' => $collector_id,'batch_id' => $batch_id ,'name' => $collector_name]) }}', '_blank')">Trust Receipt Aggreement</a></li>
                   <li><a class="dropdown-item" onclick="window.open('{{ route('print-expenses-summary', ['collector_id' => $collector_id,'batch_id' => $batch_id ,'name' => $collector_name]) }}', '_blank')">Expenses Summary</a></li>
-                  <li><a class="dropdown-item" href="#">Withdrawals & Returns</a></li>
+                  <li><a class="dropdown-item" onclick="window.open('{{ route('print-withdrawals-returns', ['collector_id' => $collector_id,'batch_id' => $batch_id ,'name' => $collector_name]) }}', '_blank')">Withdrawals & Returns</a></li>
                 </ul>
               </div>
             </div>
@@ -82,9 +78,9 @@
                   <label for="" class="form-label">Total</label>
                   <input type="number" class="form-control" name="total" id="total" readonly>
                 </div>
-                <div class="col-2 d-flex align-items-end">
+                <div class="col-1 d-flex align-items-end">
                   <input type="submit" name="add_product" class="btn btn-primary" value="Add Product" id="product-button">
-                  
+                  <button type="button" class="btn btn-secondary" id="close-products-button" style="margin-left:1em">Close</button>
                 </div>
             </div>
             </form>
@@ -107,6 +103,7 @@
                 </div>
                 <div class="col-3">
                   <label for="" class="form-label">Description</label>
+                  <input type="hidden" id="et_id" name="et_id">
                   <input type="text" class="form-control" name="description" id="expenses_description" readonly>
                 </div>
                 <div class="col-3">
@@ -119,6 +116,7 @@
                 </div>
                 <div class="col-1 d-flex align-items-end">
                   <input type="submit" name="add_expenses" class="btn btn-primary" value="Save Data" id="expenses_button">
+                  <button type="button" class="btn btn-secondary" id="close-expenses-button" style="margin-left:1em">Close</button>
                 </div>
             </div>
             </form>
@@ -128,12 +126,12 @@
         </div>
     </div>
         <div class="container view-batch">
-        <div class="row">
+        <div class="row container">
           <div class="col-lg-12">
-            <h5><strong>Products</strong></h5>
+            <h5 class="text-center"><strong>Products</strong></h5>
             </div>
             <div class="users-table table-wrapper products">
-              <table class="posts-table">
+              <table id="products-table" class="table table-striped posts-table align-middle" style="width:100%">
                 <thead style="padding-left:1em">
                   <tr class="users-table-info">
                     <th>#</th>
@@ -153,8 +151,6 @@
                 @foreach($batch_withdrawals as $key => $withdrawal)
                     <tr>
                         <td>{{ $key + 1 }}</td>
-                        <td class="t_bd_id" hidden> {{ $withdrawal->batchdetails_ID }}</td>
-                        <td class="t_ref_no" hidden>{{ $withdrawal->ref_no }}</td>
                         <td class="t_product_code">{{ $withdrawal->product_code }}</td>
                         <td class="t_description">{{ $withdrawal->description }}</td>
                         <td class="t_qty">{{ $withdrawal->qty }}</td>
@@ -165,7 +161,8 @@
                           <span class="p-relative">
                               <button class="btn p-0" data-bs-toggle="dropdown" aria-expanded="false"><iconify-icon icon="gg:more-r"></iconify-icon></button>
                               <ul class="dropdown-menu">
-                                  <li><a class="dropdown-item fs-6 edit-batch-product">Edit</a></li>
+                                  <li><a class="dropdown-item fs-6 return-batch-product" data-bid="{{ $withdrawal->batchdetails_ID }}" data-batch-id="{{ $withdrawal->batch_num }}" data-bs-toggle="modal" data-bs-target="#returnitems">Return</a></li>
+                                  <li><a class="dropdown-item fs-6 edit-batch-product" data-id="{{ $withdrawal->batchdetails_ID }}" data-ref-no="{{ $withdrawal->ref_no }}" data-product-id="{{ $withdrawal->product_id }}" data-batch-id="{{ $withdrawal->batch_num }}">Edit</a></li>
                                   <li><a class="dropdown-item fs-6" href="{{ route('delete-batch-product', ['collector_id' => $collector_id, 'batch_id' => $batch_id, 'name' => $collector_name, 'bd_id' => $withdrawal->batchdetails_ID] ) }}" onclick="return confirm('Are you sure you want to delete this item?')">Delete</a></li>
                               </ul>
                           </span>
@@ -178,19 +175,24 @@
               </tbody>
               <tfoot>
                 <tr>
-                  <td colspan="7" align="right"><strong>Total: </strong>&#8369; {{ number_format($total,2) }}</td>
-                  <td></td>
+                  <td colspan="6"></td>
+                  <td colspan="2" align="right"><strong>Total: </strong>&#8369; {{ number_format($total,2) }}</td>
                 </tr>
               </tfoot>
               </table>
             </div>
           </div>
-          <div class="row">
+          <script>
+            $(document).ready(function() {
+              $('#products-table').DataTable();
+            });
+          </script>
+          <div class="row container">
             <div class="col-lg-12">
-              <h5><strong>Expenses</strong></h5>
+              <h5 class="text-center"><strong>Expenses</strong></h5>
               </div>
               <div class="users-table table-wrapper expenses">
-                <table class="posts-table">
+                <table id="expenses-table" class="table table-striped posts-table align-middle" style="width:100%">
                   <thead style="padding-left:1em">
                     <tr class="users-table-info">
                       <th>#</th>
@@ -208,18 +210,15 @@
                   @foreach($expenses_transactions as $key => $expenses_trans)
                       <tr>
                           <td>{{ $key + 1 }}</td>
-                          <td class="t_et_id" hidden>{{ $expenses_trans->et_ID }}</td>
-                          <td class="t_expenses_id" hidden>{{ $expenses_trans->expenses_id }}</td>
                           <td class="t_code">{{ $expenses_trans->code }}</td>
                           <td class="t_e_description">{{ $expenses_trans->description }}</td>
-                          <td>{{ $expenses_trans->remarks }}</td>
                           <td class="t_remarks">{{ $expenses_trans->remarks }}</td>
                           <td class="t_amount">{{ $expenses_trans->amount }}</td>
                           <td class="text-center">
                             <span class="p-relative">
                                 <button class="btn p-0" data-bs-toggle="dropdown" aria-expanded="false"><iconify-icon icon="gg:more-r"></iconify-icon></button>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item fs-6 edit-batch-expenses">Edit</a></li>
+                                    <li><a class="dropdown-item fs-6 edit-batch-expenses" data-id="{{ $expenses_trans->et_ID }}" data-expenses-id="{{ $expenses_trans->expenses_id }}">Edit</a></li>
                                     <li><a class="dropdown-item fs-6" href="{{ route('delete-batch-expenses', ['collector_id' => $collector_id, 'batch_id' => $batch_id, 'name' => $collector_name, 'et_id' => $expenses_trans->et_ID] ) }}" onclick="return confirm('Are you sure you want to delete this item?')">Delete</a></li>
                                 </ul>
                             </span>
@@ -232,16 +231,24 @@
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td></td>
-                    <td colspan="3" align="right"><strong>Total: </strong>&#8369; {{ number_format($totalExpenses,2) }}</td>
-                    <td colspan="2"></td>
+                    <td colspan="4"></td>
+                    <td colspan="2" align="right"><strong>Total: </strong>&#8369; {{ number_format($totalExpenses,2) }}</td>
                   </tr>
                 </tfoot>
                 </table>
+                <script>
+                $(document).ready(function() {
+                  $('#expenses-table').DataTable();
+                });
+              </script>
               </div>
             </div>
           </div>
         </div>
+      </div>
+
+      <div class="scroll-to-bottom-container">
+        <button class="scroll-to-bottom" style="background:none"><iconify-icon icon="formkit:arrowdown"></iconify-icon></button>
       </div>
 
       <!-- PAYMENT LEDGER -->
@@ -302,8 +309,11 @@
                       <div class="col-7">&#8369; {{ number_format($total_payment,2) }}</div>
                     </div>
                     <div class="row">
+                      <div class="col-7"><strong>Interest:</strong></div>
+                      <div class="col-5">&#8369; {{ number_format($totalExpenses * (29/100),2) }}</div>
+                    <div class="row">
                       <div class="col-7"><strong>Remaining Balance:</strong></div>
-                      <div class="col-5">&#8369; {{ ($balance == 0) ? number_format($total + $totalExpenses,2) : number_format($balance,2) }}</div>
+                      <div class="col-5">&#8369; {{ ($balance == 0) ? number_format($total + $totalExpenses + $totalExpenses * (29/100),2) : number_format($balance,2) }}</div>
                     </div>
                   </div>
                   @endforeach
@@ -435,11 +445,60 @@
       </div>
       <!-- END OF EDIT PAYMENT MODAL -->
 
+      <!-- RETURN ITEMS MODAL -->
+      <div class="modal fade" id="returnitems" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Return Item</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form action="{{ route('return-item') }}" method="POST">
+              @csrf
+              <div class="row">
+                <div class="col-6 mb-4">
+                  <label for="" class="form-label">Product Code</label>
+                  <input type="hidden" name="r_et_id" id="r_et_id">
+                  <input type="hidden" name="batch" value="{{ $batch_id }}">
+                  <input type="hidden" name="collector" value="{{ $collector_id }}">
+                  <input type="hidden" name="collector_name" value="{{ $collector_name }}">
+                  <input class="form-control" type="text" name="r_product_code" id="r_product_code">
+                </div>
+                <div class="col-6 mb-4">
+                  <label for="" class="form-label">Description</label>
+                  <input type="hidden" id="r_batch_id" name="r_batch_id">
+                  <input class="form-control" type="text" name="r_description" id="r_description">
+                </div>
+                <div class="col-6 mb-4">
+                  <label for="" class="form-label">Return Qty</label>
+                  <input class="form-control" type="number" min="0" name="return_qty" id="return_qty">
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">Save Data</button>
+            </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- END OF RETURN ITEMS MODAL -->
+
       <script>
-        document.addEventListener("DOMContentLoaded", function() {
-          // Scroll to the bottom of the page
+        $(document).on('click', '.scroll-to-bottom', function() {
           window.scrollTo(0, document.body.scrollHeight);
         });
+      </script>
+
+      <script>
+        $(document).on('click','#close-products-button', function() {
+          $('#addproductstobatch').collapse('hide');
+        })
+
+        $(document).on('click', '#close-expenses-button', function() {
+          $('#addexpensestobatch').collapse('hide');
+        })
       </script>
 
       <script>
@@ -463,10 +522,9 @@
               url: route,
               method: "GET",
               success: function(data) {
-                  // Handle the response data
-                  console.log(data);
 
-                  // Populate the form fields with the data
+                  //console.log(data);
+
                   $('#rowId').val(selectedPaymentId);
                   $('#edit-amount').val(data.payment_datas[0].paid_amount);
                   $('#current-balance').val(data.payment_datas[0].balance);
@@ -478,7 +536,7 @@
                   $('#editpayment').modal('show');
               },
               error: function(xhr, status, error) {
-                  // Handle the error if any
+
                   console.log(error);
               }
           });
@@ -669,8 +727,13 @@
     $('#addproductstobatch').collapse('show');
 
     var _this = $(this).parents('tr');
-    $('#bdid').val(_this.find('.t_bd_id').text());
-    $('#ref_no').val(_this.find('.t_ref_no').text());
+    var bdid = $(this).data('id');
+    var ref_no = $(this).data('ref-no');
+    var product_id = $(this).data('product-id');
+
+    $('#bdid').val(bdid);
+    $('#ref_no').val(ref_no);
+    $('#product_id').val(product_id);
     $('#product_code').val(_this.find('.t_product_code').text());
     $('#description').val(_this.find('.t_description').text());
     $('#unit').val(_this.find('.t_unit').text());
@@ -689,8 +752,11 @@
     $('#addexpensestobatch').collapse('show');
 
     var _this = $(this).parents('tr');
-    $('#et_id').val(_this.find('.t_et_id').text());
-    $('#e_code').val(_this.find('.t_expenses_id').text());
+    var et_id = $(this).data('id');
+    var expenses_id = $(this).data('expenses-id');
+
+    $('#et_id').val(et_id);
+    $('#e_code').val(expenses_id);
     $('#expenses_code').val(_this.find('.t_code').text());
     $('#expenses_description').val(_this.find('.t_e_description').text());
     $('#remarks').val(_this.find('.t_remarks').text());
@@ -698,22 +764,20 @@
 
     $('#expenses_button').val('Update Data');
     $('#expenses-title-container').text('Edit Expenses');
-
-
   })
 </script>
 
 <script>
-    $(document).ready(function() {
-        // Check for the query parameter in the URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const openCollapse = urlParams.get('openCollapse');
+  $(document).on('click', '.return-batch-product', function() {
+    var _this = $(this).parents('tr');
+    var r_et_id = $(this).data('bid');
+    var r_batch_id = $(this).data('batch-id');
 
-        if (openCollapse === 'true') {
-            // Open the collapse element with the specified ID
-            $('#addproductstobatch').collapse('show');
-        }
-    });
+    $('#r_et_id').val(r_et_id);
+    $('#r_batch_id').val(r_batch_id);
+    $('#r_product_code').val(_this.find('.t_product_code').text());
+    $('#r_description').val(_this.find('.t_description').text());
+  })
 </script>
 
 

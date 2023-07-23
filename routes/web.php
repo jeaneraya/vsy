@@ -119,6 +119,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('add-batch-product',[CollectorsController::class, 'saveBatchProduct'])->name('add-batch-product');
     Route::post('edit-batch-product',[CollectorsController::class, 'updateBatchProduct'])->name('edit-batch-product');
     Route::get('delete-batch-product/{collector_id}/{batch_id}/{name}/{bd_id}',[CollectorsController::class, 'deleteBatchProduct'])->name('delete-batch-product');
+    Route::post('return-item',[CollectorsController::class, 'returnProducts'])->name('return-item');
     Route::post('add-batch-expenses',[CollectorsController::class, 'saveBatchExpenses'])->name('add-batch-expenses');
     Route::post('edit-batch-expenses',[CollectorsController::class, 'updateBatchExpenses'])->name('edit-batch-expenses');
     Route::get('delete-batch-expenses/{collector_id}/{batch_id}/{name}/{et_id}',[CollectorsController::class, 'deleteBatchExpenses'])->name('delete-batch-expenses');
@@ -128,11 +129,15 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('delete-payment',[CollectorsController::class, 'deletePayment'])->name('delete-payment');
     Route::get('stock-delivery/{user_id}/{name}',[CollectorsController::class, 'stockDelivery'])->name('stock-delivery');
     Route::post('add-stock-delivery',[CollectorsController::class, 'addStockDelivery'])->name('add-stock-delivery');
+    Route::post('edit-stock-delivery',[CollectorsController::class, 'editStockDelivery'])->name('edit-stock-delivery');
+    Route::post('edit-stock-payment',[CollectorsController::class, 'editStockPayment'])->name('edit-stock-payment');
+    Route::get('delete-stock-delivery/{user_id}/{name}/{t_id}',[CollectorsController::class, 'deleteStockDelivery'])->name('delete-stock-delivery');
     Route::post('add-stock-payment',[CollectorsController::class, 'addStockPayment'])->name('add-stock-payment');
     Route::get('print-stock-delivery/{user_id}/{name}',[CollectorsController::class, 'printStockDelivery'])->name('print-stock-delivery');
     Route::get('print-expenses-summary/{collector_id}/{batch_id}/{name}',[CollectorsController::class, 'viewWithdrawals'])->name('print-expenses-summary');
     Route::get('credit-computation/{collector_id}/{batch_id}/{name}',[CollectorsController::class, 'viewWithdrawals'])->name('credit-computation');
     Route::get('trust-receipt/{collector_id}/{batch_id}/{name}',[CollectorsController::class, 'viewWithdrawals'])->name('trust-receipt');
+    Route::get('print-withdrawals-returns/{collector_id}/{batch_id}/{name}',[CollectorsController::class, 'viewWithdrawals'])->name('print-withdrawals-returns');
 
     Route::get('/ap_list',[APListController::class, 'index'])->name('ap_list');
     Route::get('/ap_list/aplist-inactive', [APListController::class, 'aplistInactive'])->name('aplist-inactive');

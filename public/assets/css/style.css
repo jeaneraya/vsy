@@ -1857,14 +1857,14 @@
  }
  
  .table-wrapper {
-   overflow-x: auto;
-   overflow-y: hidden;
+   /* overflow-x: auto; */
+   /* overflow-y: hidden; */
    margin-bottom: 20px;
  }
 
- .users-table.table-wrapper {
+ /* .users-table.table-wrapper {
   overflow-x: hidden;
- }
+ } */
 
  .view-batch .users-table.table-wrapper {
   min-height: auto;
