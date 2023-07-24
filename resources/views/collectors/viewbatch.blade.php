@@ -261,6 +261,12 @@
               </div>
               <div class="modal-body">
                 <div class="row">
+                @php
+                  $status = [
+                      0 => 'In-active',
+                      1 => 'Active'
+                    ];
+                  @endphp
                   @foreach($transactions as $transaction)
                   <div class="col-7">
                     <div class="row">
@@ -272,8 +278,8 @@
                       <div class="col-8">{{ $transaction->first_collection }}</div>
                     </div>
                     <div class="row">
-                      <div class="col-6"><strong>Addt'l Expenses:</strong></div>
-                      <div class="col6"></div>
+                      <div class="col-4"><strong>Batch #:</strong></div>
+                      <div class="col-8">{{ $transaction->num }}</div>
                     </div>
                     <div class="row">
                       <div class="col-6"><strong>Downpayment:</strong></div>
@@ -287,7 +293,7 @@
                   <div class="col-5">
                     <div class="row">
                       <div class="col-5"><strong>Batch Status:</strong></div>
-                      <div class="col-7">{{ $transaction->status }}</div>
+                      <div class="col-7">{!! $status[$transaction->status] !!}</div>
                     </div>
                     <div class="row">
                       <div class="col-5"><strong>Total as Capital:</strong></div>
@@ -295,14 +301,12 @@
                     </div>
                     <div class="row">
                       @php
-                      $total_payment = 0; // Declare the variable outside the loop
-                      $balance = 0;
+                      $total_payment = 0; 
                       @endphp
 
                       @foreach($payments as $payment)
                           @php
-                          $total_payment += $payment->paid_amount; // Increment the variable inside the loop
-                          $balance = $payment->balance;
+                          $total_payment += $payment->paid_amount;
                           @endphp
                       @endforeach
                       <div class="col-5"><strong>Total Payment:</strong></div>
@@ -313,7 +317,7 @@
                       <div class="col-5">&#8369; {{ number_format($totalExpenses * (29/100),2) }}</div>
                     <div class="row">
                       <div class="col-7"><strong>Remaining Balance:</strong></div>
-                      <div class="col-5">&#8369; {{ ($balance == 0) ? number_format($total + $totalExpenses + $totalExpenses * (29/100),2) : number_format($balance,2) }}</div>
+                      <div class="col-5">&#8369; {{ ($payment_balance == 0) ? number_format($total + $totalExpenses + ($totalExpenses * (29/100)),2) : number_format($payment_balance,2) }}</div>
                     </div>
                   </div>
                   @endforeach
@@ -374,7 +378,7 @@
                       <input type="hidden" name="batch" value="{{ $batch_id }}">
                       <input type="hidden" name="collector" value="{{ $collector_id }}">
                       <input type="hidden" name="collector_name" value="{{ $collector_name }}">
-                      <input type="number" name="total_credit" value="{{ ($balance == 0) ? $total + $totalExpenses : $balance }}" hidden>
+                      <input type="number" name="total_credit" value="{{ ($payment_balance == 0) ? $total + $totalExpenses + ($totalExpenses * (29/100)) : $payment_balance }}" hidden>
                       <input type="text" name="id" value="" hidden class="form-control">
                     <div class="col-6 mb-4">
                       <label for="" class="form-label">Amount</label>
@@ -408,7 +412,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
               <div class="modal-header">
-                <h1 class="modal-title fs-5">Edit Payment of: {{$collector_name}}</h1>
+                <h1 class="modal-title fs-5">Payment of: {{$collector_name}}</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
@@ -417,7 +421,7 @@
                       <input type="hidden" name="batch" value="{{ $batch_id }}">
                       <input type="hidden" name="collector" value="{{ $collector_id }}">
                       <input type="hidden" name="collector_name" value="{{ $collector_name }}">
-                      <input type="hidden" name="current-balance" id="current-balance">
+                      <input type="hidden" name="current-balance" id="current-balance" value="{{ ($payment_balance == 0) ? $total + $totalExpenses + ($totalExpenses * (29/100)) : $payment_balance }}">
                       <input type="hidden" name="current-amount" id="current-amount">
                       <input type="hidden" name="payid" id="rowId">
                     <div class="col-6 mb-4">
@@ -530,7 +534,7 @@
 
                   $('#rowId').val(selectedPaymentId);
                   $('#edit-amount').val(data.payment_datas[0].paid_amount);
-                  $('#current-balance').val(data.payment_datas[0].balance);
+                  // $('#current-balance').val(data.payment_datas[0].balance);
                   $('#current-amount').val(data.payment_datas[0].paid_amount);
                   $('#edit-payment-date').val(data.payment_datas[0].payment_date);
                   $('#edit-mop').val(data.payment_datas[0].mop);
@@ -577,6 +581,7 @@
                 $.each(all_ids, function(key, val) {
                   $("#id_of_payment" + val).remove();
                 });
+                location.reload();
               },
               error: function(xhr, status, error) {
                 console.log(xhr.responseText);

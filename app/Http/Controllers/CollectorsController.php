@@ -233,6 +233,8 @@ class CollectorsController extends Controller
 
     public function viewWithdrawals($collector_id, $batch_id, $name) {
 
+        $current_date = date('Y-m-d');
+
         $users_infos = DB::table('users')
         ->join('collectors', 'users.id', '=', 'collectors.user_id')
         ->select('users.*','collectors.*')
@@ -263,6 +265,14 @@ class CollectorsController extends Controller
             ->where('batchtransactions.id', $batch_id)
             ->get();
 
+        $payment_balance = DB::table('batchtransactions')
+            ->join('payments', 'batchtransactions.id', '=', 'payments.batch_id')
+            ->select('payments.balance') 
+            ->where('batchtransactions.id', $batch_id)
+            ->where('payments.payment_status', 'paid')
+            ->orderBy('payments.id', 'desc') 
+            ->value('balance'); 
+
         $returned_products = DB::table('batchtransactions')
             ->join('batchdetails', 'batchtransactions.id', '=', 'batchdetails.batch_num')
             ->join('products', 'batchdetails.product_id', '=', 'products.id')
@@ -280,7 +290,8 @@ class CollectorsController extends Controller
             return view('collectors.viewbatch', compact('users_infos','batch_withdrawals', 'transactions', 'expenses_transactions', 'payments'))
             ->with('batch_id', $batchid)
             ->with('collector_name', $collector_name)
-            ->with('collector_id', $collectorid);
+            ->with('collector_id', $collectorid)
+            ->with('payment_balance', $payment_balance);
         } elseif (request()->routeIs('print-expenses-summary')) {
             return view('collectors.printables.expenses_summary', compact('users_infos','batch_withdrawals', 'transactions', 'expenses_transactions', 'payments'))
             ->with('batch_id', $batchid)
@@ -571,6 +582,7 @@ class CollectorsController extends Controller
         $update_payment->mop = $request->input('edit-mop');
         $update_payment->mop_details = $request->input('edit-mop-details');
         $update_payment->balance = $new_balance;
+        $update_payment->payment_status = 'paid';
         $update_payment->save();
 
         $collector_id = $request->input('collector');
