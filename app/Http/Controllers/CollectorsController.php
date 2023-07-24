@@ -175,6 +175,32 @@ class CollectorsController extends Controller
         $batch_trans->remarks = $request->input('remarks');
 
         $batch_trans->save();
+
+        $batch_trans_id = $batch_trans->id;
+
+        $first_collection = Carbon::createFromFormat('Y-m-d', $request->input('first_collection'));
+
+        for ($i = 0; $i < 10; $i++) {
+            $payments_scheds = new Payment();
+    
+            $payments_scheds->batch_id = $batch_trans_id;
+            $payments_scheds->collector_id = $request->input('collector_id');
+    
+            $payment_date = $first_collection->copy()->addDays($i * 15);
+    
+            if ($payment_date->day > 15) {
+                $payment_date->day(30);
+            } else {
+                $payment_date->day(15);
+            }
+    
+            $payments_scheds->payment_sched = $payment_date->format('Y-m-d');
+    
+            $payments_scheds->save();
+        }
+
+        // dd($payments_scheds);
+        
         $id = $request->input('collector_id');
         $name = $request->input('collector_name');
         return redirect(route('collectors.show', ['id' => $id, 'name' => $name]))->with('message', 'New Batch Added Successfully!');
@@ -492,6 +518,7 @@ class CollectorsController extends Controller
         $payment->mop = $request->input('mop');
         $payment->mop_details = $request->input('mop_details');
         $payment->days = $intervalDays;
+        $payment->payment_status = 'paid';
         $payment->save();
 
         $collector_id = $request->input('collector');

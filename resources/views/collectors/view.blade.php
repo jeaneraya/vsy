@@ -99,7 +99,7 @@
                 </div>
                 <div class="col-6 mb-3">
                     <label for="" class="form-label">Period To:</label>
-                    <input type="date" class="form-control" id="period_to" name="period_to">
+                    <input type="date" class="form-control" id="period_to" name="period_to" required>
                 </div>
                 <div class="col-6 mb-3">
                     <label for="" class="form-label">Addon Interest:</label>
@@ -107,7 +107,7 @@
                 </div>
                 <div class="col-6 mb-3">
                     <label for="" class="form-label">First Collection:</label>
-                    <input type="date" class="form-control" id="first_collection" name="first_collection">
+                    <input type="date" class="form-control" id="first_collection" name="first_collection" required>
                 </div>
                 <div class="col-12 mb-3">
                     <label for="" class="form-label">Remarks:</label>

@@ -319,10 +319,11 @@
                   @endforeach
                 </div>
                 <hr/>
-                <table class="table-striped w-100">
+                <table class="table-striped w-100" style="font-size:14px">
                   <thead>
                     <th><input type="checkbox" class="form-check-input" id="select_all_ids"></th>
                     <th>#</th>
+                    <th>Payment Sched</th>
                     <th>Payment Date</th>
                     <th>Days</th>
                     <th>Amount</th>
@@ -337,10 +338,11 @@
                           <input class="form-check-input payment_ids" type="checkbox" name="payment_id" value="{{ $payment->id }}" id="payment_id_{{ $payment->id }}">
                         </td>
                         <td>{{ $key + 1 }}</td>
-                        <td>{{ $payment->payment_date }}</td>
-                        <td>{{ $payment->days }}</td>
-                        <td>{{ $payment->paid_amount }}</td>
-                        <td>{{ $payment->balance }}</td>
+                        <td>{{ $payment->payment_sched }}</td>
+                        <td>{!! ($payment->payment_date == null) ? '00-00-0000' : $payment->payment_date !!}</td>
+                        <td>{!! ($payment->days == null) ? 0 : $payment->days !!}</td>
+                        <td>&#8369; {{ number_format($payment->paid_amount,2) }}</td>
+                        <td>&#8369; {{ number_format($payment->balance,2) }}</td>
                         <td>{{ $payment->mop }}</td>
                         <td>{{ $payment->mop_details }}</td>
                     </tr>
@@ -349,8 +351,8 @@
                 </table>
               </div>
               <div class="modal-footer">
-                <button class="btn btn-primary" onclick="openMakePaymentModal()">Make Payment</button>
-                <button class="btn btn-primary" onclick="openEditPaymentModal(event)" data-route="{{ route('payment-data', ['id' => '__paymentId__']) }}">Edit Payment</button>
+                <!-- <button class="btn btn-primary" onclick="openMakePaymentModal()">Make Payment</button> -->
+                <button class="btn btn-primary" onclick="openEditPaymentModal(event)" data-route="{{ route('payment-data', ['id' => '__paymentId__']) }}">Payment</button>
                 <button class="btn btn-danger" id="deleted-selected-rows">Delete Payment</button>
               </div>
             </div>
@@ -507,12 +509,13 @@
         }
 
         function openMakePaymentModal() {
-          $('#payment_ledger').addClass('modal-dimmed');
+          // $('#payment_ledger').addClass('modal-dimmed');
           $('#addpayment').modal('show');
         }
 
         $('#addpayment').on('hidden.bs.modal', function () {
-        $('#payment_ledger').removeClass('modal-dimmed'); });
+        // $('#payment_ledger').removeClass('modal-dimmed'); 
+      });
 
         function openEditPaymentModal(event) {
           var selectedPaymentId = document.querySelector('input[name="payment_id"]:checked').value;
@@ -532,7 +535,7 @@
                   $('#edit-payment-date').val(data.payment_datas[0].payment_date);
                   $('#edit-mop').val(data.payment_datas[0].mop);
                   $('#edit-mop-details').val(data.payment_datas[0].mop_details);
-                  $('#payment_ledger').addClass('modal-dimmed');
+                  // $('#payment_ledger').addClass('modal-dimmed');
                   $('#editpayment').modal('show');
               },
               error: function(xhr, status, error) {
@@ -541,22 +544,23 @@
               }
           });
           $('#rowId').val(selectedPaymentId);
-          $('#payment_ledger').addClass('modal-dimmed');
+          // $('#payment_ledger').addClass('modal-dimmed');
           $('#editpayment').modal('show');
         }
 
         $('#editpayment').on('hidden.bs.modal', function () {
-        $('#payment_ledger').removeClass('modal-dimmed'); });
+        // $('#payment_ledger').removeClass('modal-dimmed'); 
+      });
       </script>
 
       <script>
-        $(function(e) {
+        $(function() {
           $("#select_all_ids").click(function() {
             $(".payment_ids").prop('checked', $(this).prop('checked'));
           });
 
-          $('#deleted-selected-rows').click(function(e) {
-            e.preventDefault();
+          $('#deleted-selected-rows').click(function() {
+            // e.preventDefault();
             var all_ids = [];
             $('input:checkbox[name=payment_id]:checked').each(function() {
               all_ids.push($(this).val());

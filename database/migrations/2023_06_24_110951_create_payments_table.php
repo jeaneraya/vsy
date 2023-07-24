@@ -17,14 +17,15 @@ class CreatePaymentsTable extends Migration
             $table->id();
             $table->integer('batch_id');
             $table->integer('collector_id');
-            $table->date('payment_sched')->nullable();
-            $table->date('payment_date');
-            $table->integer('days');
-            $table->double('amount')->nullable();
-            $table->double('paid_amount');
-            $table->double('balance');
-            $table->string('mop');
-            $table->string('mop_details');
+            $table->date('payment_sched');
+            $table->date('payment_date')->nullable();
+            $table->integer('days')->nullable();
+            $table->double('amount')->default(0);
+            $table->double('paid_amount')->default(0);
+            $table->double('balance')->default(0);
+            $table->string('mop')->nullable();
+            $table->string('mop_details')->nullable();
+            $table->string('payment_status')->default('unpaid');
             $table->timestamps();
         });
     }

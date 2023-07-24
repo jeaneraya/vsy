@@ -21,5 +21,6 @@ class Payment extends Model
         'balance',
         'mop',
         'mop_details',
+        'payment_status'
     ];
 }
