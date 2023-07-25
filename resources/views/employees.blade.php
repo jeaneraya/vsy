@@ -47,7 +47,7 @@
         </div>
         <div class="row">
             <div class="col-lg-12">
-                <div class="users-table table-wrapper">
+                <div class="users-table table-wrapper" style="overflow:inherit">
                     <table class="posts-table" id="employees-table">
                         <thead style="padding-left:1em">
                             <tr class="users-table-info">
@@ -97,6 +97,14 @@
                             @endforeach
                         </tbody>
                     </table>
+                    <script>
+                        $(document).ready(function() {
+                            $('#employees-table').DataTable({
+                                initComplete: function() {},
+                            dom: 'lBfrtip',
+                            });
+                            });
+                    </script>
                 </div>
             </div>
         </div>
@@ -104,21 +112,3 @@
 
 @endsection
 
-
-@section('scripts')
-    <script src="{{ asset('assets/tools/DataTables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('assets/tools/DataTables/datatables.min.js') }}"></script>
-    <script>
-        $(document).ready(function() {
-
-            // DataTable
-            var table = $('#employees-table').DataTable({
-                initComplete: function() {},
-                dom: 'lBfrtip',
-                responsive: true,
-                scrollX: true,
-                lengthChange: false,
-            });
-        });
-    </script>
-@endsection

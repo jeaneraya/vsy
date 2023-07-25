@@ -169,38 +169,26 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        <script>
+                            $(document).ready(function() {
+                                $('#example').DataTable({
+                                    initComplete: function() {},
+                                    dom: 'lBfrtip',
+                                    order: [[0, 'desc']],
+                                });
+                                let hasError = {{ json_encode($errors->any()) }}
+
+                                if (hasError) {
+                                    $('#collapseExample').collapse(
+                                        'show'
+                                    )
+                                }
+                                });
+                        </script>
                     </div>
                 </div>
             </div>
         </div>
 
 
-    @endsection
-
-    @section('scripts')
-        <script src="{{ asset('assets/tools/DataTables/datatables.min.js') }}"></script>
-        <script src="{{ asset('assets/tools/DataTables/jquery.dataTables.min.js') }}"></script>
-
-        <script>
-            $(document).ready(function() {
-
-                // DataTable
-                var table = $('#example').DataTable({
-                    initComplete: function() {},
-                    dom: 'lBfrtip',
-                    responsive: true,
-                    scrollX: true,
-                    lengthChange: false,
-                    order: [[0, 'desc']],
-                });
-
-                let hasError = {{ json_encode($errors->any()) }}
-
-                if (hasError) {
-                    $('#collapseExample').collapse(
-                        'show'
-                    )
-                }
-            });
-        </script>
     @endsection

@@ -185,6 +185,14 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        <script>
+                            $(document).ready(function() {
+                                $('#example').DataTable({
+                                    initComplete: function() {},
+                                    dom: 'lBfrtip',
+                                });
+                                });
+                        </script>
                     </div>
                 </div>
             </div>
@@ -271,19 +279,8 @@
     @endsection
 
     @section('scripts')
-        <script src="{{ asset('assets/tools/DataTables/jquery.dataTables.min.js') }}"></script>
-        <script src="{{ asset('assets/tools/DataTables/datatables.min.js') }}"></script>
         <script>
             $(document).ready(function() {
-
-                // DataTable
-                var table = $('#example').DataTable({
-                    initComplete: function() {},
-                    dom: 'lBfrtip',
-                    responsive: true,
-                    scrollX: true,
-                    lengthChange: false,
-                });
 
                 $(".approval-btn").click(function() {
 
