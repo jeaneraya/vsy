@@ -6,8 +6,22 @@
 <main class="page-center">
   <article class="sign-up">
   <img src="{{ asset('assets/images/logo/logo.png') }}" class="img" style="width:35%">
-    <p class="sign-up__subtitle">VSY Collection | Signin To Your Account</p>
-    <form class="sign-up-form form" action="" method="">
+    <!-- <p class="sign-up__subtitle">VSY Collection | Signin To Your Account</p> -->
+    <p class="sign-up__subtitle">VSY Enterprise</p>
+    <div class="btn-group">
+      <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+        Select Website to Visit
+      </button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="https://vsyresidential.com/">VSY Apartment</a></li>
+        <li><a class="dropdown-item" href="#">VSY Lending</a></li>
+        <li><a class="dropdown-item" data-bs-toggle="collapse" href="#sign-up-form" role="button" aria-expanded="false" aria-controls="collapseExample">
+      VSY Collection
+    </a></li>
+      </ul>
+    </div>
+
+    <form class="sign-up-form form" id="sign-up-form" action="" method="">
       <label class="form-label-wrapper">
         <p class="form-label">Email</p>
         <input class="form-input" type="email" placeholder="Enter your email" required>

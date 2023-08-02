@@ -42,8 +42,23 @@
 
         <article class="sign-up">
             <img src="{{ asset('assets/images/logo/logo.png') }}" class="img" style="width:35%">
-            <p class="sign-up__subtitle">VSY Collection | Signin To Your Account</p>
-            <form class="sign-up-form form"method="POST" action="{{ route('login') }}">
+            <!-- <p class="sign-up__subtitle">VSY Collection | Signin To Your Account</p> -->
+            <p class="sign-up__subtitle">VSY Enterprise</p>
+            <div class="btn-group">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                Select Website to Visit
+            </button>
+            <ul class="dropdown-menu w-100">
+                <li><a class="dropdown-item" href="https://vsyresidential.com/">VSY Apartment</a></li>
+                <li><a class="dropdown-item" href="#">VSY Lending</a></li>
+                <li><a class="dropdown-item" data-bs-toggle="collapse" href="#sign-up-form" role="button" aria-expanded="false" aria-controls="collapseExample">
+            VSY Collection
+            </a></li>
+            </ul>
+            </div>
+
+            <div id="sign-up-form" class="collapse mt-3">
+            <form class="sign-up-form form" method="POST" action="{{ route('login') }}">
                 @csrf
 
                 <label class="form-label-wrapper">
@@ -78,6 +93,7 @@
                 </button>
 
             </form>
+            </div>
 
         </article>
     </main>

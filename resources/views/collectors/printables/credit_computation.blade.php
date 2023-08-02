@@ -58,8 +58,14 @@
                 <div class="col-9">{{ $am_info->address }}</div>
             </div>
             @endforeach
-            
+            @php
+            $interest_rate = 0;
+            $per_month_interest = 0;
+            @endphp
             @foreach($transactions as $transaction)
+            @php
+            $interest_rate = $transaction->addon_interest;
+            @endphp
             <div class="row">
                 <div class="col-5">Period Covered:</div>
                 <div class="col-7"> {{ date('m-d-Y', strtotime($transaction->period_from)) }} to {{ date('m-d-Y', strtotime($transaction->period_to)) }}</div>
@@ -69,6 +75,9 @@
                 <div class="col-7"> {{ $transaction->num }}</div>
             </div>
             @endforeach
+            @php
+            $per_month_interest = $interest_rate/5;
+            @endphp
         </div>
     </div>
     <div class="row">
@@ -167,16 +176,16 @@
         <table>
             <tbody>
                 <tr>
-                    <td style="text-align:right; padding-right:5em"><strong>Add: 5.8% for 5 mos. until the account is fully paid</strong></td>
-                    <td>&#8369; {{ $total_expenses*(29/100) }}</td>
+                    <td style="text-align:right; padding-right:5em"><strong>Add: {{$per_month_interest}}% for 5 mos. until the account is fully paid</strong></td>
+                    <td>&#8369; {{ $total_expenses*($interest_rate/100) }}</td>
                 </tr>
                 <tr>
                     <td style="text-align:right; padding-right:5em"><strong>Total Expenses:</strong></td>
-                    <td>&#8369; {{ $total_expenses*(29/100) + $total_expenses }}</td>
+                    <td>&#8369; {{ $total_expenses*($interest_rate/100) + $total_expenses }}</td>
                 </tr>
                 <tr>
                     <td style="text-align:right; padding-right:5em"><strong>Grand Total:</strong></td>
-                    <td>&#8369; {{ $total_expenses*(29/100) + $total_expenses + $total_sold }}</td>
+                    <td>&#8369; {{ $total_expenses*($interest_rate/100) + $total_expenses + $total_sold }}</td>
                 </tr>
             </tbody>
         </table>

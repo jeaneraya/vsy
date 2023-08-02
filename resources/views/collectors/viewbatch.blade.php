@@ -29,6 +29,9 @@
                   <li><a class="dropdown-item" onclick="window.open('{{ route('print-withdrawals-returns', ['collector_id' => $collector_id,'batch_id' => $batch_id ,'name' => $collector_name]) }}', '_blank')">Withdrawals & Returns</a></li>
                 </ul>
               </div>
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#applyoffset">
+                Apply Offset Balance
+              </button>
             </div>
         </div>
         <div class="collapse" id="addproductstobatch">
@@ -147,6 +150,7 @@
                 <tbody>
                 @php
                   $total = 0;
+                  $interest_rate = 0;
                 @endphp
                 @foreach($batch_withdrawals as $key => $withdrawal)
                     <tr>
@@ -251,6 +255,41 @@
         <button class="scroll-to-bottom" style="background:none"><iconify-icon icon="formkit:arrowdown"></iconify-icon></button>
       </div>
 
+      <!-- OFFSET BALANCE -->
+      <div class="modal fade" id="applyoffset" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Apply Previous Balance</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form action="{{ route('apply-offset', ['collector_id' => $collector_id,'batch_id' => $batch_id]) }}" method="POST">
+                @csrf
+                <div class="row">
+                  @foreach($offset_balances as $ob)
+                  <div class="col-6">
+                    <label for="" class="form-label">Batch #</label>
+                    <input type="number" class="form-control" value="{{$ob->num}}" readonly>
+                    <input type="hidden" value="{{$ob->id}}">
+                  </div>
+                  <div class="col-6">
+                    <label for="" class="form-label">Previous Balance</label>
+                    <input type="number" class="form-control" value="{{$ob->offset_balance}}" readonly>
+                  </div>
+                  @endforeach
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary" name="apply">Apply Offset Balance</button>
+            </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <!-- END OF OFFSET BALANCE -->
+
       <!-- PAYMENT LEDGER -->
       <div class="modal fade" id="payment_ledger" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -268,6 +307,9 @@
                     ];
                   @endphp
                   @foreach($transactions as $transaction)
+                  @php
+                  $interest_rate = $transaction->addon_interest;
+                  @endphp
                   <div class="col-7">
                     <div class="row">
                       <div class="col-4"><strong>Period Covered:</strong></div>
@@ -300,6 +342,9 @@
                       <div class="col-7">&#8369;{{ number_format($total + $totalExpenses,2) }}</div>
                     </div>
                     <div class="row">
+                      <div class="col-5"><strong>Interest:</strong></div>
+                      <div class="col-7">&#8369; {{ number_format($totalExpenses * ($interest_rate/100),2) }}</div>
+                    <div class="row">
                       @php
                       $total_payment = 0; 
                       @endphp
@@ -309,15 +354,12 @@
                           $total_payment += $payment->paid_amount;
                           @endphp
                       @endforeach
-                      <div class="col-5"><strong>Total Payment:</strong></div>
-                      <div class="col-7">&#8369; {{ number_format($total_payment,2) }}</div>
+                      <div class="col-7"><strong>Total Payment:</strong></div>
+                      <div class="col-5">&#8369; {{ number_format($total_payment,2) }}</div>
                     </div>
                     <div class="row">
-                      <div class="col-7"><strong>Interest:</strong></div>
-                      <div class="col-5">&#8369; {{ number_format($totalExpenses * (29/100),2) }}</div>
-                    <div class="row">
                       <div class="col-7"><strong>Remaining Balance:</strong></div>
-                      <div class="col-5">&#8369; {{ ($payment_balance == 0) ? number_format($total + $totalExpenses + ($totalExpenses * (29/100)),2) : number_format($payment_balance,2) }}</div>
+                      <div class="col-5">&#8369; {{ ($payment_balance == 0) ? number_format($total + $totalExpenses + ($totalExpenses * ($interest_rate/100)),2) : number_format($payment_balance,2) }}</div>
                     </div>
                   </div>
                   @endforeach
@@ -357,6 +399,7 @@
               <div class="modal-footer">
                 <!-- <button class="btn btn-primary" onclick="openMakePaymentModal()">Make Payment</button> -->
                 <button class="btn btn-primary" onclick="openEditPaymentModal(event)" data-route="{{ route('payment-data', ['id' => '__paymentId__']) }}">Payment</button>
+                <a class="btn btn-secondary" href="{{ route('offset-balance', ['batch-id'=>$batch_id, 'balance' => $payment_balance]) }}">Offset Balance</a>
                 <button class="btn btn-danger" id="deleted-selected-rows">Delete Payment</button>
               </div>
             </div>
@@ -378,7 +421,7 @@
                       <input type="hidden" name="batch" value="{{ $batch_id }}">
                       <input type="hidden" name="collector" value="{{ $collector_id }}">
                       <input type="hidden" name="collector_name" value="{{ $collector_name }}">
-                      <input type="number" name="total_credit" value="{{ ($payment_balance == 0) ? $total + $totalExpenses + ($totalExpenses * (29/100)) : $payment_balance }}" hidden>
+                      <input type="number" name="total_credit" value="{{ ($payment_balance == 0) ? $total + $totalExpenses + ($totalExpenses * ($interest_rate/100)) : $payment_balance }}" hidden>
                       <input type="text" name="id" value="" hidden class="form-control">
                     <div class="col-6 mb-4">
                       <label for="" class="form-label">Amount</label>
@@ -421,7 +464,7 @@
                       <input type="hidden" name="batch" value="{{ $batch_id }}">
                       <input type="hidden" name="collector" value="{{ $collector_id }}">
                       <input type="hidden" name="collector_name" value="{{ $collector_name }}">
-                      <input type="hidden" name="current-balance" id="current-balance" value="{{ ($payment_balance == 0) ? $total + $totalExpenses + ($totalExpenses * (29/100)) : $payment_balance }}">
+                      <input type="hidden" name="current-balance" id="current-balance" value="{{ ($payment_balance == 0) ? $total + $totalExpenses + ($totalExpenses * ($interest_rate/100)) : $payment_balance }}">
                       <input type="hidden" name="current-amount" id="current-amount">
                       <input type="hidden" name="payid" id="rowId">
                     <div class="col-6 mb-4">
