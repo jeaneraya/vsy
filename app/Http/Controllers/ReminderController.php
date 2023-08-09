@@ -155,6 +155,7 @@ class ReminderController extends Controller
     }
 
     public function notifications_index(Request $request) {
+
         $results = RemindersLogger::where([
             ['sent_via', '=', '2'], // notifications
             ['sent_to', '=', Auth::user()->id]
@@ -187,9 +188,31 @@ class ReminderController extends Controller
 
     }
 
+    public function update_all_read_status(Request $request) {
+
+        $validator = Validator::make($request->all(), [
+            'is_read' => ['required'],
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $results = RemindersLogger::where(
+            [
+                ['sent_to', '=', Auth::user()->id]
+            ])
+            ->update(['is_read' => $request->input('is_read')]);
+
+        $read = $request->input('is_read') == 1 ? 'Read' : 'Unread';
+        return redirect()->back()
+            ->withSuccess("Mark All as $read");
+
+    }
 
     public function is_active(Request $request, $id) {
-
         $validator = Validator::make([...$request->all(), 'id' => $id], [
             'id' => ['required', 'exists:reminders,id'],
             'is_active' => ['required']

@@ -83,7 +83,7 @@ Route::middleware(['auth'])->group(function () {
     // notifications
     Route::get('/notifications',[ReminderController::class, 'notifications_index'])->name('notifications_index');
     Route::put('/notifications',[ReminderController::class, 'update_is_read'])->name('update_is_read');
-
+    Route::put('/notifications/read_all',[ReminderController::class, 'update_all_read_status'])->name('update_all_read_status');
 
     // payroll computations
     Route::get('/payroll/schedule/computation',[PayrollComputationsController::class, 'index'])->name('payroll_computations');

@@ -79,12 +79,14 @@
                             @foreach ($results['payments'] as $key => $value)
                                 @php
                                     $counter++;
-                                    $lapseDays = Carbon\Carbon::createFromFormat('Y-m-d', $value->payment_date)->diffInDays($today);
+                                        $lapseDays = Carbon\Carbon::hasFormat('Y-m-d', $value->payment_date)
+                                            ? Carbon\Carbon::createFromFormat('Y-m-d', $value->payment_date)->diffInDays($today)
+                                            : 0;
                                 @endphp
                                 <tr>
                                     <td>{{ $counter }}</td>
                                     <td>{{ $value->name }}</td>
-                                    <td>{{ $value->payment_date  }}</td>
+                                    <td>{{ $value->payment_date ?? 'N/A' }}</td>
                                     <td>{{ $results['nextDueDate'] }}</td>
                                     <td class="with-lapse">{{ $lapseDays }} days</td>
                                     <td>₱ {{ number_format((float) $value->balance, 2, '.', '') }}</td>

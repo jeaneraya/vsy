@@ -43,6 +43,12 @@
             </div>
             <div class="col-2"> <a type="button" class="btn btn-primary" href="{{ route('view_add_reminder') }}">Add Reminder</a></div>
             <div class="col-2"> <a type="button" class="btn btn-primary" href="{{ route('view_reminders_log') }}">Automated Logs</a></div>
+            <div class="col-2"> <form action={{route("update_all_read_status")}} method="POST">
+                @csrf @method('PUT')
+                <input name='is_read' value="1" hidden>
+                <button type="submit" class="btn btn-primary" href="{{ route('view_reminders_log') }}">Mark All as Read </button>
+            </form>
+            </div>
         </div>
 
         @php
@@ -113,7 +119,9 @@
                 responsive: true,
                 scrollX: true,
                 lengthChange: false,
-                order: [[0, 'desc']],
+                order: [
+                    [0, 'desc']
+                ],
             });
         });
     </script>

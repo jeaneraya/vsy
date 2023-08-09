@@ -20,7 +20,7 @@ class PaymentsSeeder extends Seeder
             [
                 'batch_id' => '1',
                 'collector_id' => '3',
-                'payment_sched' => Carbon::now()->subMonth(2)->format("Y-m-{$paymentDate}"),
+                'payment_sched' => $paymentDate == 15 ? Carbon::now()->subMonth(2)->format("Y-m-{$paymentDate}") : Carbon::now()->subMonth(2)->endOfMonth()->format("Y-m-d"),
                 'payment_date' => Carbon::now()->subMonth(2)->format('Y-m-d'),
                 'days' => '0',
                 'amount' => '100',
@@ -35,7 +35,7 @@ class PaymentsSeeder extends Seeder
             [
                 'batch_id' => '1',
                 'collector_id' => '3',
-                'payment_sched' => Carbon::now()->format("Y-m-{$paymentDate}"),
+                'payment_sched' => $paymentDate == 15 ? Carbon::now()->format("Y-m-{$paymentDate}") : Carbon::now()->endOfMonth()->format("Y-m-d"),
                 'payment_date' => Carbon::now()->subMonth(1)->addDays(1)->format('Y-m-d'),
                 'days' => '0',
                 'amount' => '100',
@@ -50,7 +50,7 @@ class PaymentsSeeder extends Seeder
             [
                 'batch_id' => '3',
                 'collector_id' => '4',
-                'payment_sched' => Carbon::now()->subMonth(2)->format("Y-m-{$paymentDate}"),
+                'payment_sched' => $paymentDate == 15 ? Carbon::now()->subMonth(2)->format("Y-m-{$paymentDate}") : Carbon::now()->subMonth(2)->endOfMonth()->format("Y-m-d"),
                 'payment_date' => Carbon::now()->subMonth(2) ->addDays(2)->format('Y-m-d'),
                 'days' => '0',
                 'amount' => '100',
@@ -65,7 +65,7 @@ class PaymentsSeeder extends Seeder
             [
                 'batch_id' => '4',
                 'collector_id' => '4',
-                'payment_sched' => Carbon::now()->format("Y-m-{$paymentDate}"),
+                'payment_sched' => $paymentDate == 15 ? Carbon::now()->format("Y-m-{$paymentDate}") : Carbon::now()->endOfMonth()->format("Y-m-d"),
                 'payment_date' => Carbon::now()->subMonth(1)->subDays(2)->format('Y-m-d'),
                 'days' => '0',
                 'amount' => '100',
