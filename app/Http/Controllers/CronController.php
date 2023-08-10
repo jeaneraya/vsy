@@ -299,7 +299,6 @@ class CronController extends Controller
 
     public function cronScheduler(Request $request)
     {
-
         $validator = Validator::make([...$request->all(), 'code' => $request->input('code')], [
             'code' => ['required']
         ]);
@@ -340,9 +339,6 @@ class CronController extends Controller
 
     public function cronRunner(Request $request)
     {
-
-        $itexmo = ItexMo::broadcast('sdasdasdsad', ['09971903477']);
-        // dd($itexmo);
 
         $validator = Validator::make([...$request->all(), 'code' => $request->input('code')], [
             'code' => ['required']
@@ -408,5 +404,40 @@ class CronController extends Controller
         } catch (Exception $e) {
             dd($e->getMessage());
         }
+    }
+
+    public function cronTesterPostman()
+    {
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://api.itexmo.com/api/broadcast',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => '{
+            "Email": "miyukiayare02@gmail.com",
+            "Password": "P@ssword12345",
+            "Recipients": [
+                "09957843128"
+            ],
+            "Message": "Test message. vsy",
+            "ApiCode": "PR-MELAN231846_W29GP",
+            "SenderId": "VSY"
+        }',
+            CURLOPT_HTTPHEADER => array(
+                'Content-Type: application/json'
+            ),
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+        return $response;
     }
 }

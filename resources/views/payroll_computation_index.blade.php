@@ -39,9 +39,6 @@
                 </div>
             @endif
         </div>
-
-
-
         <div class="container users-page">
             <div class="col-lg-12">
                 <form class="sign-up-form form">
@@ -61,7 +58,8 @@
                         </label>
                         <label class="form-label-wrapper col-12">
                             <div class="">
-                                <button type="submit" class="btn btn-primary mb-3" id='see-computations-btn' disabled>See Computations</button>
+                                <button type="submit" class="btn btn-primary mb-3" id='see-computations-btn' disabled>See
+                                    Computations</button>
                             </div>
                         </label>
 
@@ -118,12 +116,22 @@
                     </div>
                 </form>
             </div>
+            <div class="mt-2">
+                <button class="btn btn-primary" {{ count($results['withComputations']) > 0 ? '' : 'disabled' }}
+                    onclick="
+                    window.open(
+                        '{{ route('print_all', ['id' => request()->get('id')]) }}',
+                    '_blank' // <- This is what makes it open in a new window.
+                    )">
 
+                    Print All </button>
+            </div>
 
             <div class="users-table table-wrapper mt-2">
                 <table class="posts-table" id="example">
                     <thead style="padding-left:1em">
                         <tr class="users-table-info">
+                            {{-- <th></th> --}}
                             <th>ID</th>
                             <th>Code</th>
                             <th>Name</th>
@@ -135,8 +143,15 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @php
+                            $counter = 0;
+                        @endphp
                         @foreach ($results['withComputations'] as $withComputations)
-                            <td>{{ $withComputations->employee_id }}</td>
+                            @php
+                                $counter++;
+                            @endphp
+                            {{-- <td><input type="checkbox"> </td> --}}
+                            <td>{{ $counter }}</td>
                             <td>{{ $withComputations->employee_code }}</td>
                             <td>{{ $withComputations->employee_full_name }}</td>
                             <td>₱ {{ number_format((float) $withComputations->computations_gross, 2, '.', '') }}</td>
@@ -167,8 +182,6 @@
                                                     {{ $withComputations->computations_is_claimed == 1 ? 'Unclaim' : 'Mark as Claimed' }}
                                                 </button>
                                             </form>
-
-
                                         </li>
                                     </ul>
                                 </span>

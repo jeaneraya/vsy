@@ -302,4 +302,63 @@ class PayrollComputationsController extends Controller
         return redirect()->back()
             ->withSuccess("Update Successful.");
     }
+
+    public function print(Request $request, $id) {
+
+        $validator = Validator::make(
+            [...$request->all(), 'id' => $id],
+            [
+                "id" => ['required', 'exists:payroll_schedules,id']
+            ],
+            [
+                'employee_id:exists' => 'Employee is Invalid.',
+                'id:exists' => 'Schedule is Invalid.',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $computations = PayrollSchedule::join('payroll_computations', 'payroll_computations.payroll_schedule_id', '=', 'payroll_schedules.id')
+            ->leftJoin('employees', 'employees.id', '=', 'payroll_computations.employee_id')
+            ->select(
+
+                'payroll_schedules.id as schedule_id',
+                'payroll_schedules.name as schedule_name',
+                'payroll_schedules.from as schedule_from',
+                'payroll_schedules.to as schedule_to',
+
+                'payroll_computations.total_deductions as computations_total_deductions',
+                'payroll_computations.net_pay as computations_net_pay',
+                'payroll_computations.gross_pay as computations_gross',
+                'payroll_computations.is_claimed as computations_is_claimed',
+                'payroll_computations.rate_per_day as computations_rate_per_day',
+                'payroll_computations.days_present as computations_days_present',
+                'payroll_computations.bonus as computations_bonus',
+                'payroll_computations.hours_overtime as computations_hours_overtime',
+                'payroll_computations.days_absent as computations_days_absent',
+                'payroll_computations.hours_late as computations_hours_late',
+
+                'payroll_computations.sss as computations_sss',
+                'payroll_computations.pagibig as computations_pagibig',
+                'payroll_computations.philhealth as computations_philhealth',
+                'payroll_computations.others as computations_others',
+
+                'employees.id as employee_id',
+                'employees.employee_code as employee_code',
+                'employees.fullname as employee_full_name',
+                'employees.position as employee_position',
+                'employees.date_hired as employee_date_hired',
+
+                'payroll_computations.id as computations_id',
+            )
+            ->where([
+                ['payroll_schedules.id', '=', $id],
+            ])->get();
+
+        return view('payroll_print_all', ['result' => $computations]);
+    }
 }

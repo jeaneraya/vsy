@@ -90,6 +90,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/payroll/schedule/computation/{id}/claimed',[PayrollComputationsController::class, 'put_claimed'])->name('put_payroll_computation_claim');
     Route::get('/payroll/schedule/computation/{id}/employee/{employee_id}',[PayrollComputationsController::class, 'show_employee'])->name('payroll_computations_employee');
     Route::put('/payroll/schedule/computation/{id}/employee/{employee_id}',[PayrollComputationsController::class, 'update_employee'])->name('payroll_computations_employee_put');
+    Route::get('/payroll/schedule/computation/{id}/print',[PayrollComputationsController::class, 'print'])->name('print_all');
     Route::get('/payroll/schedule/computation/{id}',[PayrollComputationsController::class, 'view_create'])->name('view_add_payroll_computations');
     Route::post('/payroll/schedule/computation/{id}',[PayrollComputationsController::class, 'create'])->name('create_add_payroll_computations');
 
