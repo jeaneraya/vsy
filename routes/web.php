@@ -178,12 +178,11 @@ Route::view('/register1', 'register');
     // Route::get('/birthdays', [CronController::class, 'todayBirthday']);
     // Route::get('/firstCollection', [CronController::class, 'firstMonthlyCollection']);
     // Route::get('/secondCollection', [CronController::class, 'secondMonthlyCollection']);
-    // Route::get('/customReminders', [CronController::class, 'customReminders']);
-
-
+    // Route::get('/customReminders', [CronController::class, 'customReminders'])
 
     Route::get('/scheduler', [CronController::class, 'cronScheduler']);
     Route::get('/runner', [CronController::class, 'cronRunner']);
+    Route::get('/itexmo/test', [CronController::class, 'cronTesterPostman']);
 });
 
 
