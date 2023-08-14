@@ -5,7 +5,10 @@
 <div class="container">
         <div class="row">
             <div class="col-4"><h2 class="main-title">AP List</h2></div>
-            <div class="col-2"><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addaplist">Add AP List</button></div>
+            <div class="col-3">
+              <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addaplist">Add AP List</button>
+              <a href="/ap_list/reports" class="btn btn-primary">All Transactions</a>
+            </div>
             <div class="col-3">
               <div class="btn-group">
                 <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -50,6 +53,8 @@
                         <button class="btn p-0" data-bs-toggle="dropdown" aria-expande="false"><iconify-icon icon="gg:more-r"></iconify-icon></button>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item fs-6 edit-aplist" data-bs-toggle="modal" data-bs-target="#editAPList" data-id="{{ $aplist->id }}" data-status = "{{$aplist->status}}">Edit</a></li>
+                            <li><a href="ap_list/transactions/{{$aplist->id}}" class="dropdown-item">Transaction</a></li>
+                            <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item fs-6" href="{{ route('delete-aplist', ['id' => $aplist->id]) }}" onclick ="return confirm('Are you sure you want to delete this AP List?')">Trash</a></li>
                         </ul>
                         </span>

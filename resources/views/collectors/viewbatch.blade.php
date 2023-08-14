@@ -400,7 +400,7 @@
                 <!-- <button class="btn btn-primary" onclick="openMakePaymentModal()">Make Payment</button> -->
                 <button class="btn btn-primary" onclick="openEditPaymentModal(event)" data-route="{{ route('payment-data', ['id' => '__paymentId__']) }}">Payment</button>
                 <a class="btn btn-secondary" href="{{ route('offset-balance', ['batch-id'=>$batch_id, 'balance' => $payment_balance]) }}">Offset Balance</a>
-                <button class="btn btn-danger" id="deleted-selected-rows">Delete Payment</button>
+                <!-- <button class="btn btn-danger" id="deleted-selected-rows">Delete Payment</button> -->
               </div>
             </div>
         </div>

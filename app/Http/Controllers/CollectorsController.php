@@ -400,7 +400,7 @@ class CollectorsController extends Controller
 
         $results = DB::table('products')
             ->select('*')
-            ->where('product_code', 'LIKE', '%' . $query . '%')
+            ->where('description', 'LIKE', '%' . $query . '%')
             ->get();
 
         $output = '<ul class="form-control list-dropdown" id="product-list-ul">';
@@ -698,18 +698,22 @@ class CollectorsController extends Controller
         $stock_deliveries = DB::table('stockdeliveries')
             ->where('stockdeliveries.am_id', '=', $userid)
             ->get();
+        
+            
 
-            $previousBalance = StockDelivery::where(function ($query) {
-                $query->whereNotNull('covered_date')
-                    ->orWhereNull('covered_date');
-            })
-            ->where('id', '<', function ($subquery) {
-                $subquery->selectRaw('MAX(id)')
-                    ->from('stockdeliveries')
-                    ->whereNotNull('covered_date');
-            })
-            ->orderBy('id', 'desc')
-            ->value('balance');
+        $previousBalance = StockDelivery::where(function ($query) {
+            $query->whereNotNull('covered_date')
+                ->orWhereNull('covered_date');
+        })
+        ->where('id', '<', function ($subquery) {
+            $subquery->selectRaw('MAX(id)')
+                ->from('stockdeliveries')
+                ->whereNotNull('covered_date');
+        })
+        ->orderBy('id', 'desc')
+        ->value('balance');
+
+        $previousBalance == null ? $previousBalance = 0 : $previousBalance = $previousBalance;
 
         $creditLimit = DB::table('stockdeliveries')
         ->where('stockdeliveries.am_id', '=', $userid)
@@ -717,11 +721,17 @@ class CollectorsController extends Controller
         ->orderBy('id', 'desc')
         ->value('credit_limit');
         
+        $creditLimit == null ? $creditLimit = 0 : $creditLimit = $creditLimit;
+        
         $lastCoveredDate = StockDelivery::whereNotNull('covered_date')
         ->max('covered_date');
 
+        $lastCoveredDate == null ? $lastCoveredDate = 0000-00-00 : $lastCoveredDate = $lastCoveredDate;
+
         $latestPayments = StockDelivery::where('created_at', '>=', $lastCoveredDate)
         ->sum('amount_paid');
+
+        $latestPayments == null ? $latestPayments = 0 : $latestPayments = $latestPayments;
 	
 	$latestDelivery = DB::table('stockdeliveries')
         ->where('stockdeliveries.am_id', '=', $userid)

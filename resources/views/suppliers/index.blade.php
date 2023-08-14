@@ -4,7 +4,7 @@
 
 <div class="container">
         <div class="row">
-            <div class="col-4"><h2 class="main-title">Suppliers</h2></div>
+            <div class="col-4"><h2 class="main-title text-capitalize">Suppliers</h2></div>
             <div class="col-2"><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addsupplier">Add Suppliers</button></div>
         </div>
         <div class="row container">
@@ -34,7 +34,10 @@
                         <button class="btn p-0" data-bs-toggle="dropdown" aria-expande="false"><iconify-icon icon="gg:more-r"></iconify-icon></button>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item fs-6 edit-supplier-data" data-bs-toggle="modal" data-bs-target="#editsupplier" data-id = "{{ $supplier->id }}">Edit</a></li>
-                            <li><a class="dropdown-item fs-6" href="delete/{{ $supplier->id }}" onclick="return confirm('Are you sure you want to delete this Supplier?')">Trash</a></li>
+                            <li> <a class="dropdown-item fs-6" href="{{ route('supplier-products', ['supplier_id' => $supplier->id]) }}">Products</a></li>
+                            <li> <a class="dropdown-item fs-6" href="{{ route('supplier-transactions', ['supplier_id' => $supplier->id]) }}">Transactions</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item fs-6 text-danger" href="delete/{{ $supplier->id }}" onclick="return confirm('Are you sure you want to delete this Supplier?')">Trash</a></li>
                         </ul>
                         </span>
                     </td>
