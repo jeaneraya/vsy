@@ -56,10 +56,8 @@ class CronController extends Controller
                     'message' => $template,
                     'sent_via' => 1, // sms
                     'schedule' => $today
-                ]);
-
-                // Notification
-                $logger = RemindersLogger::create([
+                ],
+                [
                     'type' => 7, // birthday
                     'description' => 'Birthday',
                     'sent_to' => 1, // Super admin
