@@ -16,7 +16,7 @@
                     <th>#</th>
                     <th>Code</th>
                     <th>Description</th>
-                    <th>Addon Interest</th>
+                    <th hidden>Addon Interest</th>
                     <th class="text-center">Action</th>
                   </tr>
                 </thead>
@@ -26,7 +26,7 @@
                     <td>{{ $key + 1 }}</td>
                     <td class="code">{{ $expense->code }}</td>
                     <td class="description">{{ $expense->description }}</td>
-                    <td class="addon_interest">{{ $expense->addon_interest }}</td>
+                    <td class="addon_interest" hidden>{{ $expense->addon_interest }}</td>
                     <td class="text-center">
                         <span class="p-relative">
                         <button class="btn p-0" data-bs-toggle="dropdown" aria-expande="false"><iconify-icon icon="gg:more-r"></iconify-icon></button>
@@ -67,7 +67,7 @@
                       <label for="code" class="form-label">Code:</label>
                       <input type="text" class="form-control border border-secondary-subtle" id="code" name="code" required>
                     </div>
-                    <div class="col-6 mb-3">
+                    <div class="col-6 mb-3 d-none">
                       <label for="" class="form-label">Addon Interest:</label>
                       <input type="number" class="form-control border border-secondary-subtle" step="any" min="0" id="addon_interest" name="addon_interest">
                     </div>

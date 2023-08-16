@@ -50,15 +50,15 @@ iconify-icon {
   margin-right: 1em;
 }
 
-ul#product-list-ul, ul#expenses-list-ul {
+ul#product-list-ul, ul#expenses-list-ul, ul#supplier-products-list-ul, ul#client-products-list-ul {
   padding: 0;
 }
 
-ul#product-list-ul li, ul#expenses-list-ul li {
+ul#product-list-ul li, ul#expenses-list-ul li, ul#supplier-products-list-ul li, ul#client-products-list-ul li {
   padding: 0.2em 0.4em;
 }
 
-ul#product-list-ul li:hover, ul#expenses-list-ul li:hover {
+ul#product-list-ul li:hover, ul#expenses-list-ul li:hover, ul#supplier-products-list-ul li:hover, ul#client-products-list-ul li:hover {
   background-color: #000000;
   color: #fff;
   cursor: pointer;

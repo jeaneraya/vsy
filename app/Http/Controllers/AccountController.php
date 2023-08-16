@@ -20,7 +20,7 @@ class AccountController extends Controller
             ];
         }
         $users = User::leftJoin('collectors', ['users.id' => 'collectors.user_id'])
-            ->select('users.*', 'collectors.code', 'collectors.ctc_no', 'collectors.cashbond')
+            ->select('users.*', 'collectors.code', 'collectors.spouse', 'collectors.id_num')
             ->where($where)
             ->get();
 
@@ -95,8 +95,8 @@ class AccountController extends Controller
             Collector::create([
                 'user_id' => $user->id,
                 'code' => $request->input('code'),
-                'cashbond' => $request->input('cashbond'),
-                'ctc_no' => $request->input('ctcnum'),
+                'spouse' => $request->input('spouse'),
+                'id_num' => $request->input('id_num'),
                 'status' => 1, // active
             ]);
         }
@@ -112,10 +112,10 @@ class AccountController extends Controller
                 'code' => [
                     'required_if:role,3',
                 ],
-                'cashbond' => [
+                'spouse' => [
                     'required_if:role,3',
                 ],
-                'ctcnum' => [
+                'id_num' => [
                     'required_if:role,3',
                 ],
 
@@ -148,16 +148,16 @@ class AccountController extends Controller
             if ($collector) {
                 $collector->user_id = $request->input('id');
                 $collector->code = $request->input('code');
-                $collector->cashbond = $request->input('cashbond');
-                $collector->ctc_no = $request->input('ctcnum');
+                $collector->spouse = $request->input('spouse');
+                $collector->id_num = $request->input('id_num');
                 $collector->status = 1; // active
                 $collector->save();
             } else {
                 Collector::create([
                     'user_id' => $request->input('id'),
                     'code' => $request->input('code'),
-                    'cashbond' => $request->input('cashbond'),
-                    'ctc_no' => $request->input('ctcnum'),
+                    'spouse' => $request->input('spouse'),
+                    'id_num' => $request->input('id_num'),
                     'status' => 1, // active
                 ]);
             }
@@ -235,21 +235,21 @@ class AccountController extends Controller
         ])->first();
         if ($collector) {
             $collector->code = $request->input('code');
-            $collector->cashbond = $request->input('cashbond');
-            $collector->ctc_no = $request->input('ctcnum');
+            $collector->spouse = $request->input('spouse');
+            $collector->id_num = $request->input('id_num');
             $collector->status = $request->input('collector_status');
         } else if (
             is_null($request->input('code')) == false
-            || is_null($request->input('cashbond')) == false
-            || is_null($request->input('ctcnum')) == false
+            || is_null($request->input('spouse')) == false
+            || is_null($request->input('id_num')) == false
         ) {
 
 
             Collector::create([
                 'user_id' => $userId,
                 'code' => $request->input('code'),
-                'cashbond' => $request->input('cashbond'),
-                'ctc_no' => $request->input('ctcnum'),
+                'spouse' => $request->input('spouse'),
+                'id_num' => $request->input('id_num'),
                 'status' => $request->input('collector_status'),
             ]);
         }

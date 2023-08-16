@@ -68,8 +68,10 @@
                                   <ul class="dropdown-menu">
                                       <li><a class="dropdown-item fs-6" href="{{ route('collectors.show', ['id' => $collector->user_id, 'name' => $collector->name]) }}">View Batch</a></li>
                                       <li>{!! ($collector->role == 4) ? '<a class="dropdown-item fs-6" href="' . route('stock-delivery', ['user_id' => $collector->user_id, 'name' => $collector->name]) . '">View SD & PS</a>' : '' !!}</li>
-                                      <li><a class="dropdown-item fs-6 edit-collector" data-bs-toggle="modal" data-bs-target="#editcollector" data-id="{{ $collector->id }}" data-role="{{ $collector->role }}" data-birthday="{{ $collector->birthday }}" data-status="{{ $collector->status }}" data-cashbond="{{ $collector->cashbond }}" data-ctc-no="{{ $collector->ctc_no }}">Edit</a></li>
-                                      <li><a class="dropdown-item fs-6" href="{{ route('delete-collector', ['id' => $collector->id]) }}" onclick ="return confirm('Are you sure you want to delete this collector?')">Trash</a></li>
+                                      <li><a class="dropdown-item fs-6 edit-collector" data-bs-toggle="modal" data-bs-target="#editcollector" data-id="{{ $collector->id }}" data-role="{{ $collector->role }}" data-birthday="{{ $collector->birthday }}" data-status="{{ $collector->status }}" data-id-num="{{ $collector->id_num}}" data-spouse="{{ $collector->spouse}}">Edit</a></li>
+                                      <li><a class="dropdown-item fs-6" href="{{ route('print-kasunduan', ['collector_id' => $collector->user_id]) }}" target="_blank">Print Kasunduan</a></li>
+                                      <li><hr class="dropdown-divider"></li>
+                                      <li><a class="dropdown-item fs-6 text-danger" href="{{ route('delete-collector', ['id' => $collector->id]) }}" onclick ="return confirm('Are you sure you want to delete this collector?')">Trash</a></li>
                                   </ul>
                               </span>
                           </td>
@@ -124,12 +126,12 @@
                       <input type="date" class="form-control border border-secondary-subtle" id="mobile" name="bday">
                     </div>
                     <div class="col-6 mb-3">
-                      <label for="" class="form-label">Cashbond:</label>
-                      <input type="text" class="form-control border border-secondary-subtle" id="cashbond" name="cashbond">
+                      <label for="" class="form-label">ID Presented:</label>
+                      <input type="text" class="form-control border border-secondary-subtle" id="id_num" name="id_num">
                     </div>
                     <div class="col-6 mb-3">
-                      <label for="" class="form-label">CTC No:</label>
-                      <input type="text" class="form-control border border-secondary-subtle" id="ctcnum" name="ctcnum">
+                      <label for="" class="form-label">Spouse:</label>
+                      <input type="text" class="form-control border border-secondary-subtle" id="spouse" name="spouse">
                     </div>
                     <div class="col-12 mb-3">
                       <label for="" class="form-label">Address:</label>
@@ -193,12 +195,12 @@
                       <input type="date" class="form-control border border-secondary-subtle" id="e_bday" name="e_bday">
                     </div>
                     <div class="col-6 mb-3">
-                      <label for="" class="form-label">Cashbond:</label>
-                      <input type="text" class="form-control border border-secondary-subtle" id="e_cashbond" name="e_cashbond">
+                      <label for="" class="form-label">ID Presented:</label>
+                      <input type="text" class="form-control border border-secondary-subtle" id="e_id_num" name="e_id_num">
                     </div>
                     <div class="col-6 mb-3">
-                      <label for="" class="form-label">CTC No:</label>
-                      <input type="text" class="form-control border border-secondary-subtle" id="e_ctcnum" name="e_ctcnum">
+                      <label for="" class="form-label">Spouse:</label>
+                      <input type="text" class="form-control border border-secondary-subtle" id="e_spouse" name="e_spouse">
                     </div>
                     <div class="col-12 mb-3">
                       <label for="" class="form-label">Address:</label>
@@ -224,8 +226,8 @@
           var role = $(this).data('role');
           var birthday = $(this).data('birthday');
           var status = $(this).data('status');
-          var cashbond = $(this).data('cashbond');
-          var ctc_no = $(this).data('ctc-no');
+          var id_num = $(this).data('id-num');
+          var spouse= $(this).data('spouse');
 
           $('#e_id').val(collector_id);
           $('#e_code').val(_this.find('.collector_code').text());
@@ -235,8 +237,8 @@
           $('#e_address').val(_this.find('.collector_address').text());
           $('#e_bday').val(birthday);
           $('#e_status').val(status.toString());
-          $('#e_cashbond').val(cashbond);
-          $('#e_ctcnum').val(ctc_no);
+          $('#e_id_num').val(id_num);
+          $('#e_spouse').val(spouse);
         });
       </script>
 

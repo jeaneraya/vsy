@@ -2,25 +2,117 @@
 
 @section ("contents")
 
-<div class="container">
-        <div class="row stock-delivery-header">
-            <div class="col-5"><h2 class="main-title">Stock Delivery & Payment Summary of {{ $collector_name }}</h2></div>
-            <div class="col-2">
-              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addtransaction">
-                Add Transaction
-              </button>
+<div class="container" style="overflow-x: hidden;">
+  <div class="row pb-2">
+        <div class="col-3" style="font-size:14px">
+            <h5 class="pb-2" style="border-bottom: 1px solid #cbcbcb"><strong>Personal Information</strong></h5>
+            @foreach($am_infos as $am_info)
+            <div class="row">
+                <div class="col-3">Fullame:</div>
+                <div class="col-8"><strong>{{ $am_info->name }}</strong></div>
             </div>
-            <div class="col-3">
-              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addtransactionpayment">
-                Add Payment
-              </button>
-              <button class="btn btn-primary" onclick="window.open('{{ route('print-stock-delivery', ['user_id' => $collector_id, 'name' => $collector_name]) }}', '_blank')">Print</button>
+            <div class="row">
+                <div class="col-3">Mobile:</div>
+                <div class="col-9"><strong>{{ $am_info->contact }}</strong></div>
+            </div>
+            <div class="row">
+                <div class="col-3">Address:</div>
+                <div class="col-9"><strong>{{ $am_info->address }}</strong></div>
+            </div>
+            <div class="row">
+                <div class="col-3">Birthdate:</div>
+                <div class="col-9"><strong>{{ date('m-d-Y', strtotime($am_info->birthday)) }}</strong></div>
             </div>
         </div>
+        <div class="col-3" style="font-size:14px">
+            @php
+            $total_payments = 0;
+            $prev_bal = 0;
+            $total_bal = 0;
+            $latest_del = 0;
+            $total_del = 0;
+            @endphp
+            @foreach($stock_deliveries as $stock_delivery)
+            @php
+            $total_payments += $stock_delivery->amount_paid;
+            $total_bal = $stock_delivery->balance;
+            $total_del += $stock_delivery->total_delivery;
+            @endphp
+            @endforeach
+            <h5 class="pb-2" style="border-bottom: 1px solid #cbcbcb"><strong>General Transaction</strong></h5>
+            <div class="row mt-1">
+                <div class="col-6">Credit Limit:</div>
+                <div class="col-6" style="color: {{ $total_del > $creditLimit ? 'red' : 'black' }}">&#8369; {{ number_format($creditLimit, 2) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">Total Delivery:</div>
+                <div class="col-6" style="color: {{ $total_del > $creditLimit ? 'red' : 'black' }}">&#8369; {{ number_format($total_del,2) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">Total Payments:</div>
+                <div class="col-6">&#8369; {{ number_format($total_payments,2) }}</div>
+            </div>
+            <div class="row">
+                <div class="col-6">Prev. Balance:</div>
+                <div class="col-6">&#8369; {{ number_format($previousBalance,2) }}</div>
+            </div>
+        </div>
+        <div class="col-3" style="font-size:14px">
+            <h5 class="pb-2" style="border-bottom: 1px solid #cbcbcb"><strong>General Transaction</strong></h5>
+            <div class="row mt-1">
+                <div class="col-6">Latest Delivery:</div>
+                <div class="col-6">&#8369; {{ number_format($latestDelivery,2) }}</div>
+            </div>
+            <div class="row">
+                <div class="col-6">Latest Payments:</div>
+                <div class="col-6">&#8369; {{ number_format($latestPayments,2) }}</div>
+            </div>
+            <div class="row">
+                <div class="col-6">Total Balance:</div>
+                <div class="col-6">&#8369; {{ number_format($total_bal,2) }}</div>
+            </div>
+        </div>
+        @endforeach
+        <div class="col-3">
+          <form class="row g-3" action="{{ route('filter-stock-delivery', ['user_id' => $collector_id, 'name' => $collector_name]) }}" id="covered-date" method="POST">
+          @csrf
+            <div class="col-auto">
+              <label for="" class="form-label">From</label>
+              <input type="date" name="covered-from" class="form-control form-control-sm covered-from">
+            </div>
+            <div class="col-auto">
+              <label for="" class="form-label">To</label>
+                  <input type="date" name="covered-to" class="form-control form-control-sm covered-to">
+            </div>
+            <div class="col-auto">
+              <button type="submit" name="covered-date-button" id="covered-date-button" class="btn btn-primary btn-sm mb-3">Submit</button>
+            </div>
+          </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="input-group">
+          <div class="mb-2 mx-2">
+            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addtransaction">
+              Add Transaction
+            </button>
+          </div>
+          <div class="mb-2 mx-2">
+            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addtransactionpayment">
+              Add Payment
+            </button>
+          </div>
+          <div class="mb-2">
+            <button class="btn btn-primary btn-sm" onclick="window.open('{{ route('print-stock-delivery', ['user_id' => $collector_id, 'name' => $collector_name, 'start-date' => $startDate, 'end-date' => $endDate ]) }}', '_blank')">Print File</button>
+          </div>
+        </div>
+    </div>
         <div class="row container">
           <div class="col-lg-12">
             <div class="users-table table-wrapper">
-              <table class="table table-striped posts-table" id="stockdelivery-table">
+              <table class="table table-striped posts-table align-middle" id="stockdelivery-table">
                 <thead style="padding-left:1em">
                   <tr class="users-table-info">
                     <th>Date</th>
@@ -57,15 +149,6 @@
                   @endforeach
               </tbody>
               </table>
-              <script>
-                $(document).ready(function() {
-                    $('#stockdelivery-table').DataTable({
-                        paging: false,
-                        lengthChange: false,
-                        ordering: false,
-                    });
-                });
-            </script>
             </div>
           </div>
         </div>
@@ -278,7 +361,41 @@
           $('#ep_description').val(_this.find('.description').text());
         })
       </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- <script>
+$(document).ready(function() {
+    var dataTable = $('#stockdelivery-table').DataTable({
+        paging: false,
+        lengthChange: false,
+        ordering: false,
+    });
+
+    $('#covered-date-button').on('click', function() {
+        var fromDate = $('.covered-from').val();
+        var toDate = $('.covered-to').val();
+
+        $.ajax({
+            url: "{{ route('date-covered-sdps') }}",
+            type: "POST", // Change the request method to POST
+            data: {
+                "_token": "{{ csrf_token() }}",
+                "fromDate": fromDate,
+                "toDate": toDate
+            },
+            success: function(response) {
+                console.log(fromDate, toDate);
+                console.log(response); // Check the response data in the browser console
+                dataTable.clear().rows.add(response.data).draw();
+            },
+            error: function(xhr) {
+                console.error(xhr);
+            }
+        });
+    });
+});
+</script> -->
 @endsection
 
 

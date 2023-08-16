@@ -32,6 +32,7 @@
                     <th>Batch #</th>
                     <th>Period From</th>
                     <th>Period To</th>
+                    <th>Interest</th>
                     <th>Status</th>
                     <th class="text-center">Action</th>
                   </tr>
@@ -45,9 +46,10 @@
                   @endphp
                 @foreach($batch_trans as $key => $batch_tran)
                     <tr>
-                        <td class="batch_num">{{ $batch_tran->num }}</td>
+                        <td>{{ $batch_tran->num }}</td>
                         <td class="t_period_from">{{ $batch_tran->period_from }}</td>
                         <td class="t_period_to">{{ $batch_tran->period_to }}</td>
+                        <td>{{ $batch_tran->addon_interest }}%</td>
                         <td class="t_status">{!! $status[$batch_tran->status] !!}</td>
                         <td class="text-center">
                             <span class="p-relative">
@@ -55,7 +57,9 @@
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item fs-6" href="{{ route('collectors.withdrawals', ['collector_id' => $batch_tran-> collector_id, 'batch_id' => $batch_tran->id, 'name' => $collector_name]) }}">View</a></li>
                                     <li><a class="dropdown-item fs-6 edit-batch" data-bs-toggle="modal" data-bs-target="#editBatch" data-id="{{ $batch_tran->id  }}" data-status="{{ $batch_tran->status  }}" data-period-from="{{ $batch_tran->period_from  }}" data-firstcollection = "{{ $batch_tran->first_collection }}" data-remarks = "{{ $batch_tran->remarks }}" data-addon-interest = "{{ $batch_tran->addon_interest }}">Edit</a></li>
-                                    <li><a class="dropdown-item fs-6" href="{{ route('delete-batch', ['collector_id' => $batch_tran-> collector_id, 'batch_id' => $batch_tran->id ,'name' => $collector_name]) }}" onclick="return confirm('Are you sure you want to delete this batch?')">Trash</a></li>
+                                    <li><a class="dropdown-item extend-payment" data-bs-toggle="modal" data-bs-target="#extendPayment" data-num="{{$batch_tran->num}}" data-id="{{$batch_tran->id}}">Extend Payments</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item fs-6 text-danger" href="{{ route('delete-batch', ['collector_id' => $batch_tran-> collector_id, 'batch_id' => $batch_tran->id ,'name' => $collector_name]) }}" onclick="return confirm('Are you sure you want to delete this batch?')">Trash</a></li>
                                 </ul>
                             </span>
                         </td>
@@ -187,6 +191,39 @@
       </div>
       <!-- END OF ADD BATCH MODAL -->
 
+      <!-- EXTEND PAYMENTS -->
+      <div class="modal fade" id="extendPayment" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Extend Payment</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form action="{{ route('extend-payment', ['collector_id' => $collector_id]) }}">
+                @csrf
+                <div class="row">
+                  <div class="col-6">
+                    <label for="" class="form-label">Batch #</label>
+                    <input type="number" min="0" name="batch_no" id="batch_no" class="form-control" readonly>
+                    <input type="hidden" name="batch_id" id="batch_id">
+                    <input type="hidden" name="collector_name" value={{$collector_name}}>
+                  </div>
+                  <div class="col-6">
+                    <label for="" class="form-label">Number of Months</label>
+                    <input type="number" min="0" name="num_months" class="form-control">
+                  </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">Extend</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- END OF EXTEND PAYMENTS -->
+
 
       <script>
         $(document).on('click', '.edit-batch', function() {
@@ -207,6 +244,14 @@
           $('#e_addon_interest').val(addonInterest);
           $('#e_first_collection').val(firstcollection);
           $('#e_remarks').val(remarks);
+        })
+
+        $(document).on('click', '.extend-payment', function() {
+          var batch_num = $(this).data('num');
+          var batch_id = $(this).data('id');
+
+          $('#batch_no').val(batch_num);
+          $('#batch_id').val(batch_id);
         })
       </script>
 

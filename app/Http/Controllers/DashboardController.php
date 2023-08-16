@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Batchtransaction;
 use App\Models\Employee;
 use App\Models\User;
+use App\Models\Payment;
+use App\Models\Product;
 use Carbon\Carbon;
 use Database\Seeders\UserTableSeeder;
 use Illuminate\Http\Request;
@@ -14,6 +16,7 @@ class DashboardController extends Controller
 {
 
     public function indexxx(Request $request){
+
         $results['payments'] = DB::table('payments')
         ->whereRaw('payments.id in (select max(id) from payments group by (collector_id)) ') //AND status="active"
         ->leftJoin('users', 'users.id' , '=', 'payments.collector_id')
@@ -27,10 +30,13 @@ class DashboardController extends Controller
             'hiring_status', '=', '0' // active
         ]])->get();
 
+        $results['products'] = Product::all();
+
         $results['collectors'] = User::where([
-            ['role', '=', '3'], // collector
             ['approval_status', '=', 1] // approved
-            ])->get();
+        ])->whereIn('role', [3, 4])->get();
+
+        $results['total_collection'] = Payment::sum('paid_amount');
         return view('dashboard', ['results' => $results]);
     }
 }

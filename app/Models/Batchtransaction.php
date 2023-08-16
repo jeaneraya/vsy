@@ -18,5 +18,6 @@ class Batchtransaction extends Model
         'remarks',
         'addon_interest',
         'status',
+        'offset_balance',
     ];
 }

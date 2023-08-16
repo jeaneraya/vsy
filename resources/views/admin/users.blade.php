@@ -173,9 +173,9 @@
                                                             data-mobile='{{ $user->contact }}'
                                                             data-address='{{ $user->address }}'
                                                             data-approval-status='{{ $user->approval_status }}'
-                                                            data-cashbond='{{ $user->cashbond }}'
+                                                            data-spouse='{{ $user->spouse }}'
                                                             data-code='{{ $user->code }}'
-                                                            data-ctc-no='{{ $user->ctc_no }}'
+                                                            data-id-num='{{ $user->id_num }}'
                                                             class='approval-btn dropdown-item fs-6'>Approval</a>
                                                     </li>
                                                 </ul>
@@ -233,13 +233,13 @@
                                         <label for="" class="form-label">Cashbond:<span
                                                 class='span-required'>*<span></label>
                                         <input type="text" class="form-control border border-secondary-subtle"
-                                            id="cashbond" name="cashbond" required>
+                                            id="spouse" name="spouse" required>
                                     </div>
                                     <div class="col-6 mb-3">
-                                        <label for="" class="form-label">CTC No<span
+                                        <label for="" class="form-label">ID Number<span
                                                 class='span-required'>*<span>:</label>
                                         <input type="text" class="form-control border border-secondary-subtle"
-                                            id="ctcnum" name="ctcnum" required>
+                                            id="id_num" name="id_num" required>
                                     </div>
                                     <div class="col-6 mb-3">
                                         <label for="" class="form-label">Address:</label>
@@ -286,8 +286,8 @@
 
                     // reset modal
                     $("#code").val('');
-                    $("#cashbond").val('');
-                    $("#ctcnum").val('');
+                    $("#spouse").val('');
+                    $("#id_num").val('');
                     $("#name").val('');
                     $("#mobile").val('');
                     $("#address").val('');
@@ -295,12 +295,12 @@
                     $(".span-required").hide();
 
                     $("#code").prop('required', false);
-                    $("#cashbond").prop('required', false);
-                    $("#ctcnum").prop('required', false);
+                    $("#spouse").prop('required', false);
+                    $("#id_num").prop('required', false);
 
                     $("#code").prop('disabled', true);
-                    $("#cashbond").prop('disabled', true);
-                    $("#ctcnum").prop('disabled', true);
+                    $("#spouse").prop('disabled', true);
+                    $("#id_num").prop('disabled', true);
                     // end reset modal
 
                     $("#user_id").val($(this).attr('data-id'));
@@ -309,18 +309,18 @@
                     $("#address").val($(this).attr('data-address'));
                     $("#role").val($(this).attr('data-role'));
                     $("#code").val($(this).attr('data-code'));
-                    $("#cashbond").val($(this).attr('data-cashbond'));
-                    $("#ctcnum").val($(this).attr('data-ctc-no'));
+                    $("#spouse").val($(this).attr('data-spouse'));
+                    $("#id_num").val($(this).attr('data-id-num'));
 
                     // collector
                     if ($(this).attr('data-role') == 3) {
                         $("#code").prop('required', true);
-                        $("#ctcnum").prop('required', true);
+                        $("#id_num").prop('required', true);
                         $("#code").prop('required', true);
 
                         $("#code").prop('disabled', false);
-                        $("#cashbond").prop('disabled', false);
-                        $("#ctcnum").prop('disabled', false);
+                        $("#spouse").prop('disabled', false);
+                        $("#id_num").prop('disabled', false);
 
                         $(".span-required").show();
                     }

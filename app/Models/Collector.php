@@ -16,8 +16,8 @@ class Collector extends Model
         'mobile',
         'address',
         'cashbond',
-        'ctc_no',
-        'status',
+        'id_num',
+        'spouse',
         'row_status'
     ];
 }

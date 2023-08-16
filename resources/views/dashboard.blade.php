@@ -15,7 +15,7 @@
                         <iconify-icon icon="fluent:money-16-filled"></iconify-icon>
                     </div>
                     <div class="stat-cards-info">
-                        <p class="stat-cards-info__num">&#8369;xxx</p>
+                        <p class="stat-cards-info__num">&#8369; {{number_format($results['total_collection'],2)}}</p>
                         <p class="stat-cards-info__title">Total Collections</p>
                     </div>
                 </article>
@@ -26,7 +26,7 @@
                         <iconify-icon icon="fluent-mdl2:product-list"></iconify-icon>
                     </div>
                     <div class="stat-cards-info">
-                        <p class="stat-cards-info__num">xxx</p>
+                        <p class="stat-cards-info__num">{{count($results['products'])}}</p>
                         <p class="stat-cards-info__title">Total Products</p>
                     </div>
                 </article>

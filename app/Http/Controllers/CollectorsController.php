@@ -20,11 +20,14 @@ class CollectorsController extends Controller
     public function index() {
 
         $collectors = Collector::leftJoin('users', 'users.id', '=', 'collectors.user_id')
-        ->where([
-            ['users.approval_status', '=', '1'],
-            ['collectors.status', '=', '1']
-        ])
-        ->get();
+            ->where([
+                ['users.approval_status', '=', '1'],
+                ['collectors.status', '=', '1']
+            ])
+            ->orderByRaw("CASE WHEN users.role = 'area manager' THEN 0 ELSE 1 END")
+            ->orderBy('collectors.code', 'asc') 
+            ->orderBy('collectors.id', 'asc')  
+            ->get();
 
         return view('collectors.index', compact('collectors'));
     }
@@ -36,7 +39,10 @@ class CollectorsController extends Controller
             ['users.approval_status', '=', '1'],
             ['collectors.status', '=', '0']
         ])
-        ->get();
+        ->orderByRaw("CASE WHEN users.role = 'area manager' THEN 0 ELSE 1 END")
+            ->orderBy('collectors.code', 'asc') 
+            ->orderBy('collectors.id', 'asc')  
+            ->get();
 
         return view('collectors.index', compact('collectors'));
     }
@@ -44,10 +50,14 @@ class CollectorsController extends Controller
     public function collectorsAll() {
 
         $collectors = Collector::leftJoin('users', 'users.id', '=', 'collectors.user_id')
-        ->where([
-            ['users.approval_status', '=', '1']
-        ])
-        ->get();
+    ->where([
+        ['users.approval_status', '=', '1']
+    ])
+    ->orderByRaw("CASE WHEN CAST(users.role AS UNSIGNED) = 4 THEN 0 ELSE 1 END")
+    ->orderBy('collectors.code', 'asc')
+    ->orderBy('collectors.id', 'asc')
+    ->get();
+
 
         return view('collectors.index', compact('collectors'));
     }
@@ -76,14 +86,24 @@ class CollectorsController extends Controller
         Collector::create([
             'user_id' => $user->id,
             'code' => $request->input('code'),
-            'cashbond' => $request->input('cashbond'),
-            'ctc_no' => $request->input('ctcnum'),
+            'spouse' => $request->input('spouse'),
+            'id_num' => $request->input('id_num'),
             'status' => 1, // active
         ]);
 
 
         return redirect('/collectors')->with('message', 'New Collector Added Successfully!');
     }
+
+    public function printKasunduan($id) {
+        $collector_details = Collector::leftJoin('users', 'users.id', '=', 'collectors.user_id')
+            ->where('users.approval_status', '=', '1')
+            ->where('users.id', '=', $id)
+            ->get();
+    
+        return view('collectors.printables.kasunduan', compact('collector_details'));
+    }
+    
 
     public function editCollector(Request $request) {
         $update_users = [
@@ -96,8 +116,8 @@ class CollectorsController extends Controller
 
         $update_collector = [
             "code"      =>  $request->e_code,
-            "cashbond"  =>  $request->e_cashbond,
-            "ctc_no"    =>  $request->e_ctcnum,
+            "id_num"     =>  $request->e_id_num,
+            "spouse"    =>  $request->e_spouse,
             "status"    =>  $request->e_status,
         ];
 
@@ -121,13 +141,19 @@ class CollectorsController extends Controller
             ->where('batchtransactions.collector_id', $id)
             ->where('status', '1')
             ->get();
+        
+        $all_batch = DB::table('batchtransactions')
+        ->join('users', 'batchtransactions.collector_id', '=', 'users.id')
+        ->select('batchtransactions.*', 'users.name')
+        ->where('batchtransactions.collector_id', $id)
+        ->get();
 
         //dd($batch_trans);
 
         $collector_id = $id;
         $collector_name = $name;
         $filteredBatchTrans = $batch_trans->where('collector_id', $collector_id);
-        $batchTransCount = $filteredBatchTrans->count();
+        $batchTransCount = $all_batch->count();
         return view('collectors.view', compact('batch_trans'), ['collector_id' => $id, 'batchTransCount' => $batchTransCount, 'collector_name' => $collector_name]);
     }
 
@@ -182,20 +208,22 @@ class CollectorsController extends Controller
 
         for ($i = 0; $i < 10; $i++) {
             $payments_scheds = new Payment();
-    
+        
             $payments_scheds->batch_id = $batch_trans_id;
             $payments_scheds->collector_id = $request->input('collector_id');
-    
+        
             $payment_date = $first_collection->copy()->addDays($i * 15);
-    
+        
+            $lastDayOfMonth = $payment_date->copy()->lastOfMonth();
+        
             if ($payment_date->day > 15) {
-                $payment_date->day(30);
+                $payment_date = $lastDayOfMonth;
             } else {
                 $payment_date->day(15);
             }
-    
+        
             $payments_scheds->payment_sched = $payment_date->format('Y-m-d');
-    
+        
             $payments_scheds->save();
         }
 
@@ -205,6 +233,52 @@ class CollectorsController extends Controller
         $name = $request->input('collector_name');
         return redirect(route('collectors.show', ['id' => $id, 'name' => $name]))->with('message', 'New Batch Added Successfully!');
     }
+
+    public function extendPayment($collector_id, Request $request) {
+        $batch_id = $request->input('batch_id');
+        $last_sched_payment = Payment::where('batch_id', $batch_id)
+            ->where('collector_id', $collector_id)
+            ->orderBy('id', 'DESC')
+            ->value('payment_sched');
+    
+        $num = $request->input('num_months');
+        $last_payment = Carbon::createFromFormat('Y-m-d', $last_sched_payment);
+        
+        
+
+        for ($i = 0; $i < $num; $i++) {
+            $payments_scheds = new Payment();
+        
+            $payments_scheds->batch_id = $batch_id;
+            $payments_scheds->collector_id = $collector_id;
+            
+            $payment_date = $last_payment->addDays(15);
+            
+            // Check if the current month is February
+            if ($payment_date->month === 2) {
+                // Set the payment_date to the last day of February (28th or 29th)
+                $lastDayOfMonth = Carbon::createFromDate($payment_date->year, 2, 1)->lastOfMonth();
+                $payment_date = $payment_date->day > $lastDayOfMonth->day ? $lastDayOfMonth : $payment_date;
+            } else {
+                $lastDayOfMonth = $payment_date->copy()->lastOfMonth();
+                // If the day is greater than 16, set it to the last day of the month
+                if ($payment_date->day > 16) {
+                    $payment_date = $lastDayOfMonth;
+                } else {
+                    // Set the payment_date to the 15th of the month if the day is less than or equal to 15
+                    $payment_date->day(15);
+                }
+            }
+            
+            $payments_scheds->payment_sched = $payment_date->format('Y-m-d');
+            $payments_scheds->save();
+        }
+    
+        $name = $request->input('collector_name');
+    
+        return redirect(route('collectors.show', ['id' => $collector_id, 'name' => $name]));
+    }
+    
 
     public function editBatch(Request $request) {
         $update_batch = [
@@ -281,34 +355,39 @@ class CollectorsController extends Controller
             ->where('return_qty', '!=', null)
             ->orderByRaw('CASE WHEN date_returned IS NOT NULL THEN 0 ELSE 1 END, date_returned')
             ->get();
+
+        $offset_balances = DB::table('batchtransactions')
+            ->where('collector_id', $collector_id)
+            ->where('offset_balance', '!=', null)
+            ->get();
     
         $batchid = $batch_id;
         $collector_name = $name;
         $collectorid = $collector_id;
 
         if(request()->routeIs('collectors.withdrawals')) { 
-            return view('collectors.viewbatch', compact('users_infos','batch_withdrawals', 'transactions', 'expenses_transactions', 'payments'))
+            return view('collectors.viewbatch', compact('offset_balances','users_infos','batch_withdrawals', 'transactions', 'expenses_transactions', 'payments'))
             ->with('batch_id', $batchid)
             ->with('collector_name', $collector_name)
             ->with('collector_id', $collectorid)
             ->with('payment_balance', $payment_balance);
         } elseif (request()->routeIs('print-expenses-summary')) {
-            return view('collectors.printables.expenses_summary', compact('users_infos','batch_withdrawals', 'transactions', 'expenses_transactions', 'payments'))
+            return view('collectors.printables.expenses_summary', compact('offset_balances','users_infos','batch_withdrawals', 'transactions', 'expenses_transactions', 'payments'))
             ->with('batch_id', $batchid)
             ->with('collector_name', $collector_name)
             ->with('collector_id', $collectorid);
         } elseif (request()->routeIs('trust-receipt')) {
-            return view('collectors.printables.trust_receipt', compact('users_infos','batch_withdrawals', 'transactions', 'expenses_transactions', 'payments'))
+            return view('collectors.printables.trust_receipt', compact('offset_balances','users_infos','batch_withdrawals', 'transactions', 'expenses_transactions', 'payments'))
             ->with('batch_id', $batchid)
             ->with('collector_name', $collector_name)
             ->with('collector_id', $collectorid);
         } elseif (request()->routeIs('credit-computation')) {
-            return view('collectors.printables.credit_computation', compact('users_infos','batch_withdrawals', 'transactions', 'expenses_transactions', 'payments'))
+            return view('collectors.printables.credit_computation', compact('offset_balances','users_infos','batch_withdrawals', 'transactions', 'expenses_transactions', 'payments'))
             ->with('batch_id', $batchid)
             ->with('collector_name', $collector_name)
             ->with('collector_id', $collectorid);
         } elseif (request()->routeIs('print-withdrawals-returns')) {
-            return view('collectors.printables.withdrawals_returns', compact('users_infos','batch_withdrawals', 'transactions', 'expenses_transactions', 'payments', 'returned_products'))
+            return view('collectors.printables.withdrawals_returns', compact('offset_balances','users_infos','batch_withdrawals', 'transactions', 'expenses_transactions', 'payments', 'returned_products'))
             ->with('batch_id', $batchid)
             ->with('collector_name', $collector_name)
             ->with('collector_id', $collectorid);
@@ -321,7 +400,7 @@ class CollectorsController extends Controller
 
         $results = DB::table('products')
             ->select('*')
-            ->where('product_code', 'LIKE', '%' . $query . '%')
+            ->where('description', 'LIKE', '%' . $query . '%')
             ->get();
 
         $output = '<ul class="form-control list-dropdown" id="product-list-ul">';
@@ -598,29 +677,140 @@ class CollectorsController extends Controller
         return response()->json(['success' => "Data has been deleted successfully"]);
       }      
 
+    public function offsetBalance(Request $request) {
+        $batch_id = $request->query('batch-id');
+        $offset = [
+            'offset_balance' => $request->query('balance'),
+            'status' => 0
+        ];
+
+        DB::table('batchtransactions')->where('id', $batch_id)->update($offset);
+        return back();
+    }
+
     public function stockDelivery($userid,$name) {
+        $am_infos = DB::table('users')
+            ->join('collectors', 'users.id', '=', 'collectors.user_id')
+            ->select('users.*','collectors.*')
+            ->where('users.id', '=', $userid)
+            ->get();
+
         $stock_deliveries = DB::table('stockdeliveries')
             ->where('stockdeliveries.am_id', '=', $userid)
             ->get();
+        
+            
 
-        $previousBalance = DB::table('stockdeliveries')
-        ->select('balance')
-        ->where('id', function ($query) {
-            $query->select(DB::raw('MAX(id) - 1'))
-                ->from('stockdeliveries');
+        $previousBalance = StockDelivery::where(function ($query) {
+            $query->whereNotNull('covered_date')
+                ->orWhereNull('covered_date');
         })
+        ->where('id', '<', function ($subquery) {
+            $subquery->selectRaw('MAX(id)')
+                ->from('stockdeliveries')
+                ->whereNotNull('covered_date');
+        })
+        ->orderBy('id', 'desc')
         ->value('balance');
+
+        $previousBalance == null ? $previousBalance = 0 : $previousBalance = $previousBalance;
 
         $creditLimit = DB::table('stockdeliveries')
         ->where('stockdeliveries.am_id', '=', $userid)
         ->whereNotNull('credit_limit')
         ->orderBy('id', 'desc')
         ->value('credit_limit');
+        
+        $creditLimit == null ? $creditLimit = 0 : $creditLimit = $creditLimit;
+        
+        $lastCoveredDate = StockDelivery::whereNotNull('covered_date')
+        ->max('covered_date');
 
+        $lastCoveredDate == null ? $lastCoveredDate = 0000-00-00 : $lastCoveredDate = $lastCoveredDate;
 
+        $latestPayments = StockDelivery::where('created_at', '>=', $lastCoveredDate)
+        ->sum('amount_paid');
+
+        $latestPayments == null ? $latestPayments = 0 : $latestPayments = $latestPayments;
+	
+	$latestDelivery = DB::table('stockdeliveries')
+        ->where('stockdeliveries.am_id', '=', $userid)
+        ->whereNotNull('covered_date')
+        ->orderBy('id', 'desc')
+        ->value('total_delivery');
+        
+        $startDate = '';
+        $endDate = '';
         $collector_name = $name;
         $collector_id = $userid;
-        return view('collectors.stockdelivery', compact('stock_deliveries'), ['creditLimit' => $creditLimit, 'previousBalance' => $previousBalance,'collector_name' => $collector_name, 'collector_id' => $collector_id]);
+        return view('collectors.stockdelivery', compact('stock_deliveries', 'am_infos'), ['startDate' => $startDate,'endDate' => $endDate,'creditLimit' => $creditLimit, 'previousBalance' => $previousBalance,'collector_name' => $collector_name, 'collector_id' => $collector_id, 'latestDelivery' => $latestDelivery, 'latestPayments' => $latestPayments]);
+    }
+
+    public function filterStockDelivery($userid,$name,Request $request) {
+        $am_infos = DB::table('users')
+        ->join('collectors', 'users.id', '=', 'collectors.user_id')
+        ->select('users.*','collectors.*')
+        ->where('users.id', '=', $userid)
+        ->get();
+
+        $startDate = date('Y-m-d', strtotime($request->input('covered-from')));
+        $endDate = date('Y-m-d', strtotime($request->input('covered-to')));        
+
+        $stock_deliveries = DB::table('stockdeliveries')
+        ->where('stockdeliveries.am_id', '=', $userid)
+        ->whereRaw("DATE(created_at) BETWEEN ? AND ?", [$startDate, $endDate])
+        ->get();    
+
+        $previousBalance = StockDelivery::where(function ($query) {
+            $query->whereNotNull('covered_date')
+                ->orWhereNull('covered_date');
+        })
+        ->where('id', '<', function ($subquery) {
+            $subquery->selectRaw('MAX(id)')
+                ->from('stockdeliveries')
+                ->whereNotNull('covered_date');
+        })
+        ->orderBy('id', 'desc')
+        ->value('balance');
+
+    $creditLimit = DB::table('stockdeliveries')
+    ->where('stockdeliveries.am_id', '=', $userid)
+    ->whereNotNull('credit_limit')
+    ->orderBy('id', 'desc')
+    ->value('credit_limit');
+    
+    $lastCoveredDate = StockDelivery::whereNotNull('covered_date')
+    ->max('covered_date');
+
+    $latestPayments = StockDelivery::where('created_at', '>=', $lastCoveredDate)
+    ->sum('amount_paid');
+
+$latestDelivery = DB::table('stockdeliveries')
+    ->where('stockdeliveries.am_id', '=', $userid)
+    ->whereNotNull('covered_date')
+    ->orderBy('id', 'desc')
+    ->value('total_delivery');
+
+    $collector_name = $name;
+    $collector_id = $userid;
+    
+    return view('collectors.stockdelivery', compact('stock_deliveries', 'am_infos'), ['startDate' => $startDate,'endDate' => $endDate,'creditLimit' => $creditLimit, 'previousBalance' => $previousBalance,'collector_name' => $collector_name, 'collector_id' => $collector_id, 'latestDelivery' => $latestDelivery, 'latestPayments' => $latestPayments]);
+    }
+
+    public function coveredDate(Request $request)
+    {
+        $fromDate = $request->input('fromDate');
+        $toDate = $request->input('toDate');
+        \Log::debug('From Date: ' . $fromDate);
+        \Log::debug('To Date: ' . $toDate);
+    
+        // Fetch filtered data from the database using Eloquent query
+        $filteredData = YourModel::whereBetween('created_at', [$fromDate, $toDate])->get();
+    
+        // Debugging: Log the fetched data
+        \Log::debug($filteredData);
+
+        return response()->json(['data' => $filteredData]);
     }
 
     public function addStockDelivery(Request $request) {
@@ -757,16 +947,20 @@ class CollectorsController extends Controller
         return redirect(route('stock-delivery', ['user_id' => $collector_id, 'name' => $collector_name] ))->with('message', 'Transaction Added Successfully');
     }
 
-    public function printStockDelivery($userid,$name) {
+    public function printStockDelivery($userid,$name, Request $request) {
         $am_infos = DB::table('users')
             ->join('collectors', 'users.id', '=', 'collectors.user_id')
             ->select('users.*','collectors.*')
             ->where('users.id', '=', $userid)
             ->get();
 
-        $stock_deliveries = DB::table('stockdeliveries')
+            $startDate = date('Y-m-d', strtotime($request->input('start-date')));
+            $endDate = date('Y-m-d', strtotime($request->input('end-date')));        
+    
+            $stock_deliveries = DB::table('stockdeliveries')
             ->where('stockdeliveries.am_id', '=', $userid)
-            ->get();
+            ->whereRaw("DATE(created_at) BETWEEN ? AND ?", [$startDate, $endDate])
+            ->get(); 
         
         // $previousBalance = DB::table('stockdeliveries')
         // ->select('balance')

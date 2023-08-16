@@ -23,6 +23,7 @@ class CreateBatchtransactionsTable extends Migration
             $table->date('first_collection');
             $table->double('addon_interest')->nullable();
             $table->string('status')->default('1');
+            $table->double('offset_balance')->nullable();
             $table->timestamps();
         });
     }

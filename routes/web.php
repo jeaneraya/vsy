@@ -9,6 +9,7 @@ use App\Http\Controllers\APListController;
 use App\Http\Controllers\CronController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\ClientsController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\ExpensesController;
 use App\Http\Controllers\PayrollComputationsController;
@@ -105,12 +106,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('collectors/in-active', [CollectorsController::class, 'collectorsInactive'])->name('collectors-inactive');
     Route::get('collectors/all', [CollectorsController::class, 'collectorsAll'])->name('collectors-all');
     Route::post('add-collector', [CollectorsController::class, 'addCollector'])->name('add-collector');
+    Route::get('/print-kasunduan/{collector_id}/',[CollectorsController::class, 'printKasunduan'])->name('print-kasunduan');
     Route::post('edit-collector', [CollectorsController::class, 'editCollector'])->name('edit-collector');
     Route::get('delete-collector/{id}', [CollectorsController::class, 'deleteCollector'])->name('delete-collector');
     Route::get('/collectors/{id}/{name}',[CollectorsController::class, 'viewCollector'])->name('collectors.show');
     Route::get('/collectors/{id}/{name}/in-active',[CollectorsController::class, 'viewCollectorInactive'])->name('collectors.show-inactive');
     Route::get('/collectors/{id}/{name}/all',[CollectorsController::class, 'viewCollectorAll'])->name('collectors.show-all');
     Route::post('add-batch',[CollectorsController::class, 'saveBatch'])->name('add-batch');
+    Route::get('/extend-payment/{collector_id}',[CollectorsController::class, 'extendPayment'])->name('extend-payment');
     Route::post('edit-batch', [CollectorsController::class, 'editBatch'])->name('edit-batch');
     Route::get('delete-batch/{collector_id}/{batch_id}/{name}', [CollectorsController::class, 'deleteBatch'])->name('delete-batch');
     Route::get('/collectors/{collector_id}/{batch_id}/{name}',[CollectorsController::class, 'viewWithdrawals'])->name('collectors.withdrawals');
@@ -128,30 +131,60 @@ Route::middleware(['auth'])->group(function () {
     Route::get('payment-data/{id}',[CollectorsController::class, 'getEditPaymentData'])->name('payment-data');
     Route::get('edit-payment',[CollectorsController::class, 'editPayment'])->name('edit-payment');
     Route::delete('delete-payment',[CollectorsController::class, 'deletePayment'])->name('delete-payment');
+    Route::get('offset-balance',[CollectorsController::class, 'offsetBalance'])->name('offset-balance');
+    Route::post('apply-offset/{collector_id}/{batch_id}',[CollectorsController::class, 'applyOffset'])->name('apply-offset');
     Route::get('stock-delivery/{user_id}/{name}',[CollectorsController::class, 'stockDelivery'])->name('stock-delivery');
+    Route::post('stock-delivery/{user_id}/{name}/filter',[CollectorsController::class, 'filterStockDelivery'])->name('filter-stock-delivery');
     Route::post('add-stock-delivery',[CollectorsController::class, 'addStockDelivery'])->name('add-stock-delivery');
     Route::post('edit-stock-delivery',[CollectorsController::class, 'editStockDelivery'])->name('edit-stock-delivery');
     Route::post('edit-stock-payment',[CollectorsController::class, 'editStockPayment'])->name('edit-stock-payment');
     Route::get('delete-stock-delivery/{user_id}/{name}/{t_id}',[CollectorsController::class, 'deleteStockDelivery'])->name('delete-stock-delivery');
     Route::post('add-stock-payment',[CollectorsController::class, 'addStockPayment'])->name('add-stock-payment');
     Route::get('print-stock-delivery/{user_id}/{name}',[CollectorsController::class, 'printStockDelivery'])->name('print-stock-delivery');
+    Route::get('date-covered-sdps',[CollectorsController::class, 'coveredDate'])->name('date-covered-sdps');
     Route::get('print-expenses-summary/{collector_id}/{batch_id}/{name}',[CollectorsController::class, 'viewWithdrawals'])->name('print-expenses-summary');
     Route::get('credit-computation/{collector_id}/{batch_id}/{name}',[CollectorsController::class, 'viewWithdrawals'])->name('credit-computation');
     Route::get('trust-receipt/{collector_id}/{batch_id}/{name}',[CollectorsController::class, 'viewWithdrawals'])->name('trust-receipt');
     Route::get('print-withdrawals-returns/{collector_id}/{batch_id}/{name}',[CollectorsController::class, 'viewWithdrawals'])->name('print-withdrawals-returns');
 
+    // AP LIST
     Route::get('/ap_list',[APListController::class, 'index'])->name('ap_list');
     Route::get('/ap_list/aplist-inactive', [APListController::class, 'aplistInactive'])->name('aplist-inactive');
     Route::get('/ap_list/aplist-all', [APListController::class, 'aplistAll'])->name('aplist-all');
     Route::post('add-aplist',[APListController::class, 'saveAPList'])->name('add-aplist');
     Route::post('edit-aplist',[APListController::class, 'editAPList'])->name('edit-aplist');
     Route::get('delete-aplist/{id}',[APListController::class, 'deleteAPList'])->name('delete-aplist');
+    Route::get('ap_list/transactions/{ap_id}',[APListController::class, 'aplistTransactions'])->name('aplist-transaction');
+    Route::post('ap_list/transaction',[APListController::class, 'addAPListTransaction'])->name('add-aplist-transaction');
+    Route::post('ap_list/payment',[APListController::class, 'addAPListPayment'])->name('add-aplist-payment');
+    Route::get('ap_list/{ap_id}/{detail_id}/post',[APListController::class, 'postApTransaction'])->name('post-ap-trans');
+    Route::get('ap_list/reports',[APListController::class, 'accountsPayable'])->name('aplist-reports');
+    Route::post('ap_list/payables',[APListController::class, 'periodCovered'])->name('account-payables');
+    Route::get('ap_list/payables/print',[APListController::class, 'printPayables'])->name('print-account-payables');
 
     // Suppliers
     Route::get('/suppliers',[SupplierController::class, 'index'])->name('suppliers');
     Route::post('add-supplier', [SupplierController::class,'saveSupplier'])->name('add-supplier');
     Route::post('edit-supplier', [SupplierController::class, 'editSupplier'])->name('edit-supplier');
-    Route::get('delete/{id}', [SupplierController::class, 'deleteSupplier'])->name('delete-supplier');
+    Route::get('suppliers/delete/{id}', [SupplierController::class, 'deleteSupplier'])->name('delete-supplier');
+    Route::get('suppliers/{supplier_id}/products',[SupplierController::class, 'supplierProducts'])->name('supplier-products');
+    Route::get('suppliers/{supplier_id}/products/inactive',[SupplierController::class, 'supplierProductsInactive'])->name('supplier-products-inactive');
+    Route::get('suppliers/{supplier_id}/products/all',[SupplierController::class, 'supplierProductsAll'])->name('supplier-products-all');
+    Route::post('suppliers/add-supplier-product',[SupplierController::class, 'addSupplierProduct'])->name('add-supplier-product');
+    Route::post('suppliers/edit-supplier-product',[SupplierController::class, 'editSupplierProduct'])->name('edit-supplier-product');
+    Route::get('suppliers/delete-supplier-product',[SupplierController::class, 'deleteSupplierProduct'])->name('delete-supplier-product');
+    Route::get('suppliers/{supplier_id}/transactions',[SupplierController::class, 'supplierTransactions'])->name('supplier-transactions');
+    Route::post('suppliers/{supplier_id}/transactions/filter-date',[SupplierController::class, 'filterSupplierTransactions'])->name('filter-supplier-transactions');
+    Route::get('suppliers/{supplier_id}/transactions/print',[SupplierController::class, 'printSupplierTransactions'])->name('print-supplier-transactions');
+    Route::post('suppliers/add-transaction',[SupplierController::class, 'addSupplierTransaction'])->name('add-supplier-transaction');
+    Route::get('suppliers/{supplier_id}/{trans_id}/trans-detail',[SupplierController::class, 'supplierTransDetails'])->name('supplier-trans-details');
+    Route::get('suppliers/{supplier_id}/{trans_id}/delete',[SupplierController::class, 'deleteSupplierTransaction'])->name('delete-supplier-transaction');
+    Route::post('suppliers/add-supplier-items', [SupplierController::class, 'addSupplierItems'])->name('add-supplier-items');
+    Route::post('suppliers/edit-trans-items',[SupplierController::class, 'editSupplierTransItems'])->name('edit-supplier-trans-item');
+    Route::get('delete-supplier-trans-detail/{trans_id}',[SupplierController::class, 'deleteSupplierTransDetail'])->name('delete-supplier-trans-detail');
+    Route::get('supplier-productcode-autocomplete',[SupplierController::class, 'searchSupplierProductCode'])->name('supplier-productcode-autocomplete');
+    Route::get('/get-supplier-product-price',[SupplierController::class, 'getSupplierProductPrice'])->name('get-product-price');
+    Route::get('add-supplier-payment',[SupplierController::class, 'supplierPayment'])->name('add-supplier-payment');
 
     Route::get('/products',[StockController::class, 'index'])->name('products');
     Route::get('/products/all',[StockController::class, 'showAll'])->name('show-all');
@@ -165,7 +198,27 @@ Route::middleware(['auth'])->group(function () {
     Route::post('edit-expenses', [ExpensesController::class, 'editExpenses'])->name('edit-expenses');
     Route::get('delete-expense/{id}', [ExpensesController::class, 'deleteExpense'])->name('delete-expense');
 
+    // Clients
+    Route::get('/clients',[ClientsController::class, 'index'])->name('clients');
+    Route::post('add-client', [ClientsController::class,'saveClient'])->name('add-client');
+    Route::post('add-client-products',[ClientsController::class, 'saveClientsProducts'])->name('add-clients-products');
+    Route::post('edit-client', [ClientsController::class, 'editClient'])->name('edit-client');
+    Route::get('delete/{id}', [ClientsController::class, 'deleteClient'])->name('delete-client');
+    Route::post('clients/add-client-product',[ClientsController::class, 'addClientProduct'])->name('add-client-product');
+    Route::post('clients/edit-client-product',[ClientsController::class, 'editClientProduct'])->name('edit-client-product');
+    Route::get('clients/delete-client-product',[ClientsController::class, 'deleteClientProduct'])->name('delete-client-product');
+    Route::get('clients/{client_id}/transactions',[ClientsController::class, 'clientTransactions'])->name('client-transactions');
+    Route::post('clients/{client_id}/transactions/filter-date',[ClientsController::class, 'filterClientTransactions'])->name('filter-client-transactions');
+    Route::get('clients/{client_id}/transactions/print',[ClientsController::class, 'printClientTransactions'])->name('print-client-transactions');
+    Route::post('clients/add-transaction',[ClientsController::class, 'addClientTransaction'])->name('add-client-transaction');
+    Route::get('clients/{client_id}/{trans_id}/trans-detail',[ClientsController::class, 'clientTransDetails'])->name('client-trans-details');
+    Route::get('clients/{client_id}/{trans_id}/delete',[ClientsController::class, 'deleteClientTransaction'])->name('delete-client-transaction');
+    Route::get('client-productcode-autocomplete',[ClientsController::class, 'searchClientProductCode'])->name('client-productcode-autocomplete');
+    Route::get('/get-client-product-price',[ClientsController::class, 'getClientProductPrice'])->name('get-client-product-price');
+    Route::post('clients/add-client-items', [ClientsController::class, 'addClientItems'])->name('add-client-items');
+    Route::get('add-client-payment',[ClientsController::class, 'addClientPayment'])->name('add-client-payment');
 });
+
 
 
 Route::get('/', function () {

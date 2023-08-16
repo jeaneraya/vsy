@@ -60,7 +60,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="sidebar-body">
+                <div class="sidebar-body p-0">
                     <ul class="sidebar-body-menu">
                         <li>
                           <a class="{{ request()->is('/') ? 'active' : '' }}" href="{{ url('/') }}">
@@ -105,16 +105,19 @@
                                 <a class="{{ request()->routeIs('collectors') ? 'active' : '' }}" href="{{ route('collectors') }}"><span class="material-icons-outlined">groups</span>Collectors</a>
                             </li>
                             <li>
-                                <a class="{{ request()->routeIs('suppliers') ? 'active' : '' }}" href="{{ route('suppliers') }}"><span class="material-icons-outlined">group</span>Suppliers</a>
+                                <a class="{{ request()->routeIs('products') ? 'active' : '' }}" href="{{ route('products') }}"><span class="material-icons-outlined">inventory_2</span>Products</a>
                             </li>
                             <li>
-                                <a class="{{ request()->routeIs('products') ? 'active' : '' }}" href="{{ route('products') }}"><span class="material-icons-outlined">inventory_2</span>Products</a>
+                                <a class="{{ request()->routeIs('expenses') ? 'active' : '' }}" href="{{ route('expenses') }}"><span class="material-icons-outlined">playlist_add_check</span>Expenses</a>
                             </li>
                             <li>
                                 <a class="{{ request()->routeIs('ap_list') ? 'active' : '' }}" href="{{ route('ap_list') }}"><span class="material-icons-outlined">list_alt</span>AP List</a>
                             </li>
                             <li>
-                                <a class="{{ request()->routeIs('expenses') ? 'active' : '' }}" href="{{ route('expenses') }}"><span class="material-icons-outlined">playlist_add_check</span>Expenses</a>
+                                <a class="{{ request()->routeIs('suppliers') ? 'active' : '' }}" href="{{ route('suppliers') }}"><span class="material-icons-outlined">group</span>Suppliers</a>
+                            </li>
+                            <li>
+                                <a class="{{ request()->routeIs('clients') ? 'active' : '' }}" href="{{ route('clients') }}"><span class="material-icons-outlined">group</span>Clients</a>
                             </li>
                         </ul>
                     </ul>
