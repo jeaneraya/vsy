@@ -32,7 +32,7 @@ class UserTableSeeder extends Seeder
             'password' => Hash::make('Testing123'),
             'birthday' => Carbon::now()->format('Y-m-d'),
             'contact' => 12345678912,
-            'address' => 'test address',
+            'address' => 'Cebu, Cebu',
             'role' => 1,
             'approval_status' => '1'
         ]);
@@ -43,7 +43,7 @@ class UserTableSeeder extends Seeder
             'password' => Hash::make('Testing123'),
             'birthday' => Carbon::now()->format('Y-m-d'),
             'contact' => 12345678912,
-            'address' => 'test address',
+            'address' => 'Cebu, Cebu',
             'role' => 2,
             'approval_status' => '1'
         ]);
@@ -54,7 +54,7 @@ class UserTableSeeder extends Seeder
             'password' => Hash::make('Testing123'),
             'birthday' => '2023-01-01',
             'contact' => 12345678912,
-            'address' => 'test address',
+            'address' => 'Cebu, Cebu',
             'role' => 3,
             'approval_status' => '0'
         ]);
@@ -65,7 +65,7 @@ class UserTableSeeder extends Seeder
             'password' => Hash::make('Testing123'),
             'birthday' => '2023-01-01',
             'contact' => 12345678912,
-            'address' => 'test address',
+            'address' => 'Cebu, Cebu',
             'role' => 4,
             'approval_status' => '0'
         ]);

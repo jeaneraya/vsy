@@ -17,6 +17,7 @@ class CronController extends Controller
 {
 
     const SYSTEM_MOBILE = '09762111571';
+
     const firstMonthlyCollection = 15;
     const softReminder = 2;
     const securityCode = '67c145c02eb4f98b7d731ecee63ba96b';
@@ -31,6 +32,12 @@ class CronController extends Controller
      */
     protected function scheduleTodayBirthday()
     {
+        $roleList = [
+            1 => 'a Super Admin',
+            2 => 'an Admin',
+            3 => 'a Collector',
+            4 => 'an Area Manager',
+        ];
         $today = Carbon::now()->format('Y-m-d');
         $results = User::where([
             ['birthday', '=', $today]
@@ -38,24 +45,32 @@ class CronController extends Controller
 
         try {
             foreach ($results as $result) {
-
                 // insert template
-                $template = "Happy birthday $result->id!";
-                // send message
+                $role = $roleList[$result->role];
+                $template = "Good day, Today is {$result->name}'s Birthday {$role} from {$result->address}";
+                // send message - SMS
                 $logger = RemindersLogger::create([
                     'type' => 7, // birthday
                     'description' => 'Birthday',
-                    'sent_to' => 0, // System
+                    'sent_to' => 1, // Super admin
                     'message' => $template,
                     'sent_via' => 1, // sms
+                    'schedule' => $today
+                ]);
+
+                // Notification
+                $logger = RemindersLogger::create([
+                    'type' => 7, // birthday
+                    'description' => 'Birthday',
+                    'sent_to' => 1, // Super admin
+                    'message' => $template,
+                    'sent_via' => 2, // notification
                     'schedule' => $today
                 ]);
             }
             return 'Success';
         } catch (Exception $e) {
-            dd($e->getMessage());
-            // return "Error: " . $e->getMessage();
-            dd($e->getMessage());
+            return "Error: " . $e->getMessage();
         }
     }
 
@@ -361,6 +376,7 @@ class CronController extends Controller
                 ->select('reminders_loggers.*', 'users.contact as mobile')
                 ->get();
             $now = Carbon::now();
+            echo 'itextmo response:';
             foreach ($cronForRunning as $key => $value) {
                 if (is_null($value->reminder_id) == false) {
                     $reminder = Reminder::find($value->reminder_id);
@@ -368,13 +384,8 @@ class CronController extends Controller
                     $reminder->status = 1;
                     $reminder->save();
                 }
-                if ($value->sent_via == 1) {
-                    $mobile = $value->mobile;
-                    if ($value->sent_to == 0) { // sent to admin
-                        $mobile = self::SYSTEM_MOBILE;
-                    }
-
-                    $itexmo = ItexMo::broadcast($value->message, [$mobile]);
+                if ($value->sent_via == 1) { // SMS
+                    $itexmo = ItexMo::broadcast($value->message, [$value->mobile]);
                 }
                 echo "$itexmo <br>";
             }
@@ -385,22 +396,24 @@ class CronController extends Controller
                                 <th scope='row'>ID</th>
                                 <th>Description</th>
                                 <th>Sent to</th>
+                                <th>Sent as</th>
                                 <th>Message</th>
                                 <th>Schedule</th>
                                 <th>Send By</th>
                             </tr>
                         </thead>
-
                         <tbody>";
 
             foreach ($cronForRunning as $key => $value) {
 
                 $value->sent_datetime = Carbon::now()->format('Y-m-d H:i:s');
                 $value->save();
+                $sent_via = $value->sent_via == 1 ? 'SMS' : 'NOTIF';
                 $table .= "<tr>
                 <th>$value->id</th>
                 <td>$value->description</td>
                 <th>$value->sent_to</th>
+                <th>{$sent_via}</th>
                 <th>$value->message</th>
                 <th>$value->schedule</th>
                 <th>$value->send_via</th>
@@ -439,13 +452,13 @@ class CronController extends Controller
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'POST',
             CURLOPT_POSTFIELDS => '{
-                "Email": "' .$email. '",
-                "Password": "'.$password.'",
+                "Email": "' . $email . '",
+                "Password": "' . $password . '",
                 "Recipients": [
-                    "'.self::SYSTEM_MOBILE.'"
+                    "' . self::SYSTEM_MOBILE . '"
                 ],
                 "Message": "Test message. vsy",
-                "ApiCode": "'.$apiCode.'",
+                "ApiCode": "' . $apiCode . '",
                 "SenderId": "VSY"
             }',
             CURLOPT_HTTPHEADER => array(
