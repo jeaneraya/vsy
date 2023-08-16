@@ -16,8 +16,10 @@ use Illuminate\Support\Facades\Validator;
 class CronController extends Controller
 {
 
+    const SYSTEM_MOBILE = '09762111571';
     const firstMonthlyCollection = 15;
     const softReminder = 2;
+    const securityCode = '67c145c02eb4f98b7d731ecee63ba96b';
 
     /**
      * cron/birthdays?code=random
@@ -29,7 +31,6 @@ class CronController extends Controller
      */
     protected function scheduleTodayBirthday()
     {
-
         $today = Carbon::now()->format('Y-m-d');
         $results = User::where([
             ['birthday', '=', $today]
@@ -44,14 +45,11 @@ class CronController extends Controller
                 $logger = RemindersLogger::create([
                     'type' => 7, // birthday
                     'description' => 'Birthday',
-                    'sent_to' => $result->id,
+                    'sent_to' => 0, // System
                     'message' => $template,
                     'sent_via' => 1, // sms
                     'schedule' => $today
                 ]);
-                // dd('asdasdasdsad');
-                // dd( $logger );
-
             }
             return 'Success';
         } catch (Exception $e) {
@@ -307,6 +305,11 @@ class CronController extends Controller
             return json_encode($validator);
         }
 
+        if (strval($request->input('code')) !== self::securityCode) {
+            return json_encode('Invalid code');
+        }
+
+
         $dateToday = Carbon::now();
 
         try {
@@ -339,13 +342,16 @@ class CronController extends Controller
 
     public function cronRunner(Request $request)
     {
-
         $validator = Validator::make([...$request->all(), 'code' => $request->input('code')], [
             'code' => ['required']
         ]);
 
         if ($validator->fails()) {
             return json_encode($validator);
+        }
+
+        if (strval($request->input('code')) !== self::securityCode) {
+            return json_encode('Invalid code');
         }
 
         try {
@@ -362,8 +368,14 @@ class CronController extends Controller
                     $reminder->status = 1;
                     $reminder->save();
                 }
+                if ($value->sent_via == 1) {
+                    $mobile = $value->mobile;
+                    if ($value->sent_to == 0) { // sent to admin
+                        $mobile = self::SYSTEM_MOBILE;
+                    }
 
-                $itexmo = ItexMo::broadcast($value->message, [$value->mobile]);
+                    $itexmo = ItexMo::broadcast($value->message, [$mobile]);
+                }
                 echo "$itexmo <br>";
             }
 
@@ -382,11 +394,9 @@ class CronController extends Controller
                         <tbody>";
 
             foreach ($cronForRunning as $key => $value) {
-                // echo '<br>';
-                // echo "$value->id | $value->description | $value->sent_to | $value->message | $value->schedule";
+
                 $value->sent_datetime = Carbon::now()->format('Y-m-d H:i:s');
                 $value->save();
-
                 $table .= "<tr>
                 <th>$value->id</th>
                 <td>$value->description</td>
@@ -408,6 +418,14 @@ class CronController extends Controller
 
     public function cronTesterPostman()
     {
+        $email = env('ITEXMO_EMAIL');
+        $password = env('ITEXMO_PASSWORD');
+        $apiCode = env('ITEXMO_API_KEY');
+
+        echo '<pre>';
+        var_dump($email);
+        var_dump($password);
+        var_dump($apiCode);
 
         $curl = curl_init();
 
@@ -421,15 +439,15 @@ class CronController extends Controller
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'POST',
             CURLOPT_POSTFIELDS => '{
-            "Email": "miyukiayare02@gmail.com",
-            "Password": "P@ssword12345",
-            "Recipients": [
-                "09957843128"
-            ],
-            "Message": "Test message. vsy",
-            "ApiCode": "PR-MELAN231846_W29GP",
-            "SenderId": "VSY"
-        }',
+                "Email": "' .$email. '",
+                "Password": "'.$password.'",
+                "Recipients": [
+                    "'.self::SYSTEM_MOBILE.'"
+                ],
+                "Message": "Test message. vsy",
+                "ApiCode": "'.$apiCode.'",
+                "SenderId": "VSY"
+            }',
             CURLOPT_HTTPHEADER => array(
                 'Content-Type: application/json'
             ),

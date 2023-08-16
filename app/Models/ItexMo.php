@@ -80,16 +80,10 @@ class ItexMo extends Model
         try {
             $ch = curl_init();
 
-            // $email = env('ITEXMO_EMAIL');
-            // $password = env('ITEXMO_PASSWORD');
-            // $apiCode = env('ITEXMO_API_KEY');
-            // $isTestingMode = env('ITEXMO_IS_TESTING', true);
-
-
-            $email = 'miyukiayare02@gmail.com';
-            $password = 'P@ssword12345';
-            $apiCode = 'PR-MELAN231846_W29GP';
-            $isTestingMode = false;
+            $email = env('ITEXMO_EMAIL');
+            $password = env('ITEXMO_PASSWORD');
+            $apiCode = env('ITEXMO_API_KEY');
+            $isTestingMode = env('ITEXMO_IS_TESTING', true);
 
             $itexmo = [
                 'Email' => $email,
@@ -97,10 +91,7 @@ class ItexMo extends Model
                 'ApiCode' => $apiCode,
                 'Message' => $message,
                 'Recipients' => $recipients,
-                // 'SenderId' => "VSY"
                 'SenderId' => "VSY"
-                // 'SenderId' => "VSY Apt"
-                // 'SenderId' => "VSY"
             ];
 
             // DO NOT SEND IF IN TESTING MODE
