@@ -38,12 +38,10 @@ class CronController extends Controller
             3 => 'a Collector',
             4 => 'an Area Manager',
         ];
-        $today = Carbon::now();
-
-        $results = User::whereDay('birthday', '=', $today->format('d'))
-            ->whereMonth('birthday', '=', $today->format('m'))
+        $today = $todayYmd = Carbon::now();
+        $results = User::whereDay('birthday', '=', $todayYmd->format('d'))
+            ->whereMonth('birthday', '=', $todayYmd->format('m'))
             ->get();
-
         try {
             foreach ($results as $result) {
                 // insert template
