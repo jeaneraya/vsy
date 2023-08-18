@@ -38,7 +38,8 @@ class CronController extends Controller
             3 => 'a Collector',
             4 => 'an Area Manager',
         ];
-        $today = $todayYmd = Carbon::now();
+        $today = Carbon::now();
+        $todayYmd = Carbon::now();
         $results = User::whereDay('birthday', '=', $todayYmd->format('d'))
             ->whereMonth('birthday', '=', $todayYmd->format('m'))
             ->get();
@@ -48,22 +49,32 @@ class CronController extends Controller
                 $role = $roleList[$result->role];
                 $template = "Good day, Today is {$result->name}'s Birthday {$role} from {$result->address}";
                 // send message - SMS
-                $logger = RemindersLogger::create([
-                    'type' => 7, // birthday
-                    'description' => 'Birthday',
-                    'sent_to' => 1, // Super admin
-                    'message' => $template,
-                    'sent_via' => 1, // sms
-                    'schedule' => $today
-                ],
-                [
-                    'type' => 7, // birthday
-                    'description' => 'Birthday',
-                    'sent_to' => 1, // Super admin
-                    'message' => $template,
-                    'sent_via' => 2, // notification
-                    'schedule' => $today
-                ]);
+                $logger = RemindersLogger::create(
+
+                    [
+                        'type' => 7, // birthday
+                        'description' => 'Birthday',
+                        'sent_to' => 1, // Super admin
+                        'message' => $template,
+                        'sent_via' => 1, // sms
+                        'schedule' => $today
+                    ],
+
+
+                );
+                $logger = RemindersLogger::create(
+
+                    [
+                        'type' => 7, // birthday
+                        'description' => 'Birthday',
+                        'sent_to' => 1, // Super admin
+                        'message' => $template,
+                        'sent_via' => 2, // notification
+                        'schedule' => $today
+                    ]
+
+
+                );
             }
             return 'Success';
         } catch (Exception $e) {
