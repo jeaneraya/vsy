@@ -38,10 +38,11 @@ class CronController extends Controller
             3 => 'a Collector',
             4 => 'an Area Manager',
         ];
-        $today = Carbon::now()->format('Y-m-d');
-        $results = User::where([
-            ['birthday', '=', $today]
-        ])->get();
+        $today = Carbon::now();
+
+        $results = User::whereDay('birthday', '=', $today->format('d'))
+            ->whereMonth('birthday', '=', $today->format('m'))
+            ->get();
 
         try {
             foreach ($results as $result) {
