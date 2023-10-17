@@ -10,7 +10,6 @@ class Supplierproduct extends Model
     use HasFactory;
     protected $table = 'supplier_products';
     protected $fillable = [
-        "supplier_id",
         "item_code",
         "item_description",
         "unit",

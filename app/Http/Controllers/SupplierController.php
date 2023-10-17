@@ -50,44 +50,30 @@ class SupplierController extends Controller
         return redirect('/suppliers');
     }
 
-    public function supplierProducts($supplier_id) {
-        $suppliers_products = DB::table('supplier_products')
-        ->where('supplier_id', $supplier_id)
-        ->where('status', 1)
-        ->get();
+    public function supplierProducts() {
+        $suppliers_products = Supplierproduct::where('status', 1)->get();
 
-        $supplier = DB::table('suppliers')->where('id', $supplier_id)->first();
-        $supplier_name = $supplier->supplier_name;
-
-        return view('suppliers.product-list',compact('suppliers_products'),['supplier_id' => $supplier_id, 'supplier_name' => $supplier_name]);
+        return view('suppliers.product-list',compact('suppliers_products'));
     }
 
-    public function supplierProductsInactive($supplier_id) {
+    public function supplierProductsInactive() {
         $suppliers_products = DB::table('supplier_products')
-        ->where('supplier_id', $supplier_id)
         ->where('status', 0)
         ->get();
 
-        $supplier = DB::table('suppliers')->where('id', $supplier_id)->first();
-        $supplier_name = $supplier->supplier_name;
-
-        return view('suppliers.product-list',compact('suppliers_products'),['supplier_id' => $supplier_id, 'supplier_name' => $supplier_name]);
+        return view('suppliers.product-list',compact('suppliers_products'));
     }
 
-    public function supplierProductsAll($supplier_id) {
+    public function supplierProductsAll() {
         $suppliers_products = DB::table('supplier_products')
         ->where('supplier_id', $supplier_id)
         ->get();
 
-        $supplier = DB::table('suppliers')->where('id', $supplier_id)->first();
-        $supplier_name = $supplier->supplier_name;
-
-        return view('suppliers.product-list',compact('suppliers_products'),['supplier_id' => $supplier_id, 'supplier_name' => $supplier_name]);
+        return view('suppliers.product-list',compact('suppliers_products'));
     }
 
     public function addSupplierProduct(Request $request) {
         $new_supplier_products = [
-            'supplier_id'       =>  $request->query('supplier_id'),
             'item_code'         =>  $request->input('item_code'),
             'item_description'  =>  $request->input('description'),
             'unit'              =>  $request->input('unit'),
@@ -110,7 +96,7 @@ class SupplierController extends Controller
 
         DB::table('supplier_products')->where('id', $request->pid)->update($update_supplier_products);
 
-        return back();
+        return redirect()->back();
     }
 
     public function deleteSupplierProduct(Request $request) {
@@ -248,7 +234,6 @@ class SupplierController extends Controller
         $results = DB::table('supplier_products')
             ->select('*')
             ->where('item_description', 'LIKE', '%' . $query . '%')
-            ->where('supplier_id', $supplier_id)
             ->get();
 
         $output = '<ul class="form-control list-dropdown" id="supplier-products-list-ul">';

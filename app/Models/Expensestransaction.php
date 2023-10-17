@@ -10,7 +10,8 @@ class Expensestransaction extends Model
     use HasFactory;
     protected $table = 'expensestransactions';
     protected $fillable = [
-        'batch_num',
+        'batch_id',
+        'delivery_id',
         'expenses_id',
         'remarks',
         'amount',

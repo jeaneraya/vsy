@@ -4,7 +4,7 @@
 
 <div class="container">
         <div class="row">
-            <div class="col-4"><h2 class="main-title" style="text-transform:capitalize">{{$supplier_name}}'s Products</h2></div>
+            <div class="col-4"><h2 class="main-title" style="text-transform:capitalize">Suppliers' Products</h2></div>
             <div class="col-4"><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addsupplierproduct">Add Products</button></div>
             <div class="col-3">
                 <div class="btn-group">
@@ -12,9 +12,9 @@
                     Select Items to Display
                   </button>
                   <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{{ route('supplier-products', ['supplier_id' => $supplier_id]) }}">Show Active</a></li>
-                    <li><a class="dropdown-item" href="{{ route('supplier-products-inactive', ['supplier_id' => $supplier_id]) }}">Show In-active</a></li>
-                    <li><a class="dropdown-item" href="{{ route('supplier-products-all', ['supplier_id' => $supplier_id]) }}">Show All</a></li>
+                    <li><a class="dropdown-item" href="{{ route('supplier-products') }}">Show Active</a></li>
+                    <li><a class="dropdown-item" href="{{ route('supplier-products-inactive') }}">Show In-active</a></li>
+                    <li><a class="dropdown-item" href="{{ route('supplier-products-all') }}">Show All</a></li>
                   </ul>
                 </div>
               </div>
@@ -81,10 +81,9 @@
               <h1 class="modal-title fs-5" id="exampleModalLabel">Add Product</h1>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('add-supplier-product', ['supplier_id' => $supplier_id]) }}" method="POST">
+            <form action="{{ route('add-supplier-product') }}" method="POST">
                 @csrf
             <div class="modal-body">
-
                   <div class="row">
                     <div class="col-4 mb-3">
                       <label for="code" class="form-label">Item Code:</label>
@@ -165,7 +164,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <input type="submit" value="Add Product" class="btn btn-primary">
+              <input type="submit" value="UpdateProduct" class="btn btn-primary">
             </div>
         </form>
           </div>

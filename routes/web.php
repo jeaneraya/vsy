@@ -116,17 +116,21 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/extend-payment/{collector_id}',[CollectorsController::class, 'extendPayment'])->name('extend-payment');
     Route::post('edit-batch', [CollectorsController::class, 'editBatch'])->name('edit-batch');
     Route::get('delete-batch/{collector_id}/{batch_id}/{name}', [CollectorsController::class, 'deleteBatch'])->name('delete-batch');
-    Route::get('/collectors/{collector_id}/{batch_id}/{name}',[CollectorsController::class, 'viewWithdrawals'])->name('collectors.withdrawals');
+    Route::get('/collectors/{collector_id}/{batch_id}/{name}',[CollectorsController::class, 'viewDeliveries'])->name('collectors.deliveries');
+    Route::post('/collectors/add-delivery-transaction',[CollectorsController::class, 'addDeliveries'])->name('add-delivery-transaction');
+    Route::get('/collectors/{batch_id}/{name}/{batch_delivery_id}/delete',[CollectorsController::class, 'deleteDeliveryTrans'])->name('delete-delivery-trans');
+    Route::post('/collectors/{delivery_id}/edit',[CollectorsController::class, 'editBatchDelivery'])->name('edit-batch-delivery');
+    Route::get('/collectors/{name}/{batch_id}/{batch_delivery_id}/withdrawals',[CollectorsController::class, 'collectorsWithdrawal'])->name('collectorsWithdrawal');
     Route::get('productcode-autocomplete',[CollectorsController::class, 'searchProductCode'])->name('productcode-autocomplete');
     Route::get('expenses-autocomplete',[CollectorsController::class, 'searchExpensesCode'])->name('expenses-autocomplete');
     Route::get('/get-product',[CollectorsController::class, 'getProductPrice'])->name('get-product');
     Route::post('add-batch-product',[CollectorsController::class, 'saveBatchProduct'])->name('add-batch-product');
     Route::post('edit-batch-product',[CollectorsController::class, 'updateBatchProduct'])->name('edit-batch-product');
-    Route::get('delete-batch-product/{collector_id}/{batch_id}/{name}/{bd_id}',[CollectorsController::class, 'deleteBatchProduct'])->name('delete-batch-product');
+    Route::get('delete-batch-product/{batch_id}/{name}/{batch_delivery_id}/{bd_id}',[CollectorsController::class, 'deleteBatchProduct'])->name('delete-batch-product');
     Route::post('return-item',[CollectorsController::class, 'returnProducts'])->name('return-item');
     Route::post('add-batch-expenses',[CollectorsController::class, 'saveBatchExpenses'])->name('add-batch-expenses');
     Route::post('edit-batch-expenses',[CollectorsController::class, 'updateBatchExpenses'])->name('edit-batch-expenses');
-    Route::get('delete-batch-expenses/{collector_id}/{batch_id}/{name}/{et_id}',[CollectorsController::class, 'deleteBatchExpenses'])->name('delete-batch-expenses');
+    Route::get('delete-batch-expenses/{batch_id}/{name}/{batch_delivery_id}/{et_id}',[CollectorsController::class, 'deleteBatchExpenses'])->name('delete-batch-expenses');
     Route::get('add-payment',[CollectorsController::class, 'addPayment'])->name('add-payment');
     Route::get('payment-data/{id}',[CollectorsController::class, 'getEditPaymentData'])->name('payment-data');
     Route::get('edit-payment',[CollectorsController::class, 'editPayment'])->name('edit-payment');
@@ -142,10 +146,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('add-stock-payment',[CollectorsController::class, 'addStockPayment'])->name('add-stock-payment');
     Route::get('print-stock-delivery/{user_id}/{name}',[CollectorsController::class, 'printStockDelivery'])->name('print-stock-delivery');
     Route::get('date-covered-sdps',[CollectorsController::class, 'coveredDate'])->name('date-covered-sdps');
-    Route::get('print-expenses-summary/{collector_id}/{batch_id}/{name}',[CollectorsController::class, 'viewWithdrawals'])->name('print-expenses-summary');
-    Route::get('credit-computation/{collector_id}/{batch_id}/{name}',[CollectorsController::class, 'viewWithdrawals'])->name('credit-computation');
-    Route::get('trust-receipt/{collector_id}/{batch_id}/{name}',[CollectorsController::class, 'viewWithdrawals'])->name('trust-receipt');
-    Route::get('print-withdrawals-returns/{collector_id}/{batch_id}/{name}',[CollectorsController::class, 'viewWithdrawals'])->name('print-withdrawals-returns');
+    Route::get('print-expenses-summary/{collector_id}/{batch_id}/{name}',[CollectorsController::class, 'viewDeliveries'])->name('print-expenses-summary');
+    Route::get('credit-computation/{collector_id}/{batch_id}/{name}',[CollectorsController::class, 'viewDeliveries'])->name('credit-computation');
+    Route::get('trust-receipt/{collector_id}/{batch_id}/{name}',[CollectorsController::class, 'viewDeliveries'])->name('trust-receipt');
+    Route::get('print-withdrawals-returns/{collector_id}/{batch_id}/{name}',[CollectorsController::class, 'viewDeliveries'])->name('print-withdrawals-returns');
 
     // AP LIST
     Route::get('/ap_list',[APListController::class, 'index'])->name('ap_list');
@@ -161,15 +165,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('ap_list/reports',[APListController::class, 'accountsPayable'])->name('aplist-reports');
     Route::post('ap_list/payables',[APListController::class, 'periodCovered'])->name('account-payables');
     Route::get('ap_list/payables/print',[APListController::class, 'printPayables'])->name('print-account-payables');
+    Route::get('print-ap-list/{ap_id}/{detail_id}/{at_name}/{amount}/{schedule_date}',[APListController::class, 'printAPLIST'])->name('print-ap-list');
 
     // Suppliers
     Route::get('/suppliers',[SupplierController::class, 'index'])->name('suppliers');
     Route::post('add-supplier', [SupplierController::class,'saveSupplier'])->name('add-supplier');
     Route::post('edit-supplier', [SupplierController::class, 'editSupplier'])->name('edit-supplier');
     Route::get('suppliers/delete/{id}', [SupplierController::class, 'deleteSupplier'])->name('delete-supplier');
-    Route::get('suppliers/{supplier_id}/products',[SupplierController::class, 'supplierProducts'])->name('supplier-products');
-    Route::get('suppliers/{supplier_id}/products/inactive',[SupplierController::class, 'supplierProductsInactive'])->name('supplier-products-inactive');
-    Route::get('suppliers/{supplier_id}/products/all',[SupplierController::class, 'supplierProductsAll'])->name('supplier-products-all');
+    Route::get('suppliers/products',[SupplierController::class, 'supplierProducts'])->name('supplier-products');
+    Route::get('suppliers/products/inactive',[SupplierController::class, 'supplierProductsInactive'])->name('supplier-products-inactive');
+    Route::get('suppliers/products/all',[SupplierController::class, 'supplierProductsAll'])->name('supplier-products-all');
     Route::post('suppliers/add-supplier-product',[SupplierController::class, 'addSupplierProduct'])->name('add-supplier-product');
     Route::post('suppliers/edit-supplier-product',[SupplierController::class, 'editSupplierProduct'])->name('edit-supplier-product');
     Route::get('suppliers/delete-supplier-product',[SupplierController::class, 'deleteSupplierProduct'])->name('delete-supplier-product');

@@ -179,4 +179,11 @@ class APListController extends Controller
     
         return view('ap-list.prints.reports',compact('accounts_payable'), ['startDate' => $formattedStartDate, 'endDate' => $formattedEndDate]);
     }
+
+    public function printAPLIST($ap_id,$detail_id,$at_name,$amount,$schedule_date) {
+        return view('ap-list.prints.check')
+            ->with('at_name', $at_name)
+            ->with('amount', $amount)
+            ->with('schedule_date', $schedule_date);
+    }
 }

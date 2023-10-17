@@ -53,7 +53,7 @@
                     <td class="supplier_name">{{ $ct->ref_no }}</td>
                     <td class="supplier_address">{{ $ct->trans_description }}</td>
                     <td class="contact_person">&#8369; {{ number_format($ct->payments,2) }}</td>
-                    <td class="contact_num">&#8369; {{ number_format($ct->charges,2) }}</td>
+                    <td class="contact_num">&#8369; {{ number_format($ct->total,2) }}</td>
                     <td>&#8369; {{ number_format($ct->balance,2) }}</td>
                     <td>{{ $ct->remarks }}</td>
                     <td class="text-center">
@@ -105,8 +105,8 @@
                       <input type="text" class="form-control border border-secondary-subtle" id="ref_no" name="ref_no">
                     </div>
                     <div class="col-6 mb-3">
-                      <label for="" class="form-label">Charges:</label>
-                      <input type="number" class="form-control border border-secondary-subtle" id="charges" name="charges">
+                      <label for="" class="form-label">OR Number</label>
+                      <input type="text" class="form-control" name="or_num_charges" id="or_num_charges">
                     </div>
                     <div class="col-6 mb-3">
                       <label for="" class="form-label">Remarks:</label>

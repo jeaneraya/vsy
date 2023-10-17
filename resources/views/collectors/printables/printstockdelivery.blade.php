@@ -34,8 +34,9 @@
 </head>
 <body onload="window.print();">
 
-<div class="container">
-    <div class="row pb-2" style="border-bottom: 1px solid #cbcbcb">
+<div class="container mt-3">
+{{ now()->format('F j, Y') }}
+    <div class="row pb-2 info-and-trans-details mt-4" style="border-bottom: 1px solid #cbcbcb">
         <div class="col-4" style="font-size:14px">
             <h5 class="pb-2" style="border-bottom: 1px solid #cbcbcb"><strong>Personal Information</strong></h5>
             @foreach($am_infos as $am_info)
@@ -49,7 +50,7 @@
             </div>
             <div class="row">
                 <div class="col-3">Address:</div>
-                <div class="col-9"><strong>{{ $am_info->address }}</strong></div>
+                <div class="col-9"><strong class="text capitalize">{{ $am_info->address }}</strong></div>
             </div>
             <div class="row">
                 <div class="col-3">Birthdate:</div>
@@ -63,22 +64,27 @@
             $total_bal = 0;
             $latest_del = 0;
             $total_del = 0;
+            $available_credit = 0;
             @endphp
             @foreach($stock_deliveries as $stock_delivery)
             @php
             $total_payments += $stock_delivery->amount_paid;
             $total_bal = $stock_delivery->balance;
             $total_del += $stock_delivery->total_delivery;
+            $available_credit = $creditLimit - $total_bal;
             @endphp
             @endforeach
             <h5 class="pb-2" style="border-bottom: 1px solid #cbcbcb"><strong>General Transaction</strong></h5>
+            <h5 class="pb-2" style="border-bottom: 1px solid #cbcbcb"><strong>General Transaction</strong></h5>
             <div class="row mt-1">
                 <div class="col-6">Credit Limit:</div>
-                <div class="col-6">&#8369; {{ number_format($creditLimit,2) }}</div>
+                <div class="col-6" style="color: {{ $total_bal > $creditLimit ? 'red' : 'black' }}">&#8369; {{ number_format($creditLimit, 2) }}
+                </div>
             </div>
             <div class="row">
                 <div class="col-6">Total Delivery:</div>
-                <div class="col-6">&#8369; {{ number_format($total_del,2) }}</div>
+                <div class="col-6">&#8369; {{ number_format($total_del,2) }}
+                </div>
             </div>
             <div class="row">
                 <div class="col-6">Total Payments:</div>
@@ -86,22 +92,26 @@
             </div>
             <div class="row">
                 <div class="col-6">Prev. Balance:</div>
-                <div class="col-6">&#8369; {{ number_format($previousBalance,2) }}</div>
+                <div class="col-6">&#8369; {{ number_format(@$previousDelivery->balance,2) }}</div>
             </div>
         </div>
         <div class="col-4" style="font-size:14px">
-            <h5 class="pb-2" style="border-bottom: 1px solid #cbcbcb"><strong>General Transaction</strong></h5>
+            <h5 class="pb-2" style="border-bottom: 1px solid #cbcbcb"><strong>Latest Transaction</strong></h5>
             <div class="row mt-1">
-                <div class="col-6">Latest Delivery:</div>
-                <div class="col-6">&#8369; {{ number_format($latestDelivery,2) }}</div>
+              <div class="col-6">Avail. Credit Amount:</div>
+              <div class="col-6" style="color: {{ $total_bal > $creditLimit ? 'red' : 'black' }}">&#8369; {{ number_format($available_credit,2) }}</div>
             </div>
             <div class="row">
                 <div class="col-6">Latest Payments:</div>
-                <div class="col-6">&#8369; {{ number_format($latestPayments,2) }}</div>
+                <div class="col-6">&#8369; {{ number_format(@$latestPayments,2) }}</div>
+            </div>
+            <div class="row">
+                <div class="col-6">Latest Delivery:</div>
+                <div class="col-6">&#8369; {{ number_format(@$latestDelivery->total_delivery,2) }}</div>
             </div>
             <div class="row">
                 <div class="col-6">Total Balance:</div>
-                <div class="col-6">&#8369; {{ number_format($total_bal,2) }}</div>
+                <div class="col-6" style="color: {{ $total_bal > $creditLimit ? 'red' : 'black' }}">&#8369; {{ number_format($total_bal,2) }}</div>
             </div>
         </div>
         @endforeach
@@ -153,9 +163,24 @@
     </div>
     <div class="row mt-3">
         <div class="col-12">
-            <p>Prepared by: ___________________________ Date:</p>
-            <p align="right" class="mt-4">Received by: ___________________________ Date:</p>
-            <p class="mt-4">Checked and Approved By:______________________________ Date:</p>
+            <p>Prepared by: ___________________________ </p><br/>
+            <div class="row mb-5">
+                <div class="col-6"></div>
+                <div class="col-6 text-center">
+                    <div class="preparation received-by">
+                    Received by: <u style="text-transform:capitalize"><strong class="px-2">{{@$am_info->name}} </strong></u>
+                    </div>
+                    <div class="signature">Signature Over Printed Name</div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 text-center">
+                    <div class="preparation approved-by">
+                    Checked and Approved By: <u><strong class="px-2">Virgilio S. Yumul </strong></u>
+                    </div>
+                    <div class="signature">Signature Over Printed Name</div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

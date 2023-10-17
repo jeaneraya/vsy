@@ -123,3 +123,13 @@ ul#product-list-ul li:hover, ul#expenses-list-ul li:hover, ul#supplier-products-
   background-color: #8f8f8f36;
   padding: 0.2em 0.5em;
 }
+
+/* .info-and-trans-details {
+  position: fixed;
+  height: 30vh;
+  width: 80%;
+}
+
+.row.container.trans-table-container {
+  margin-top: 25vh;
+} */

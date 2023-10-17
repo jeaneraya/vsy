@@ -10,7 +10,8 @@ class Batchdetail extends Model
     use HasFactory;
     protected $table = 'batchdetails';
     protected $fillable = [
-        'batch_num',
+        'batch_id',
+        'delivery_id',
         'ref_no',
         'product_id',
         'qty',

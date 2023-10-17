@@ -16,6 +16,7 @@ class Clienttransaction extends Model
         'trans_description',
         'payments',
         'charges',
+        'or_num_charges',
         'balance',
         'remarks'
     ];

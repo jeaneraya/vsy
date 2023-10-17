@@ -66,7 +66,13 @@ class ClientsController extends Controller
     }
 
     public function clientTransactions($client_id) { 
-        $client_trans = DB::table('clients_transactions')->where('client_id', $client_id)->get();
+        $client_trans = DB::table('clients_transactions')
+            ->join('clients_transdetails', 'clients_transactions.id', '=', 'clients_transdetails.client_trans_id')
+            ->select('clients_transactions.*', 'clients_transdetails.total as total')
+            ->where('clients_transactions.client_id', $client_id)
+            ->get();
+    
+
         $client = DB::table('clients')->where('id', $client_id)->first();
         $client_name = $client->client_name;
 
@@ -147,14 +153,13 @@ class ClientsController extends Controller
         $add_client_trans = [
             'trans_date'    =>  $request->trans_date,
             'ref_no'        =>  $request->ref_no,
-            'charges'       =>  $request->charges,
             'remarks'       =>  $request->remarks,
             'client_id'     =>  $request->cid,
             'trans_description'   =>  $request->description
         ];
 
         DB::table('clients_transactions')->insert($add_client_trans);
-        return back();
+        return redirect()->back();
     }
 
     public function clientTransDetails($client_id, $trans_id) {
@@ -222,32 +227,33 @@ class ClientsController extends Controller
     }
 
     public function addClientItems(Request $request) {
-        $client_id = $request->client_id;
+        $client_id = $request->input('client_id');
+        $trans_id = $request->input('trans_id');
         
         $currentBalance = DB::table('clients_transactions')
-        ->where('id', $request->trans_id)
+        ->where('id', $trans_id)
         ->where('client_id', $client_id)
         ->value('balance');
 
-        $charges = DB::table('supplier_transactions')
+        $charges = DB::table('Clients_transactions')
         ->where('client_id', $client_id)
-        ->where('id', $request->trans_id)
+        ->where('id', $trans_id)
         ->value('charges');
 
         $updatedBalance = $currentBalance + $request->total + $charges;
 
         $insert_items = [
-            'client_trans_id'   => $request->trans_id,
-            'product_id'        => $request->product_id,
-            'qty'               => $request->qty,
-            'total'             => $request->total
+            'client_trans_id'   => $request->input('trans_id'),
+            'product_id'        => $request->input('product_id'),
+            'qty'               => $request->input('qty'),
+            'total'             => $request->input('total')
         ];
 
         DB::table('clients_transdetails')->insert($insert_items);
 
         DB::table('clients_transactions')
         ->where('client_id', $client_id)
-        ->where('id', $request->trans_id)
+        ->where('id', $trans_id)
         ->update(['balance' => $updatedBalance]);
 
         return back()->with('openCollapseClientItems', true);

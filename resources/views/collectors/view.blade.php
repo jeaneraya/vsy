@@ -55,7 +55,7 @@
                             <span class="p-relative">
                                 <button class="btn p-0" data-bs-toggle="dropdown" aria-expanded="false"><iconify-icon icon="gg:more-r"></iconify-icon></button>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item fs-6" href="{{ route('collectors.withdrawals', ['collector_id' => $batch_tran-> collector_id, 'batch_id' => $batch_tran->id, 'name' => $collector_name]) }}">View</a></li>
+                                    <li><a class="dropdown-item fs-6" href="{{ route('collectors.deliveries', ['collector_id' => $batch_tran-> collector_id, 'batch_id' => $batch_tran->id, 'name' => $collector_name]) }}">View</a></li>
                                     <li><a class="dropdown-item fs-6 edit-batch" data-bs-toggle="modal" data-bs-target="#editBatch" data-id="{{ $batch_tran->id  }}" data-status="{{ $batch_tran->status  }}" data-period-from="{{ $batch_tran->period_from  }}" data-firstcollection = "{{ $batch_tran->first_collection }}" data-remarks = "{{ $batch_tran->remarks }}" data-addon-interest = "{{ $batch_tran->addon_interest }}">Edit</a></li>
                                     <li><a class="dropdown-item extend-payment" data-bs-toggle="modal" data-bs-target="#extendPayment" data-num="{{$batch_tran->num}}" data-id="{{$batch_tran->id}}">Extend Payments</a></li>
                                     <li><hr class="dropdown-divider"></li>

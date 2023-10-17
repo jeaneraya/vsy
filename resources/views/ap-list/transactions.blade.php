@@ -64,6 +64,7 @@
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item fs-6 edit-supplier-trans" data-bs-toggle="modal" data-bs-target="#editsuppliertrans" data-id = "{{ $at->id }}">Edit</a></li>
                             <li><a href="{{route('post-ap-trans', ['ap_id' => $ap_id, 'detail_id' => $at->id, 'apy' => $at->amount_payable, 'ap' => $at->amount_paid, 'balance' => $at->balance])}}" class="dropdown-item">Post</a></li>
+                            <li><a href="{{route('print-ap-list', ['ap_id' => $ap_id, 'detail_id' => $at->id, 'at_name' => $ap_name, 'amount' => $at->amount_paid, 'schedule_date' => $at->schedule_date])}}" class="dropdown-item" target="_blank">Print</a></li>
                             <li><hr class="dropdown-divider"></li>
                             @if ($at->post_status == 0)
                             <li><a class="dropdown-item fs-6 text-danger" href="{{route('delete-supplier',['id'=>$at->id])}}" onclick="return confirm('Are you sure you want to delete this Transaction?')">Trash</a></li>
